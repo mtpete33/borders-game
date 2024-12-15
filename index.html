@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Borders</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+  <!-- Toastr CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <!-- Toastr JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <!-- <link rel="manifest" href="/site.webmanifest"> -->
+  
+</head>
+
+<body>
+
+  
+  
+  <div id="landingPage" style="display: block;">
+    <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1>
+    <p>Welcome to Borders! In this timed, daily word game you fill in the blank squares with letters creating four valid dictionary words <em>across and down</em> (like a crossword) connecting around the border of the grid. A few letters will be filled in already. See example below. Any valid dictionary words are accepted, so there may be more than one solution to each puzzle.</p> <p>Hit Submit when you finish to stop the clock. Solve the puzzle as quick as you can!</p> <p>Log in to get your time on the leaderboard or just click Play to play as a guest. Come back each day for a new puzzle.</p>
+    <div>
+      <button id="playBtn">Play</button>
+      <button id="viewSolvedBtn" style="display:none;">View Solved Puzzle</button>
+      
+      </div>
+    
+    <div id="loggedInAs" style="display:none;">
+      
+    </div>
+    <a href="#" id="logoutLink" style="display:none;">Logout</a>
+    <button id="signUpBtn">Sign Up</button>
+    <button id="logInBtn">Log In With Email</button>
+  </div>
+
+  <button id="googleLoginBtn" style="display:inline-flex;">
+    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 20px; height: 20px; margin-right: 8px;">
+    Log In with Google
+  </button>
+  
+<br>
+
+  <!-- Log In Form -->
+  <div id="loginForm" class="form-container">
+      <h2>Log In</h2>
+      <input type="email" id="loginEmail" placeholder="Email" class="form-input">
+      <input type="password" id="loginPassword" placeholder="Password" class="form-input">
+      <button id="logInSubmitBtn" class="form-button">Log In with Email</button>
+
+  </div>
+  
+  <div id="signupSuccess" style= "display: none;"></div>
+  
+  <div id="gameBoard" style="display: none;">
+    <h1>Borders</h1>
+  <div class="crossword">
+      <input type="text" maxlength="1" id="cell-1" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="cell-2" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="cell-3" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="cell-4" class="cell" autocomplete="off">
+
+      <input type="text" maxlength="1" id="cell-5" class="cell" autocomplete="off" disabled>
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="cell-6" class="cell" autocomplete="off" disabled>
+
+      <input type="text" maxlength="1" id="cell-7" class="cell" autocomplete="off">
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="cell-8" class="cell" autocomplete="off">
+
+      <input type="text" maxlength="1" id="cell-9" class="cell" autocomplete="off" disabled>
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="cell-10" class="cell" autocomplete="off" disabled>
+
+      <input type="text" maxlength="1" id="cell-11" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="cell-12" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="cell-13" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="cell-14" class="cell" autocomplete="off">
+  </div>
+
+
+    <!-- New Onscreen Keyboard -->
+    <div id="virtual-keyboard" class="keyboard-container">
+        <div class="keyboard-row">
+            <button class="key" data-key="q">Q</button>
+            <button class="key" data-key="w">W</button>
+            <button class="key" data-key="e">E</button>
+            <button class="key" data-key="r">R</button>
+            <button class="key" data-key="t">T</button>
+            <button class="key" data-key="y">Y</button>
+            <button class="key" data-key="u">U</button>
+            <button class="key" data-key="i">I</button>
+            <button class="key" data-key="o">O</button>
+            <button class="key" data-key="p">P</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="a">A</button>
+            <button class="key" data-key="s">S</button>
+            <button class="key" data-key="d">D</button>
+            <button class="key" data-key="f">F</button>
+            <button class="key" data-key="g">G</button>
+            <button class="key" data-key="h">H</button>
+            <button class="key" data-key="j">J</button>
+            <button class="key" data-key="k">K</button>
+            <button class="key" data-key="l">L</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="key" data-key="z">Z</button>
+            <button class="key" data-key="x">X</button>
+            <button class="key" data-key="c">C</button>
+            <button class="key" data-key="v">V</button>
+            <button class="key" data-key="b">B</button>
+            <button class="key" data-key="n">N</button>
+            <button class="key" data-key="m">M</button>
+            <button class="key key-del" id="backspace" data-key="backspace">
+                <img src="backspace.svg" alt="Backspace">
+            </button>
+        </div>
+    </div>
+
+  <div id="resultTime" style="display: none;"></div><br>
+    <div id="shareButtonContainer" style="display: none;">
+        <button id="shareBtn" class="form-button">Share Your Time</button>
+    </div>
+    <div id="signUpCTA" style="display: none;"><a href="#" id="signupCTAlink">Create an account</a> to track your daily score and add your time to the leaderboard for tomorrow's puzzle!</div>
+    
+    
+    <button id="submitBtn">Submit</button>
+    <button id="giveUpBtn">Give Up</button>
+
+    <!-- Give Up Confirmation Modal -->
+    <div id="giveUpModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h3>Are you sure you want to give up and see the answers?</h3>
+        <button id="confirmGiveUpBtn">Yes, I give up</button>
+        <button id="cancelGiveUpBtn">No, go back to puzzle</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sign Up Form -->
+  <div id="signUpForm" style="display: none;" class="form-container">
+      <h2>Sign Up</h2>
+      <input type="text" id="username" placeholder="Username" required class="form-input">
+      <input type="email" id="email" placeholder="Email" class="form-input">
+      <input type="password" id="password" placeholder="Password" class="form-input">
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-input">
+      <button id="signUpSubmitBtn" class="form-button">Sign Up</button>
+    <p id="haveAccountNotice">Already have an account? <a id="haveAccountSignIn" href="#">Sign in here.</a></p>
+  </div>
+<br>
+
+  
+  <!-- Leaderboard Element -->
+  <div id="leaderboard" style="display:none;">
+    <h2>Leaderboard</h2>
+    <!-- <h3>Top 10 Today</h3> -->
+    
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>User</th>
+          <th>Time</th>
+          <th>Date</th>
+          <th>Puzzle #</th>
+          <th>Answers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Leaderboard entries will be dynamically added here -->
+      </tbody>
+    </table>
+    <br>
+    <br>
+  </div>
+
+  <img id="example" src="images/bordersexample.jpg" alt="game example">
+  
+  <footer>
+    <p>&copy;2024 MP Web Development. All rights reserved</a></p>
+  </footer>
+
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+  import { getFirestore, doc, getDoc, collection, query, where, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
+    authDomain: "borders-game.firebaseapp.com",
+    projectId: "borders-game",
+    storageBucket: "borders-game.appspot.com",
+    messagingSenderId: "575743641828",
+    appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
+    measurementId: "G-MLSC33TSZ6"
+  };
+
+  // Initialize Firebase and Firestore
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  window.db = getFirestore(app); // Expose the Firestore instance to to be accessible in script.js
+  const auth = getAuth(app); // Expose the Auth instance to be accessible in script.js
+  window.auth = auth; // Expose the Auth instance to be accessible in script.js
+    // window.auth = getAuth();
+</script>
+  
+  
+
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>

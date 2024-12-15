@@ -1,0 +1,540 @@
+html, body {
+  touch-action: manipulation; /* Prevents pinch and double-tap zooming */
+}
+
+.title-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+  text-align: center;
+  font-family: "Agdasima", sans-serif;
+}
+h1 {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 300;
+  margin-top:-15px;
+  margin-bottom: -10px;
+}
+
+#landingPage {
+  font-size: 1.5em;
+  width:60%;
+  margin: 4em auto 0 auto;
+}
+
+/* Define root font-size for rem calculations */
+:root {
+    font-size: 16px; /* 1rem = 16px */
+}
+
+.crossword {
+  display: grid;
+  grid-template-columns: repeat(4, 3.75rem); /* Converted 60px to rem */
+  grid-template-rows: repeat(5, 3.75rem);    /* Converted 60px to rem */
+  grid-gap: 0.75rem; /* Converted 12px to rem */
+  justify-content: center;
+  margin-top: 2.2rem; /* Converted 35px to rem */
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.75rem;  /* Converted 60px to rem */
+  height: 3.75rem; /* Converted 60px to rem */
+  font-size: 2rem;  /* Converted 24px to rem*/
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid black;
+  padding:0;
+  line-height: 1;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* For iOS */
+  -webkit-touch-callout: none; /* Disable callout on iOS */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  
+}
+
+.cell, .cell:disabled {
+  vertical-align: middle;
+  line-height: 1.5; /* Adjust this value to match the alignment */
+}
+.cell:disabled {
+  padding-top:.19em;
+}
+
+.cell::selection {
+  background: none; /* Remove the background highlight */
+  color: inherit;   /* Keep the text color the same */
+}
+.cell::-moz-selection {
+  background: transparent;
+  color: inherit;
+}
+
+.cell:focus {
+  caret-color: transparent;
+  border-top: 0.25rem solid #42ff58; /* Converted 4px to rem */
+  border-right: 0.25rem solid #42ff58; /* Converted 4px to rem */
+  border-left: 0.25rem solid #42ff58; /* Converted 4px to rem */
+  border-bottom: 0.25rem solid #42ff58; /* Converted 3.5px to rem */
+}
+
+.black-cell {
+  background-color: black;
+  width: 3.75rem;  /* Converted 60px to rem */
+  height: 3.75rem; /* Converted 60px to rem */
+}
+
+.padded-cell {
+    padding-bottom: .2em;
+}
+
+
+#cell-2, #cell-5, #cell-6, #cell-9, #cell-10, #cell-13 {
+  background-color: #ebebf9;
+  color: black;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+#help {
+  position: absolute;
+  top: 20px;
+  left:20px;
+}
+
+footer {
+  margin-top: 4em;
+  font-weight:bold;
+}
+
+#submitBtn, #logInBtn, #logInSubmitBtn, #playBtn, #signUpBtn, #signUpSubmitBtn, #googleLoginBtn, #viewLeaderboardBtn, #shareBtn, #giveUpBtn, #confirmGiveUpBtn, #cancelGiveUpBtn, #viewSolvedBtn {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: white;
+  color: black;
+  padding: 9px 16px;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 12px; /* Rounded edges */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover and active */
+  margin-top: 1em;
+}
+#submitBtn {
+  margin-top: 5px;
+  background-color: black;
+  color: white;
+}
+#playBtn {
+  background-color: black;
+  color:white;
+}
+
+#submitBtn:hover, #logInBtn:hover, #logInSubmitBtn:hover, #playBtn:hover, #signUpBtn:hover, #signUpSubmitBtn:hover, #viewLeaderboardBtn:hover, #shareBtn:hover, #giveUpBtn:hover, #confirmGiveUpBtn:hover, #cancelGiveUpBtn:hover, #viewSolvedBtn:hover  {
+  background-color: #d3d5d3;
+  color: black;
+}
+
+#giveUpBtn {
+  display:block;
+  width:7em;
+  margin: 3em auto 0 auto;
+  background-color:#ffffff;
+  padding: 7px 16px;
+  
+}
+
+/* Give Up confirmation modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+#googleLoginBtn {
+  /* display: inline; */
+  align-items: center;
+  color: black;
+  font-family: "Josefin Sans", sans-serif;
+  background-color: #ffffff;
+  border: 1.5px solid black;
+  border-radius: 12px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1em;
+}
+
+#googleLoginBtn:hover {
+  background-color: #d3d5d3;
+}
+
+#googleLoginBtn img {
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+}
+
+
+/* Hover effect */
+#submitBtn:hover {
+  background-color: #333333; /* Dark gray on hover */
+  color: #f0f0f0; /* Slightly lighter text */
+}
+
+/* Active effect */
+#submitBtn:active {
+  background-color: #555555; /* Lighter gray when active */
+  color: #e0e0e0; /* Lighter text when active */
+}
+
+#resultTime {
+  font-size:20px;
+  font-weight:bold;
+  margin-top:1em;
+}
+
+#signUpCTA {
+  font-size:20px;
+  margin-top: .5em;
+}
+
+#loggedInAs {
+  margin-top:1em;
+  margin-bottom: .2em;
+}
+
+#haveAccountNotice {
+  font-size: 1.3em;
+}
+
+#example {
+  width:30em;
+  margin-top: .75em;
+}
+
+
+/* New Keyboard Styles */
+.keyboard-container {
+  margin-top: 2em;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 5px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.key {
+  min-width: 45px;
+  height: 55px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6c757d;
+  color: #f8f9fa;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.key:hover {
+  background-color: #7d8590;
+  transform: translateY(-2px);
+}
+
+.key:active, .key.pressed {
+  background-color: #0d6efd;
+  transform: translateY(1px);
+}
+
+.key-del {
+  min-width: 80px;
+}
+
+.key-del img {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .key {
+      min-width: 32px;
+      height: 45px;
+      font-size: 1rem;
+  }
+
+  .key-del {
+      min-width: 60px;
+  }
+  .keyboard-row {
+      gap: 7px;
+  }
+}
+
+@media (max-width: 375px) {
+  .keyboard-container {
+      padding: 10px;
+  }
+
+  .keyboard-row {
+      gap: 7px;
+      margin-bottom: 6px;
+  }
+
+  .key {
+      min-width: 28px;
+      height: 40px;
+      font-size: 0.9rem;
+  }
+
+  .key-del {
+      min-width: 50px;
+  }
+}
+
+#keyboard-input {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+  border: 2px solid var(--bs-secondary);
+  font-size: 1.2rem;
+}
+
+
+
+/* Toast notification styles*/
+/* To adjust the success notification */
+.toast-success {
+  background-color: #4CAF50 !important; /* Success background*/
+  color: white !important;
+}
+
+/* To adjust the error notification */
+.toast-error {
+  background-color: #ff441a !important; /* Error background*/
+  color: white !important;
+}
+
+.toast {
+  border-radius: 8px !important; /* Add a rounded border */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important; */
+  font-size: 18px !important; /* Adjust the font size */
+  opacity: 1 !important; /* Make the toasts fully opaque */
+}
+
+/* Leaderboard Styling */
+#leaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#leaderboardTable th, #leaderboardTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#leaderboardTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+
+
+.form-container {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-container h2 {
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #42ff58; /* Match the site's existing theme */
+}
+
+
+#shareBtn {
+  width: 10em;
+}
+
+/* Animation for enlarging button */
+@keyframes swell {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); } /* Slightly increase size */
+}
+
+/* Animation for shaking button */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Styling for submit button animation */
+#submitBtn.swell {
+    animation: swell 0.5s ease-in-out; /* Swell animation */
+}
+
+#submitBtn.shake {
+    animation: shake 0.5s ease-in-out; /* Shake animation */
+}
+
+/*Responsive Mobile Styles */
+@media screen and (max-width: 600px) {
+
+  .crossword {
+    grid-template-columns: repeat(4, 2.5rem); /* Adjust grid for mobile */
+    grid-template-rows: repeat(5, 2.5rem);    /* Smaller rows for mobile */
+    grid-gap: 1.5rem;
+    margin-top: 1.5rem; /* Adjust margin for mobile */
+    margin-bottom: 3em;
+  }
+
+  .cell {
+    width: 3.1rem;  /* Smaller width for mobile */
+    height: 3.1rem; /* Smaller height for mobile */
+    font-size: 2em;
+
+  }
+
+  .cell:focus {
+    caret-color: transparent;
+    /* border-top: 0.15rem solid #42ff58; */
+    border-top: 0.33rem solid #42ff58;
+    border-right: 0.33rem solid #42ff58; 
+    border-left: 0.33rem solid #42ff58; 
+    border-bottom: 0.33rem solid #42ff58; 
+    box-shadow: 0 0 0 0.10rem rgb(42, 44, 43, 0.5);
+  }
+
+  .black-cell {
+    width: 3.2rem;  /* Smaller width for mobile */
+    height: 3.2rem; /* Smaller height for mobile */
+
+  }
+
+
+  #landingPage {
+    width: 90%;
+    margin: 2em auto 0 auto;
+  }
+
+  .keyboard {
+    padding: 0 1rem; /* Add padding for better spacing */
+  }
+
+  .key {
+    padding: 0.65rem 0; /* Adjust padding for smaller screens */
+    font-size: 1rem; /* Adjust font size */
+  }
+
+  .key:first-child, .key:last-child {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #example {
+    width:21em;
+  }
+
+
+}
+
+
+
+
+
+@media screen and (max-width: 470px) {
+h1 {
+  font-size:1.7em;
+}
+.cell:focus {
+  caret-color: transparent;
+  border-top: 0.3rem solid #42ff58; /* Converted 4px to rem */
+  border-right: 0.3rem solid #42ff58; /* Converted 4px to rem */
+  border-left: 0.3rem solid #42ff58; /* Converted 4px to rem */
+  border-bottom: 0.3rem solid #42ff58; /* Converted 3.5px to rem */
+  /* box-shadow: 0 0 0 0.10rem rgb(42, 44, 43, 0.5); */
+}
+
+  #landingPage {
+    margin: 2em auto 0 auto;
+    font-size: 1.35em;
+  }
+
+  #submitBtn, #logInBtn, #playBtn, #signUpBtn, #googleLoginBtn, #logInSubmitBtn {
+    font-family: "Josefin Sans", sans-serif;
+    background-color: white;
+    color: black;
+    padding: 9px 15px;
+    font-size: 21px;
+    border: 1.5px solid black;
+    border-radius: 12px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+  }
+
+  #playBtn {
+    margin-top: 0;
+  }
+
+  #submitBtn {
+    margin-top: 5px;
+    padding: 10px 20px;
+  }
+#shareBtn {
+  margin-top:0;
+}
+  h2 {
+    margin-top:.25em;
+  }
+  
+}
