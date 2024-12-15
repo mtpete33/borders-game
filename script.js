@@ -237,7 +237,21 @@ $(document).ready(function() {
               word3: puzzleData.word3,
               word4: puzzleData.word4
           };
-          // Update the game board with the puzzle data.
+            //Original pattern
+            // $("#cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+
+            //   // Word2: Right word (down)
+            //   $("#cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+            //   $("#cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
+            //   // Word3: Bottom word (across)
+            //   $("#cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
+            //   // Word4: Left word (down)
+            //   $("#cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+            //   $("#cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+
+
+          // New Pattern
+          // Update the game board with the puzzle data
           // Word1: Top word - 1st and 3rd letters
           $("#cell-1").val(puzzleData.word1.charAt(0)).prop('disabled', true);
           $("#cell-3").val(puzzleData.word1.charAt(2)).prop('disabled', true);
