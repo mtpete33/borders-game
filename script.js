@@ -408,7 +408,7 @@ $(document).ready(function() {
         $('#loginForm').hide();   // Hide the login form
         $("#landingPage").css('display', 'none');
         $("#gameBoard").css('display', 'block');
-        $("#cell-1").focus();
+        $(`#${focusableCells[0]}`).focus();
         $("#googleLoginBtn").hide();
         $("#example").hide();
         $("#viewLeaderboardBtn").hide();
@@ -581,7 +581,7 @@ $(document).ready(function() {
       "hideMethod": "fadeOut"
     };
 
-    $("#cell-1").focus();
+    $(`#${focusableCells[0]}`).focus();
 
     // Event listener for the "Submit" button
     $("#submitBtn").click(function() {
@@ -598,7 +598,7 @@ $(document).ready(function() {
     let currentCellIndex = 0;
 
     // Define the sequence of focusable cells
-    const focusableCells = ["cell-1", "cell-3", "cell-4", "cell-7", "cell-8", "cell-11", "cell-12", "cell-14"];
+    const focusableCells = ["cell-2", "cell-4", "cell-5", "cell-6", "cell-7", "cell-8", "cell-9", "cell-10", "cell-11", "cell-12", "cell-13", "cell-14"];
 
     // Initialize focus on the first cell when the game starts
     // console.log("Initializing focus on first cell:");
@@ -626,7 +626,7 @@ $(document).ready(function() {
     focusableCells.forEach((cellId, index) => {
         $(`#${cellId}`).on('input', function(event) {
             if (!isProgrammaticChange && $(this).val().length === 1 && index < focusableCells.length - 1) {
-                currentCellIndex++;
+                currentCellIndex = index + 1;
                 $(`#${focusableCells[currentCellIndex]}`).focus().select();
             }
         });
