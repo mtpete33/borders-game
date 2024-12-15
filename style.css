@@ -51,32 +51,7 @@ h1 {
   padding:0;
   line-height: 1;
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent; /* For iOS */
-  -webkit-touch-callout: none; /* Disable callout on iOS */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-  
-}
-
-.cell, .cell:disabled {
-  vertical-align: middle;
-  line-height: 1.5; /* Adjust this value to match the alignment */
-}
-.cell:disabled {
-  padding-top:.19em;
-}
-
-.cell::selection {
-  background: none; /* Remove the background highlight */
-  color: inherit;   /* Keep the text color the same */
-}
-.cell::-moz-selection {
-  background: transparent;
-  color: inherit;
-}
+  }
 
 .cell:focus {
   caret-color: transparent;
