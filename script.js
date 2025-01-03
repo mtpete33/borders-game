@@ -22,6 +22,25 @@ let isProgrammaticChange = false;
 
 
 $(document).ready(function() {
+    // Filter button handlers
+    $('.filter-btn').click(function() {
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $('#todayFilter').click(function() {
+        $('#leaderboardDate').show();
+        getLeaderboard(new Date());
+    });
+
+    $('#bestTimeFilter').click(function() {
+        getBestTimes();
+    });
+
+    $('#mostWinsFilter').click(function() {
+        getMostWins();
+    });
+
     // Navigation button handlers
     $('#prevDay').click(function() {
         const prevDay = new Date(currentLeaderboardDate);
@@ -1145,7 +1164,107 @@ await fetchTodaysPuzzle();
     //             }
 
 
-    async function getLeaderboard(date = new Date()) {
+    // Function to get all-time best times
+async function getBestTimes() {
+    const statsRef = collection(window.db, "leaderboard");
+    const q = query(
+        statsRef,
+        orderBy("time", "asc"),
+        limit(10)
+    );
+
+    try {
+        const querySnapshot = await getDocs(q);
+        const leaderboardData = [];
+        for (const doc of querySnapshot.docs) {
+            const data = doc.data();
+            if (!data.hasGivenUp) {
+                leaderboardData.push(data);
+            }
+        }
+        $('#leaderboardDate').hide();
+        displayLeaderboard(leaderboardData);
+    } catch (error) {
+        console.error('Error fetching best times:', error);
+    }
+}
+
+// Function to get users with most wins
+async function getMostWins() {
+    const statsRef = collection(window.db, "leaderboard");
+    try {
+        // Get all entries
+        const querySnapshot = await getDocs(statsRef);
+        const winCounts = {};
+
+        // Group first place wins by user
+        querySnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            if (!data.hasGivenUp) {
+                const puzzleId = data.puzzleId;
+                const date = new Date(data.date);
+                date.setHours(0, 0, 0, 0);
+                
+                // Create a unique key for each puzzle/date combination
+                const key = `${puzzleId}_${date.getTime()}`;
+                
+                if (!winCounts[key]) {
+                    winCounts[key] = {
+                        time: data.time,
+                        username: data.username
+                    };
+                } else if (data.time < winCounts[key].time) {
+                    winCounts[key] = {
+                        time: data.time,
+                        username: data.username
+                    };
+                }
+            }
+        });
+
+        // Count wins per user
+        const userWins = {};
+        Object.values(winCounts).forEach(win => {
+            userWins[win.username] = (userWins[win.username] || 0) + 1;
+        });
+
+        // Convert to array and sort
+        const sortedWins = Object.entries(userWins)
+            .map(([username, wins]) => ({ username, wins }))
+            .sort((a, b) => b.wins - a.wins)
+            .slice(0, 10);
+
+        $('#leaderboardDate').hide();
+        displayWinnersList(sortedWins);
+    } catch (error) {
+        console.error('Error fetching most wins:', error);
+    }
+}
+
+// Function to display winners list
+function displayWinnersList(winnersList) {
+    const leaderboardTable = document.getElementById('leaderboardTable');
+    const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+    
+    winnersList.forEach((winner, index) => {
+        const row = tbody.insertRow();
+        const rankCell = row.insertCell(0);
+        const usernameCell = row.insertCell(1);
+        const winsCell = row.insertCell(2);
+        
+        rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
+        usernameCell.textContent = winner.username;
+        winsCell.textContent = `${winner.wins} wins`;
+        
+        // Add empty cells for alignment
+        row.insertCell(3);
+        row.insertCell(4);
+        row.insertCell(5);
+    });
+}
+
+async function getLeaderboard(date = new Date()) {
         const statsRef = collection(window.db, "leaderboard");
         currentLeaderboardDate = date;
         const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
