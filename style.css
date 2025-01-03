@@ -83,10 +83,14 @@ h1 {
 
 
 #cell-1, #cell-3, #cell-7, #cell-8, #cell-12, #cell-14 {
-  background-color: #ebebf9;
+  background-color: #ffffff;
   color: black;
   font-family: "Josefin Sans", sans-serif;
   padding-top: .2em;
+}
+#cell-2, #cell-5, #cell-6, #cell-9, #cell-10, #cell-13 {
+  background-color: #ebebf9;
+
 }
 
 #help {
@@ -113,7 +117,7 @@ footer {
   margin-top: 1em;
 }
 #submitBtn {
-  margin-top: 5px;
+  margin-top: 8px;
   background-color: black;
   color: white;
 }
@@ -129,8 +133,8 @@ footer {
 
 #giveUpBtn {
   display:block;
-  width:7em;
-  margin: 3em auto 0 auto;
+  width:6.6em;
+  margin: 1.5em auto 0 auto;
   background-color:#ffffff;
   padding: 7px 16px;
   
@@ -220,7 +224,7 @@ footer {
 
 /* New Keyboard Styles */
 .keyboard-container {
-  margin-top: 2em;
+  margin-top: 1.5em;
   background-color: #ffffff;
   border-radius: 10px;
   padding: 5px;
@@ -520,7 +524,7 @@ footer {
 
   .key {
     padding: 0.65rem 0; /* Adjust padding for smaller screens */
-    font-size: 1rem; /* Adjust font size */
+    font-size: 1.2rem; /* Adjust font size */
   }
 
   .key:first-child, .key:last-child {
@@ -531,7 +535,9 @@ footer {
   #example {
     width:21em;
   }
-
+  #submitBtn {
+    margin-top:10px;
+  }
 
 }
 
