@@ -68,7 +68,7 @@ h1 {
 }
 
 .padded-cell {
-    padding-bottom: .2em;
+    padding-top: .7em;
 }
 
 
@@ -76,6 +76,7 @@ h1 {
   background-color: #ebebf9;
   color: black;
   font-family: "Josefin Sans", sans-serif;
+  padding-top: .2em;
 }
 
 #help {

@@ -237,34 +237,20 @@ $(document).ready(function() {
               word3: puzzleData.word3,
               word4: puzzleData.word4
           };
-            //Original pattern
-            // $("#cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+          // Update the game board with the puzzle data.
+          // Word1: Top word
+          $("#cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
 
-            //   // Word2: Right word (down)
-            //   $("#cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
-            //   $("#cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
-            //   // Word3: Bottom word (across)
-            //   $("#cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
-            //   // Word4: Left word (down)
-            //   $("#cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
-            //   $("#cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+          // Word2: Right word (down)
+          $("#cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+          $("#cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
 
+          // Word3: Bottom word (across)
+          $("#cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
 
-          // New Pattern
-          // Update the game board with the puzzle data
-          // Word1: Top word - 1st and 3rd letters
-          $("#cell-1").val(puzzleData.word1.charAt(0)).prop('disabled', true);
-          $("#cell-3").val(puzzleData.word1.charAt(2)).prop('disabled', true);
-
-          // Word2: Right word (down) - 3rd and 5th letters
-          $("#cell-8").val(puzzleData.word2.charAt(2)).prop('disabled', true);
-          $("#cell-14").val(puzzleData.word2.charAt(4)).prop('disabled', true);
-
-          // Word3: Bottom word (across) - 2nd letter
-          $("#cell-12").val(puzzleData.word3.charAt(1)).prop('disabled', true);
-
-          // Word4: Left word (down) - 3rd letter
-          $("#cell-7").val(puzzleData.word4.charAt(2)).prop('disabled', true);
+          // Word4: Left word (down)
+          $("#cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+          $("#cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
 
         } else {
             await fetchRandomPuzzle();
@@ -356,14 +342,14 @@ $(document).ready(function() {
         // Disable all cells in the game grid
         $(".cell").prop('disabled', true);
         
-        $("#cell-1").css('padding-top', '0');
-        $("#cell-3").css('padding-top', '0');
+        $("#cell-1").css('padding-top', '5px');
+        $("#cell-3").css('padding-top', '5px');
         $("#cell-4").css('padding-top', '0');
-        $("#cell-7").css('padding-top', '0');
-        $("#cell-8").css('padding-top', '0');
+        $("#cell-7").css('padding-top', '5px');
+        $("#cell-8").css('padding-top', '5px');
         $("#cell-11").css('padding-top', '0');
-        $("#cell-12").css('padding-top', '0');
-        $("#cell-14").css('padding-top', '0');
+        $("#cell-12").css('padding-top', '5px');
+        $("#cell-14").css('padding-top', '5px');
         // Show the give up message
         toastr.info("You gave up! Sorry, better luck tomorrow.");
         // Hide the confirmation modal
@@ -408,7 +394,7 @@ $(document).ready(function() {
         $('#loginForm').hide();   // Hide the login form
         $("#landingPage").css('display', 'none');
         $("#gameBoard").css('display', 'block');
-        $(`#${focusableCells[0]}`).focus();
+        $("#cell-1").focus();
         $("#googleLoginBtn").hide();
         $("#example").hide();
         $("#viewLeaderboardBtn").hide();
@@ -581,7 +567,7 @@ $(document).ready(function() {
       "hideMethod": "fadeOut"
     };
 
-    $(`#${focusableCells[0]}`).focus();
+    $("#cell-1").focus();
 
     // Event listener for the "Submit" button
     $("#submitBtn").click(function() {
@@ -626,7 +612,7 @@ $(document).ready(function() {
     focusableCells.forEach((cellId, index) => {
         $(`#${cellId}`).on('input', function(event) {
             if (!isProgrammaticChange && $(this).val().length === 1 && index < focusableCells.length - 1) {
-                currentCellIndex = index + 1;
+                currentCellIndex++;
                 $(`#${focusableCells[currentCellIndex]}`).focus().select();
             }
         });
@@ -1078,10 +1064,11 @@ $(document).ready(function() {
         $("#leaderboard").show();
         getLeaderboard();
 
-        // Disable all cells in the game grid
-        $(".cell").prop('disabled', true);
+        
         // Apply padding to specific cells
         $("#cell-1, #cell-3, #cell-4, #cell-7, #cell-8, #cell-11, #cell-12, #cell-14").addClass("padded-cell");
+        // Disable all cells in the game grid
+        $(".cell").prop('disabled', true);
     }
     
 
