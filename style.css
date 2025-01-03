@@ -55,15 +55,7 @@ h1 {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   }
-
-.cell {
-  -webkit-text-fill-color: currentcolor;
-}
 
 .cell::selection {
   background: transparent;
