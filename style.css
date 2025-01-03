@@ -92,7 +92,9 @@ h1 {
 }
 #cell-2, #cell-5, #cell-6, #cell-9, #cell-10, #cell-13 {
   background-color: #ebebf9;
-
+  color: #616161;
+  font-family: "Josefin Sans", sans-serif;
+  padding-top: .2em;
 }
 
 #help {
