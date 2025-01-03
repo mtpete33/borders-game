@@ -51,16 +51,16 @@ h1 {
   padding:0;
   line-height: 1;
   box-sizing: border-box;
-  -webkit-user-select: none;
-  user-select: none;
   }
 
 .cell::selection {
-  background-color: transparent;
+  background: transparent;
+  color: inherit;
 }
 
 .cell::-moz-selection {
-  background-color: transparent;
+  background: transparent;
+  color: inherit;
 }
 
 .cell:focus {
