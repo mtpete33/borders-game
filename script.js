@@ -75,6 +75,33 @@ $(document).ready(function() {
                 } else if (data.hasGivenUp) {
                     $("#playBtn").hide();
 
+
+// Navigation button handlers
+$('#prevDay').click(function() {
+    const prevDay = new Date(currentLeaderboardDate);
+    prevDay.setDate(prevDay.getDate() - 1);
+    getLeaderboard(prevDay);
+});
+
+$('#nextDay').click(function() {
+    const nextDay = new Date(currentLeaderboardDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const today = new Date();
+    if (nextDay <= today) {
+        getLeaderboard(nextDay);
+    }
+});
+
+// Update button states based on current date
+function updateNavigationButtons() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const currentDate = new Date(currentLeaderboardDate);
+    currentDate.setHours(0, 0, 0, 0);
+    
+    $('#nextDay').prop('disabled', currentDate >= today);
+}
+
                     //Load today's puzzle data
                     await fetchTodaysPuzzle();
                     
@@ -1115,11 +1142,22 @@ $(document).ready(function() {
     //             }
 
 
-    async function getLeaderboard() {
+    let currentLeaderboardDate = new Date();
+
+async function getLeaderboard(date = new Date()) {
         const statsRef = collection(window.db, "leaderboard");
-        const today = new Date();
-        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        currentLeaderboardDate = date;
+        const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+
+        // Update the displayed date
+        const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
+            weekday: 'long',
+            month: 'long', 
+            day: 'numeric',
+            year: 'numeric'
+        });
+        $('#leaderboardDate').text(formattedDisplayDate);
 
         const q = query(
             statsRef, 
@@ -1198,6 +1236,7 @@ $(document).ready(function() {
     function displayLeaderboard(leaderboardData) {
         const leaderboardDiv = document.getElementById('leaderboard');
         leaderboardDiv.style.display = 'block'; // Show the leaderboard
+        updateNavigationButtons();
         const leaderboardTableBody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
         leaderboardTableBody.innerHTML = ''; // Clear previous data
         leaderboardData.forEach((entry, index) => {
