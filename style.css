@@ -326,6 +326,39 @@ footer {
 }
 
 /* Leaderboard Styling */
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.nav-arrow {
+  background: none;
+  border: 2px solid #333;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.nav-arrow:disabled {
+  border-color: #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+#leaderboardDate {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-family: "Josefin Sans", sans-serif;
+}
+
 #leaderboardTable {
   width: 100%;
   border-collapse: collapse;

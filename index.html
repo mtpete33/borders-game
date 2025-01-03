@@ -168,8 +168,12 @@
   
   <!-- Leaderboard Element -->
   <div id="leaderboard" style="display:none;">
-    <h2>Leaderboard</h2>
-    <!-- <h3>Top 10 Today</h3> -->
+      <div class="leaderboard-header">
+        <button class="nav-arrow" id="prevDay">&#9664;</button>
+        <h2>Leaderboard</h2>
+        <button class="nav-arrow" id="nextDay">&#9654;</button>
+      </div>
+      <div id="leaderboardDate"></div>
     
     <table id="leaderboardTable">
       <thead>
