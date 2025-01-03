@@ -1247,6 +1247,13 @@ function displayWinnersList(winnersList) {
     const thead = leaderboardTable.getElementsByTagName('thead')[0];
     const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
     
+    // Filter out entries with undefined username
+    winnersList = winnersList.filter(winner => 
+        winner.username && 
+        winner.username !== 'undefined' && 
+        winner.username.toLowerCase() !== 'undefined'
+    );
+    
     // Update table headers for Most 1st Place view
     thead.innerHTML = `
         <tr>
