@@ -22,6 +22,22 @@ let isProgrammaticChange = false;
 
 
 $(document).ready(function() {
+    // Navigation button handlers
+    $('#prevDay').click(function() {
+        const prevDay = new Date(currentLeaderboardDate);
+        prevDay.setDate(prevDay.getDate() - 1);
+        getLeaderboard(prevDay);
+    });
+
+    $('#nextDay').click(function() {
+        const nextDay = new Date(currentLeaderboardDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const today = new Date();
+        if (nextDay <= today) {
+            getLeaderboard(nextDay);
+        }
+    });
+    
 // getLeaderboard(); // <----comment this out
 
     // const auth = getAuth();
@@ -90,24 +106,7 @@ $(document).ready(function() {
                     $("#playBtn").hide();
 
 
-// Navigation button handlers
-$('#prevDay').click(function() {
-    const prevDay = new Date(currentLeaderboardDate);
-    prevDay.setDate(prevDay.getDate() - 1);
-    getLeaderboard(prevDay);
-});
-
-$('#nextDay').click(function() {
-    const nextDay = new Date(currentLeaderboardDate);
-    nextDay.setDate(nextDay.getDate() + 1);
-    const today = new Date();
-    if (nextDay <= today) {
-        getLeaderboard(nextDay);
-    }
-});
-
-//Load today's puzzle data
-                    await fetchTodaysPuzzle();
+await fetchTodaysPuzzle();
                     
                     $("#viewSolvedBtn").show().off("click").click(showGivenUpPuzzle);
                 } else {
