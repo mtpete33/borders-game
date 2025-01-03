@@ -1244,7 +1244,18 @@ async function getMostWins() {
 // Function to display winners list
 function displayWinnersList(winnersList) {
     const leaderboardTable = document.getElementById('leaderboardTable');
+    const thead = leaderboardTable.getElementsByTagName('thead')[0];
     const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
+    
+    // Update table headers for Most 1st Place view
+    thead.innerHTML = `
+        <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Wins</th>
+        </tr>
+    `;
+    
     tbody.innerHTML = '';
     
     winnersList.forEach((winner, index) => {
@@ -1255,12 +1266,7 @@ function displayWinnersList(winnersList) {
         
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
         usernameCell.textContent = winner.username;
-        winsCell.textContent = `${winner.wins} wins`;
-        
-        // Add empty cells for alignment
-        row.insertCell(3);
-        row.insertCell(4);
-        row.insertCell(5);
+        winsCell.textContent = winner.wins;
     });
 }
 
