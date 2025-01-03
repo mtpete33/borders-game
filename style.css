@@ -48,6 +48,8 @@ h1 {
   font-weight: bold;
   text-align: center;
   border: 1px solid black;
+  border-radius: 0;
+  -webkit-appearance: none;
   padding:0;
   line-height: 1;
   box-sizing: border-box;
