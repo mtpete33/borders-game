@@ -1361,32 +1361,69 @@ async function getLeaderboard(date = new Date()) {
 
     function displayLeaderboard(leaderboardData) {
         const leaderboardDiv = document.getElementById('leaderboard');
-        leaderboardDiv.style.display = 'block'; // Show the leaderboard
+        leaderboardDiv.style.display = 'block';
         updateNavigationButtons();
-        const leaderboardTableBody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
-        leaderboardTableBody.innerHTML = ''; // Clear previous data
+        
+        const thead = document.getElementById('leaderboardTable').getElementsByTagName('thead')[0];
+        const tbody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
+        
+        // Determine which view is active
+        const activeFilter = $('.filter-btn.active').attr('id');
+        
+        // Set appropriate headers based on active filter
+        if (activeFilter === 'mostWinsFilter') {
+            thead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Wins</th>
+                </tr>
+            `;
+        } else {
+            thead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Puzzle #</th>
+                    <th>Answers</th>
+                </tr>
+            `;
+        }
+        
+        tbody.innerHTML = '';
+        
         leaderboardData.forEach((entry, index) => {
-            const row = leaderboardTableBody.insertRow();
-            // Reorder the table columns as Rank, User, Time, Date, PuzzleID
-            const rankCell = row.insertCell(0); // Rank first
-            const usernameCell = row.insertCell(1); // Username second
-            const timeCell = row.insertCell(2); // Time third
-            const dateCell = row.insertCell(3); // Date fourth
-            const puzzleCell = row.insertCell(4); // PuzzleID fifth
-            const wordsCell = row.insertCell(5); // Words sixth
-            // Format the elapsed time
-            const formattedTime = formatTime(entry.time);
-            // Set the cell values based on the new order
-            rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;  // Rank with suffix
-            usernameCell.textContent = entry.username;
-            timeCell.textContent = formattedTime;  // Display time in mm:ss format
-            // Convert date to "MM/DD/YY" format
-            const dateObj = new Date(entry.date);
-            const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
-            dateCell.textContent = formattedDate;
-            puzzleCell.textContent = entry.puzzleId;  // Make sure puzzleId is the correct identifier
-            // Display words
-            wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
+            const row = tbody.insertRow();
+            if (activeFilter === 'mostWinsFilter') {
+                const rankCell = row.insertCell(0);
+                const usernameCell = row.insertCell(1);
+                const winsCell = row.insertCell(2);
+                
+                rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
+                usernameCell.textContent = entry.username;
+                winsCell.textContent = entry.wins;
+            } else {
+                const rankCell = row.insertCell(0);
+                const usernameCell = row.insertCell(1);
+                const timeCell = row.insertCell(2);
+                const dateCell = row.insertCell(3);
+                const puzzleCell = row.insertCell(4);
+                const wordsCell = row.insertCell(5);
+                
+                const formattedTime = formatTime(entry.time);
+                
+                rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
+                usernameCell.textContent = entry.username;
+                timeCell.textContent = formattedTime;
+                
+                const dateObj = new Date(entry.date);
+                const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+                dateCell.textContent = formattedDate;
+                puzzleCell.textContent = entry.puzzleId;
+                wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
+            }
         });
     }
 
