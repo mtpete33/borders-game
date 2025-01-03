@@ -5,11 +5,19 @@ let currentLeaderboardDate = new Date();
 
 // Function to update navigation button states
 function updateNavigationButtons() {
+    const activeFilter = $('.filter-btn.active').attr('id');
+    
+    if (activeFilter === 'bestTimeFilter' || activeFilter === 'mostWinsFilter') {
+        $('.nav-arrow').prop('disabled', true);
+        return;
+    }
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const currentDate = new Date(currentLeaderboardDate);
     currentDate.setHours(0, 0, 0, 0);
     
+    $('.nav-arrow').prop('disabled', false);
     $('#nextDay').prop('disabled', currentDate >= today);
 }
 
