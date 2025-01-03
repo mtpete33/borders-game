@@ -1394,7 +1394,10 @@ async function getLeaderboard(date = new Date()) {
         
         tbody.innerHTML = '';
         
-        leaderboardData.forEach((entry, index) => {
+        // Filter out entries with undefined username
+        const validEntries = leaderboardData.filter(entry => entry.username !== 'undefined' && entry.username !== undefined);
+        
+        validEntries.forEach((entry, index) => {
             const row = tbody.insertRow();
             if (activeFilter === 'mostWinsFilter') {
                 const rankCell = row.insertCell(0);
