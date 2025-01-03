@@ -51,6 +51,8 @@ h1 {
   padding:0;
   line-height: 1;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   }
 
 .cell::selection {
