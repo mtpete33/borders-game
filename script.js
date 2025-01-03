@@ -1,5 +1,17 @@
 import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+// Function to update navigation button states
+function updateNavigationButtons() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const currentDate = new Date(currentLeaderboardDate);
+    currentDate.setHours(0, 0, 0, 0);
+    
+    $('#nextDay').prop('disabled', currentDate >= today);
+}
+
+
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 let validWords = [];
@@ -92,17 +104,7 @@ $('#nextDay').click(function() {
     }
 });
 
-// Update button states based on current date
-function updateNavigationButtons() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const currentDate = new Date(currentLeaderboardDate);
-    currentDate.setHours(0, 0, 0, 0);
-    
-    $('#nextDay').prop('disabled', currentDate >= today);
-}
-
-                    //Load today's puzzle data
+//Load today's puzzle data
                     await fetchTodaysPuzzle();
                     
                     $("#viewSolvedBtn").show().off("click").click(showGivenUpPuzzle);
