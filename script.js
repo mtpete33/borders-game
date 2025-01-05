@@ -186,6 +186,7 @@ $(document).ready(function() {
                 $("#signUpBtn").hide();
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
+                
                 $("#playBtn").show();
                 
             })
