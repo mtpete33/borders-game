@@ -123,25 +123,25 @@ $(document).ready(function() {
             console.log("Checking for document with user ID and puzzle ID:", user.uid, currentPuzzleId);
 
             const querySnapshot = await getDocs(q);
+            // Hide both buttons initially
+            $("#playBtn").hide();
+            $("#viewSolvedBtn").hide();
+            
             if (!querySnapshot.empty) {
                 const docSnap = querySnapshot.docs[0];
                 const data = docSnap.data();
                 console.log("Leaderboard data retrieved:", data);
                 
-                $("#playBtn").hide(); // Always hide play button first
-                
-                if (data.hasCompleted) {
-                    $("#viewSolvedBtn").show().off("click").click(showSolvedPuzzle);
-                } else if (data.hasGivenUp) {
-                    await fetchTodaysPuzzle();
-                    $("#viewSolvedBtn").show().off("click").click(showGivenUpPuzzle);
+                if (data.hasCompleted || data.hasGivenUp) {
+                    $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
+                    if (data.hasGivenUp) {
+                        await fetchTodaysPuzzle();
+                    }
                 } else {
                     $("#playBtn").show();
-                    $("#viewSolvedBtn").hide();
                 }
             } else {
                 $("#playBtn").show();
-                $("#viewSolvedBtn").hide();
             }
         }
     }
