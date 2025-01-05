@@ -30,6 +30,7 @@ let isProgrammaticChange = false;
 
 
 $(document).ready(function() {
+    $('#playBtn').hide();
     // Filter button handlers
     $('.filter-btn').click(function() {
         $('.filter-btn').removeClass('active');
@@ -88,7 +89,7 @@ $(document).ready(function() {
         } else {
             $('#loggedInAs').text(''); // Clear if logged out
             // User is signed out
-            $("#playBtn").show();
+            // $("#playBtn").show();
             $("#viewSolvedBtn").hide();
 
         }
@@ -136,6 +137,7 @@ $(document).ready(function() {
 await fetchTodaysPuzzle();
                     
                     $("#viewSolvedBtn").show().off("click").click(showGivenUpPuzzle);
+                    $("#playBtn").hide();
                 } else {
                     $("#playBtn").show();
                     $("#viewSolvedBtn").hide();
@@ -190,6 +192,8 @@ await fetchTodaysPuzzle();
                 $("#signUpBtn").hide();
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
+                $("#playBtn").show();
+                
             })
             .catch((error) => {
                 console.error('Error during Google login:', error.message);
@@ -237,13 +241,13 @@ await fetchTodaysPuzzle();
         const key = $(this).data("key");
         isProgrammaticChange = true; // Mark change as programmatic before any way this happens
         if (key === "backspace") {
-            console.log("Delete button clicked");
+            // console.log("Delete button clicked");
             handleDelete();
         } else {
             $(`#${focusableCells[currentCellIndex]}`).val(key.toUpperCase());
             if (currentCellIndex < focusableCells.length - 1) {
                 currentCellIndex++;
-                console.log("Moved to next cell due to key input. Current cell index:", currentCellIndex);
+                // console.log("Moved to next cell due to key input. Current cell index:", currentCellIndex);
                 $(`#${focusableCells[currentCellIndex]}`).focus();
             }
         }
@@ -252,7 +256,7 @@ await fetchTodaysPuzzle();
 
 
     let currentPuzzleId = getSequentialDay();
-    console.log(currentPuzzleId);
+    // console.log(currentPuzzleId);
     // const date = new Date();
     let currentUsername = "";
     
@@ -311,8 +315,9 @@ await fetchTodaysPuzzle();
 
         } else {
             await fetchRandomPuzzle();
-          // console.log("No puzzle found for today.");
-          // toastr.error("No puzzle available for today!");
+          console.log("No puzzle found for today.");
+          toastr.error("No puzzle available for today! Displaying random puzzle.");
+          
         }
       } catch (error) {
         console.error("Error retrieving puzzle data:", error);
@@ -321,7 +326,7 @@ await fetchTodaysPuzzle();
     }
 
     async function fetchRandomPuzzle() {
-        const randomPuzzleId = Math.floor(Math.random() * 30) + 1; // Random ID between 1 and 30
+        const randomPuzzleId = Math.floor(Math.random() * 50) + 1; // Random ID between 1 and 50
         try {
             const docRef = doc(window.db, "puzzles", randomPuzzleId.toString());
             const docSnap = await getDoc(docRef);
@@ -364,19 +369,11 @@ await fetchTodaysPuzzle();
 
     // Event handler for the confirmation button inside the modal
     $("#confirmGiveUpBtn").click(function () {
-
-        //Get the current user
-        const user = auth.currentUser;
-
-        // if (!user) {
-        //     console.error("User is not logged in. Cannot proceed with 'give up' action.");
-        //         toastr.error("You must be logged in to give up.");
-        //         return;
-        //     }
+        
         // Clear all user inputs and display correct answers
         $(".cell").each(function() {
             $(this).val('');
-            // $(this).prop('disabled', false);
+
         });
         // Display the correct answers
         $("#cell-1").val(puzzleAnswers.word1.charAt(0));
@@ -399,14 +396,14 @@ await fetchTodaysPuzzle();
         // Disable all cells in the game grid
         $(".cell").prop('disabled', true);
         
-        $("#cell-1").css('padding-top', '5px');
-        $("#cell-3").css('padding-top', '5px');
-        $("#cell-4").css('padding-top', '0');
-        $("#cell-7").css('padding-top', '5px');
-        $("#cell-8").css('padding-top', '5px');
-        $("#cell-11").css('padding-top', '0');
-        $("#cell-12").css('padding-top', '5px');
-        $("#cell-14").css('padding-top', '5px');
+        // $("#cell-1").css('padding-top', '5px');
+        // $("#cell-3").css('padding-top', '6px');
+        // $("#cell-4").css('padding-top', '6px');
+        // $("#cell-7").css('padding-top', '5px');
+        // $("#cell-8").css('padding-top', '5px');
+        // $("#cell-11").css('padding-top', '2px');
+        // $("#cell-12").css('padding-top', '5px');
+        // $("#cell-14").css('padding-top', '5px');
         // Show the give up message
         toastr.info("You gave up! Sorry, better luck tomorrow.");
         // Hide the confirmation modal
@@ -416,10 +413,6 @@ await fetchTodaysPuzzle();
         $("#giveUpBtn").hide();
         
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
-
-        // if (user) {
-        // storePlayerStats(currentPuzzleId, new Date().toISOString(), user.uid, currentUsername, null, [], false, true);
-        // }
         
         $("#gameBoard").css('display', 'block');
         // Show default words and message
@@ -679,14 +672,14 @@ await fetchTodaysPuzzle();
 
     // Function to handle the deletion logic
     function handleDelete() {
-        console.log("Handle delete called. Current cell index:", currentCellIndex);
+        // console.log("Handle delete called. Current cell index:", currentCellIndex);
         let currentCell = $(`#${focusableCells[currentCellIndex]}`);
         if (currentCell.val().length > 0) {
             currentCell.val("");
             
         } else if (currentCellIndex > 0) {
             currentCellIndex--; // Move back one cell
-            console.log("Moved to previous cell. Current cell index:", currentCellIndex);
+            // console.log("Moved to previous cell. Current cell index:", currentCellIndex);
             let previousCell = $(`#${focusableCells[currentCellIndex]}`);
             previousCell.val(""); // Clear the previous cell
             previousCell.focus(); // Focus the previous cell
@@ -697,29 +690,6 @@ await fetchTodaysPuzzle();
     }
 
 
-
-    // Handle keyboard events for navigation and deletion
-    // $(document).keydown(function(event) {
-    //     // Check if the focused element is a game cell
-    //     const focusedElement = document.activeElement;
-    //     const isGameCell = $(focusedElement).hasClass('cell'); // Assuming your game input fields have a class 'cell'
-    //     if (isGameCell) {
-    //         if (event.key === "Backspace") {
-    //             event.preventDefault(); // Prevent the default backspace behavior
-    //             handleDelete();
-    //         } else if (event.key === "ArrowLeft") {
-    //             if (currentCellIndex > 0) {
-    //                 currentCellIndex--;
-    //                 $(`#${focusableCells[currentCellIndex]}`).focus().select();
-    //             }
-    //         } else if (event.key === "ArrowRight") {
-    //             if (currentCellIndex < focusableCells.length - 1) {
-    //                 currentCellIndex++;
-    //                 $(`#${focusableCells[currentCellIndex]}`).focus().select();
-    //             }
-    //         }
-    //     }
-    // });
 
     // Handle keyboard events for navigation and deletion
     $(document).keydown(function(event) {
@@ -890,6 +860,7 @@ await fetchTodaysPuzzle();
                     displayLoggedInMessage(currentUsername);
                     // Show success and hide login-related UI elements
                     toastr.success("Logged in successfully!");
+                    $("#playBtn").show();
                     $("#signupSuccess").hide();
                     $("#loginForm").hide();
                     $("#logInBtn").hide();
@@ -929,63 +900,6 @@ await fetchTodaysPuzzle();
         $('#landingPage').show()
     });
 
-
-
-
-
-  // function storePlayerStats(puzzleId, date, uid, username, time, words) {
-  //   console.log(`Storing stats for UID: ${uid}, Username: ${username}`);
-  //     const statsRef = collection(window.db, "leaderboard");
-
-  //     // Ensure words is defined and an array
-  //     const wordsToStore = Array.isArray(words) ? words : [];
-
-
-  //     addDoc(statsRef, {
-  //         puzzleId: puzzleId,
-  //         date: date,
-  //         uid: uid,
-  //         username: username || 'Unknown User',
-  //         time: time,
-  //         words: wordsToStore
-  //     })
-  //     .then(() => {
-  //         console.log('Player stats stored successfully');
-  //     })
-  //     .catch(error => {
-  //         console.error('Error storing player stats:', error);
-  //     });
-  // }
-
-    // function storePlayerStats(puzzleId, date, uid, username, time, words, hasCompleted, hasGivenUp) {
-    //     console.log(`Storing stats for UID: ${uid}, Username: ${username}`);
-    //     const statsRef = collection(window.db, "leaderboard");
-
-    //     // Ensure words is defined and an array
-    //     const wordsToStore = Array.isArray(words) ? words : [];
-
-    //     addDoc(statsRef, {
-    //         puzzleId: puzzleId,
-    //         date: date,
-    //         uid: uid,
-    //         username: username || 'Unknown User',
-    //         time: hasCompleted ? time : null, // Store time only if completed
-    //         words: hasCompleted ? wordsToStore : [], // Use wordsToStore
-    //         hasCompleted: hasCompleted,
-    //         hasGivenUp: hasGivenUp
-    //     })
-    //     .then(() => {
-    //         console.log('Player stats stored successfully');
-            
-    //         setTimeout(() => {
-    //             decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
-    //         }, 200); // 200ms delay
-
-    //     })
-    //     .catch(error => {
-    //         console.error('Error storing player stats:', error);
-    //     });
-    // }
 
     async function storePlayerStats(puzzleId, date, uid, time, words) {
         try {
@@ -1129,49 +1043,6 @@ await fetchTodaysPuzzle();
     }
     
 
-    // async function getLeaderboard() {
-    //     const statsRef = collection(window.db, "leaderboard");
-
-    //     // Get today's start and end timestamps
-    //     const today = new Date();
-    //     const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    //     const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-
-    //     // Query to get results between start and end of today and order them by time
-    //     const q = query(
-    //         statsRef, 
-    //         where("date", ">=", startOfDay.toISOString()), 
-    //         where("date", "<", endOfDay.toISOString()), 
-    //         orderBy("time", "asc"), 
-    //         limit(10)
-    //     );
-
-    //     try {
-    //         const querySnapshot = await getDocs(q);
-    //         const leaderboardData = [];
-
-    //         for (const doc of querySnapshot.docs) {
-    //             const data = doc.data();
-
-    //             // Skip entries where the player has given up
-    //             if (data.hasGivenUp) {
-    //                 continue;
-    //             }
-
-    //                         // Use the `username` directly from the leaderboard document
-    //                         leaderboardData.push({
-    //                             username: data.username || 'Unknown User', // Fallback to 'Unknown User' if username is missing
-    //                             ...data
-    //                         });
-    //                     }
-
-    //                     displayLeaderboard(leaderboardData);
-    //                 } catch (error) {
-    //                     console.error('Error fetching leaderboard:', error);
-    //                 }
-    //             }
-
-
     // Function to get all-time best times
 async function getBestTimes() {
     const statsRef = collection(window.db, "leaderboard");
@@ -1190,7 +1061,8 @@ async function getBestTimes() {
                 leaderboardData.push(data);
             }
         }
-        $('#leaderboardDate').hide();
+        // $('#leaderboardDate').hide();
+        $('#leaderboardDate').text('All Time');
         displayLeaderboard(leaderboardData);
     } catch (error) {
         console.error('Error fetching best times:', error);
@@ -1242,7 +1114,8 @@ async function getMostWins() {
             .sort((a, b) => b.wins - a.wins)
             .slice(0, 10);
 
-        $('#leaderboardDate').hide();
+        // $('#leaderboardDate').hide();
+        $('#leaderboardDate').text('All Time');
         displayWinnersList(sortedWins);
     } catch (error) {
         console.error('Error fetching most wins:', error);
@@ -1487,6 +1360,7 @@ async function getLeaderboard(date = new Date()) {
                     // alert('You have been logged out.');
                     // Optionally, navigate to the home page or refresh the page
                     location.reload();
+                    $("#playBtn").hide();
                     $("#logInBtn").show();
                     $("#signUpBtn").show();
                     $("#googleLoginBtn").show();

@@ -100,6 +100,10 @@ h1 {
   font-family: "Josefin Sans", sans-serif;
   padding-top: .2em;
 }
+#cell-4 {
+  padding-top:6.4px;
+}
+
 #cell-2, #cell-5, #cell-6, #cell-9, #cell-10, #cell-13 {
   /* background-color: #ebebf9; */
   background-color: #ebebff;
@@ -116,7 +120,6 @@ h1 {
 
 footer {
   margin-top: 4em;
-  font-weight:bold;
 }
 
 #submitBtn, #logInBtn, #logInSubmitBtn, #playBtn, #signUpBtn, #signUpSubmitBtn, #googleLoginBtn, #viewLeaderboardBtn, #shareBtn, #giveUpBtn, #confirmGiveUpBtn, #cancelGiveUpBtn, #viewSolvedBtn {
@@ -133,12 +136,12 @@ footer {
 }
 #submitBtn {
   margin-top: 8px;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
 }
 #playBtn {
-  background-color: black;
-  color:white;
+  background-color: white;
+  color:black;
 }
 
 #submitBtn:hover, #logInBtn:hover, #logInSubmitBtn:hover, #playBtn:hover, #signUpBtn:hover, #signUpSubmitBtn:hover, #viewLeaderboardBtn:hover, #shareBtn:hover, #giveUpBtn:hover, #confirmGiveUpBtn:hover, #cancelGiveUpBtn:hover, #viewSolvedBtn:hover  {
@@ -617,7 +620,7 @@ h1 {
     padding: 10px 20px;
   }
 #shareBtn {
-  margin-top:0;
+  margin-top:5px;
 }
   h2 {
     margin-top:.25em;

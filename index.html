@@ -29,10 +29,11 @@
   
   
   <div id="landingPage" style="display: block;">
-    <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1>
-    <p>Welcome to Borders! In this timed, daily word game you fill in the blank squares with letters creating four valid dictionary words <em>across and down</em> (like a crossword) connecting around the border of the grid. A few letters will be filled in already. See example below. Any valid dictionary words are accepted, so there may be more than one solution to each puzzle.</p> <p>Hit Submit when you finish to stop the clock. Solve the puzzle as quick as you can!</p> <p>Log in to get your time on the leaderboard or just click Play to play as a guest. Come back each day for a new puzzle.</p>
+    <!-- <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1> -->
+    <h1>Borders</h1>
+    <p>Welcome to Borders! In this timed, daily word game you fill in the blank squares with letters creating four valid dictionary words <em>across and down</em> (like a crossword) connecting around the border of the grid. A few letters will be filled in already. See example below. Any valid dictionary words are accepted, so there may be more than one solution to each puzzle.</p> <p>Click Submit when you finish to stop the clock. Solve the puzzle as quick as you can!</p> <p>Come back each day for a new puzzle.</p>
     <div>
-      <button id="playBtn">Play</button>
+      <button id="playBtn" style="display:none;">Play</button>
       <button id="viewSolvedBtn" style="display:none;">View Solved Puzzle</button>
       
       </div>
@@ -46,8 +47,8 @@
   </div>
 
   <button id="googleLoginBtn" style="display:inline-flex;">
-    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 20px; height: 20px; margin-right: 8px;">
-    Log In with Google
+    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 18px; height: 18px; margin-right: 8px;">
+    Google Login
   </button>
   
 <br>
@@ -58,12 +59,15 @@
       <input type="email" id="loginEmail" placeholder="Email" class="form-input">
       <input type="password" id="loginPassword" placeholder="Password" class="form-input">
       <button id="logInSubmitBtn" class="form-button">Log In with Email</button>
+      <p><a href="accountrecovery.html" style="font-size:18px;">Forgot your password?</a></p>
+
 
   </div>
   
   <div id="signupSuccess" style= "display: none;"></div>
   
   <div id="gameBoard" style="display: none;">
+    <!-- <h1><a href="https://bordersgame.replit.app/" style="text-decoration: none; color: inherit;">Borders</a></h1> -->
     <h1>Borders</h1>
   <div class="crossword">
       <input type="text" maxlength="1" id="cell-1" class="cell" autocomplete="off">
@@ -205,7 +209,8 @@
   <img id="example" src="images/bordersexample.jpg" alt="game example">
   
   <footer>
-    <p>&copy;2024 MP Web Development. All rights reserved.</a></p>
+    <a href="https://bordersgame.replit.app/" style="text-decoration: none;"><h1 style="font-size:16px;">Borders</h1></a>
+    <p>&copy;<span id="year"></span> MP Web Development. All rights reserved.</p>
   </footer>
 
   <script type="module">
@@ -239,6 +244,13 @@
   
 
   <script type="module" src="script.js"></script>
+
+    <script>
+      // Get the current year
+      const currentYear = new Date().getFullYear();
+      // Set the year in the HTML
+      document.getElementById('year').textContent = currentYear;
+    </script>
 </body>
 
 </html>
