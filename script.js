@@ -187,7 +187,8 @@ $(document).ready(function() {
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
                 
-                $("#playBtn").show();
+                // Check if puzzle is already completed before showing Play button
+                decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
                 
             })
             .catch((error) => {
