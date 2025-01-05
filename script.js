@@ -123,9 +123,8 @@ $(document).ready(function() {
             console.log("Checking for document with user ID and puzzle ID:", user.uid, currentPuzzleId);
 
             const querySnapshot = await getDocs(q);
-            // Hide both buttons initially
-            $("#playBtn").hide();
-            $("#viewSolvedBtn").hide();
+            // Reset button visibility
+            $("#playBtn, #viewSolvedBtn").hide();
             
             if (!querySnapshot.empty) {
                 const docSnap = querySnapshot.docs[0];
@@ -137,12 +136,11 @@ $(document).ready(function() {
                     if (data.hasGivenUp) {
                         await fetchTodaysPuzzle();
                     }
-                } else {
-                    $("#playBtn").show();
+                    return; // Exit early to prevent Play button from showing
                 }
-            } else {
-                $("#playBtn").show();
             }
+            // Only show Play button if puzzle not completed/given up
+            $("#playBtn").show();
         }
     }
 
