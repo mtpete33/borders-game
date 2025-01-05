@@ -124,26 +124,22 @@ $(document).ready(function() {
 
             const querySnapshot = await getDocs(q);
             if (!querySnapshot.empty) {
-                const docSnap = querySnapshot.docs[0]; // Assuming there's only one matching document
+                const docSnap = querySnapshot.docs[0];
                 const data = docSnap.data();
                 console.log("Leaderboard data retrieved:", data);
+                
+                $("#playBtn").hide(); // Always hide play button first
+                
                 if (data.hasCompleted) {
-                    $("#playBtn").hide();
                     $("#viewSolvedBtn").show().off("click").click(showSolvedPuzzle);
                 } else if (data.hasGivenUp) {
-                    $("#playBtn").hide();
-
-
-await fetchTodaysPuzzle();
-                    
+                    await fetchTodaysPuzzle();
                     $("#viewSolvedBtn").show().off("click").click(showGivenUpPuzzle);
-                    $("#playBtn").hide();
                 } else {
                     $("#playBtn").show();
                     $("#viewSolvedBtn").hide();
                 }
             } else {
-                // console.warn("No leaderboard data found for this user or puzzle.");
                 $("#playBtn").show();
                 $("#viewSolvedBtn").hide();
             }
