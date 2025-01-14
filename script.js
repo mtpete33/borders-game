@@ -991,6 +991,25 @@ $(document).ready(function() {
                 // Show completion time and any success messages
                 $("#gameBoard").css('display', 'block');
                 $("#resultTime").text(`Completed in: ${formattedTime}`).show();
+                
+                // Show share button if Web Share API is supported
+                if (navigator.share) {
+                    $("#shareButtonContainer").show();
+                    $("#shareBtn").off('click').on('click', async function() {
+                        const today = new Date();
+                        const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+                        const shareData = {
+                            title: 'Borders',
+                            text: `Borders Puzzle #${currentPuzzleId} - ${formattedDate} - Time: ${formattedTime}`,
+                            url: window.location.href
+                        };
+                        try {
+                            await navigator.share(shareData);
+                        } catch (error) {
+                            console.error('Error sharing:', error);
+                        }
+                    });
+                }
             } else {
                 console.error("No solved puzzle data found.");
             }
