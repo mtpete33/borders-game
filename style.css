@@ -386,7 +386,7 @@ footer {
   color: white;
 }
 
-.new-feature-banner {
+/* .new-feature-banner {
   display: inline-block;
   background-color: #4CAF50;
   color: white;
@@ -396,12 +396,19 @@ footer {
   margin-left: 8px;
   font-family: "Josefin Sans", sans-serif;
   animation: pulse 2s infinite;
-}
+} */
 
-@keyframes pulse {
+/* @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
+} */
+footer a {
+  color: black;
+  text-decoration: none;
+  width: 5em;
+  display: inline-block;
+  margin: 0 auto;
 }
 
 .leaderboard-header {
@@ -516,6 +523,7 @@ footer {
 
 /*Responsive Mobile Styles */
 @media screen and (max-width: 600px) {
+
 
   .crossword {
     grid-template-columns: repeat(4, 2.5rem); /* Adjust grid for mobile */

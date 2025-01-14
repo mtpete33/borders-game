@@ -1045,7 +1045,7 @@ async function getBestTimes() {
     const q = query(
         statsRef,
         orderBy("time", "asc"),
-        limit(15)
+        limit(10)
     );
 
     try {
