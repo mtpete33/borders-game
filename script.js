@@ -1011,66 +1011,38 @@ $(document).ready(function() {
                     // });
                     $('#shareBtn').on('click', async function () {
                     try {
-                        $('#shareLeaderboardTitle').show();
-                        const leaderboardContent = document.getElementById('leaderboardContent');
+                        // Get the leaderboard data as text first
+                        const leaderboardText = Array.from($('#leaderboardTable tbody tr')).map(row => {
+                            const cells = Array.from(row.cells);
+                            return `${cells[0].textContent} ${cells[1].textContent} - ${cells[2].textContent}`;
+                        }).join('\n');
 
-                        // Ensure the content is visible before capturing
-                        leaderboardContent.style.display = 'block';
+                        const today = new Date();
+                        const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+                        const shareText = `Borders Leaderboard - ${formattedDate}\n\n${leaderboardText}\n\nPlay at: ${window.location.href}`;
 
-                        // Mobile-specific settings for html2canvas
-                        const canvas = await html2canvas(leaderboardContent, {
-                            useCORS: true,
-                            scale: window.devicePixelRatio || 2,
-                            logging: false,
-                            allowTaint: true,
-                            backgroundColor: '#ffffff'
-                        });
-
-                        try {
-                            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-                            if (isMobile) {
-                                // Use basic text sharing for mobile
-                                await navigator.share({
-                                    title: "Borders Leaderboard",
-                                    text: `Check out my score on Borders! Time: ${formattedTime}`,
-                                    url: window.location.href
-                                });
-                            } else {
-                                // Desktop sharing with image
-                                const blob = await new Promise((resolve, reject) => {
-                                    canvas.toBlob(resolve, 'image/png', 0.9);
-                                });
-
-                                if (!blob) throw new Error('Failed to create image');
-
-                                const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
-
-                                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                    await navigator.share({
-                                        title: "Borders Leaderboard",
-                                        text: "Check out my score on Borders!",
-                                        files: [file]
-                                    });
-                                } else {
-                                    throw new Error('File sharing not supported');
-                                }
-                            }
-                        } catch (shareError) {
-                            // Fallback to sharing URL only
+                        if (navigator.share) {
                             await navigator.share({
                                 title: "Borders Leaderboard",
-                                text: "Check out my score on Borders!",
-                                url: window.location.href
+                                text: shareText
                             });
+                            console.log("Shared successfully");
+                        } else {
+                            // Fallback for devices without sharing capability
+                            const textarea = document.createElement('textarea');
+                            textarea.value = shareText;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                            toastr.success('Leaderboard copied to clipboard!');
                         }
                     } catch (error) {
                         console.error('Error sharing:', error);
                         if (error.name === 'AbortError') {
-                            // User cancelled sharing - no need to show error
                             return;
                         }
-                        toastr.error('Unable to share leaderboard. Sharing may not be supported on this device.');
+                        toastr.error('Unable to share leaderboard. Try copying and pasting manually.');
                     }
                 });
 
