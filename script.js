@@ -1017,26 +1017,37 @@ $(document).ready(function() {
                         // Ensure the content is visible before capturing
                         leaderboardContent.style.display = 'block';
                         
-                        // Wait for html2canvas to complete
+                        // Mobile-specific settings for html2canvas
                         const canvas = await html2canvas(leaderboardContent, {
                             useCORS: true,
-                            scale: 2, // Higher quality for mobile
-                            logging: true
+                            scale: window.devicePixelRatio || 2,
+                            logging: false,
+                            allowTaint: true,
+                            backgroundColor: '#ffffff'
                         });
                         
-                        // Convert canvas to blob
-                        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                        const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
-
-                        // Check if device supports sharing files
-                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                            await navigator.share({
-                                title: "Borders Leaderboard",
-                                text: "Check out my score on Borders!",
-                                files: [file]
+                        try {
+                            // Try sharing as image first
+                            const blob = await new Promise((resolve, reject) => {
+                                canvas.toBlob(resolve, 'image/png', 0.9);
                             });
-                        } else {
-                            // Fallback for devices that don't support file sharing
+                            
+                            if (!blob) throw new Error('Failed to create image');
+                            
+                            const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
+
+                            // Verify file sharing support
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                await navigator.share({
+                                    title: "Borders Leaderboard",
+                                    text: "Check out my score on Borders!",
+                                    files: [file]
+                                });
+                            } else {
+                                throw new Error('File sharing not supported');
+                            }
+                        } catch (shareError) {
+                            // Fallback to sharing URL only
                             await navigator.share({
                                 title: "Borders Leaderboard",
                                 text: "Check out my score on Borders!",
@@ -1045,7 +1056,11 @@ $(document).ready(function() {
                         }
                     } catch (error) {
                         console.error('Error sharing:', error);
-                        toastr.error('Error sharing leaderboard. Please try again.');
+                        if (error.name === 'AbortError') {
+                            // User cancelled sharing - no need to show error
+                            return;
+                        }
+                        toastr.error('Unable to share leaderboard. Sharing may not be supported on this device.');
                     }
                 });
 
