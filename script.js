@@ -1009,30 +1009,45 @@ $(document).ready(function() {
                     //         console.error('Error sharing:', error);
                     //     }
                     // });
-                    $('#shareBtn').on('click', function () {
+                    $('#shareBtn').on('click', async function () {
+                    try {
                         $('#shareLeaderboardTitle').show();
-                        const leaderboardContent = document.getElementById('leaderboardContent'); // Keep this as plain JS for html2canvas
-
-                        // Use html2canvas to capture the leaderboard
-                        html2canvas(leaderboardContent).then((canvas) => {
-                            canvas.toBlob((blob) => {
-                                const file = new File([blob], "leaderboard.png", { type: "image/png" });
-
-                                // Check if the browser supports Web Share API and sharing files
-                                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                                    navigator.share({
-                                        title: "Borders Leaderboard",
-                                        text: "Check out the leaderboard!",
-                                        files: [file]
-                                    })
-                                    .then(() => console.log('Shared successfully'))
-                                    .catch((error) => console.error('Error sharing:', error));
-                                } else {
-                                    alert('Your browser does not support sharing files.');
-                                }
-                            });
+                        const leaderboardContent = document.getElementById('leaderboardContent');
+                        
+                        // Ensure the content is visible before capturing
+                        leaderboardContent.style.display = 'block';
+                        
+                        // Wait for html2canvas to complete
+                        const canvas = await html2canvas(leaderboardContent, {
+                            useCORS: true,
+                            scale: 2, // Higher quality for mobile
+                            logging: true
                         });
-                    });
+                        
+                        // Convert canvas to blob
+                        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                        const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
+
+                        // Check if device supports sharing files
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                title: "Borders Leaderboard",
+                                text: "Check out my score on Borders!",
+                                files: [file]
+                            });
+                        } else {
+                            // Fallback for devices that don't support file sharing
+                            await navigator.share({
+                                title: "Borders Leaderboard",
+                                text: "Check out my score on Borders!",
+                                url: window.location.href
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error sharing:', error);
+                        toastr.error('Error sharing leaderboard. Please try again.');
+                    }
+                });
 
                 }
             } else {
