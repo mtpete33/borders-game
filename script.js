@@ -6,17 +6,17 @@ let currentLeaderboardDate = new Date();
 // Function to update navigation button states
 function updateNavigationButtons() {
     const activeFilter = $('.filter-btn.active').attr('id');
-    
+
     if (activeFilter === 'bestTimeFilter' || activeFilter === 'mostWinsFilter') {
         $('.nav-arrow').prop('disabled', true);
         return;
     }
-    
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const currentDate = new Date(currentLeaderboardDate);
     currentDate.setHours(0, 0, 0, 0);
-    
+
     $('.nav-arrow').prop('disabled', false);
     $('#nextDay').prop('disabled', currentDate >= today);
 }
@@ -65,7 +65,7 @@ $(document).ready(function() {
             getLeaderboard(nextDay);
         }
     });
-    
+
 // getLeaderboard(); // <----comment this out
 
     // const auth = getAuth();
@@ -96,7 +96,7 @@ $(document).ready(function() {
         decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
     });
 
-    
+
 
     // Load the word list on page load
     fetch('filtered_word_list.json')
@@ -109,10 +109,10 @@ $(document).ready(function() {
             console.error('Error loading word list:', error);
         });
 
-    
+
     // const provider = new GoogleAuthProvider();
 
-    
+
 
     async function decideButtonDisplay() {
         const user = auth.currentUser;
@@ -125,12 +125,12 @@ $(document).ready(function() {
             const querySnapshot = await getDocs(q);
             // Reset button visibility
             $("#playBtn, #viewSolvedBtn").hide();
-            
+
             if (!querySnapshot.empty) {
                 const docSnap = querySnapshot.docs[0];
                 const data = docSnap.data();
                 console.log("Leaderboard data retrieved:", data);
-                
+
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
                     if (data.hasGivenUp) {
@@ -145,7 +145,7 @@ $(document).ready(function() {
     }
 
 
-    
+
 
     // Function to check and register new Google users
     async function registerGoogleUser(user) {
@@ -186,10 +186,10 @@ $(document).ready(function() {
                 $("#signUpBtn").hide();
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
-                
+
                 // Check if puzzle is already completed before showing Play button
                 decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
-                
+
             })
             .catch((error) => {
                 console.error('Error during Google login:', error.message);
@@ -206,8 +206,8 @@ $(document).ready(function() {
         $('.cell').attr('readonly', true);
     }
 
-   
-    
+
+
     $('#loginForm').hide();
 
     // Function to toggle the visibility of login-related buttons
@@ -255,7 +255,7 @@ $(document).ready(function() {
     // console.log(currentPuzzleId);
     // const date = new Date();
     let currentUsername = "";
-    
+
 
     function getSequentialDay() {
         const startDate = new Date(Date.UTC(2024, 9, 15)); // Reference start date in UTC (sET TO 2024, 9, 15 for correct puzzle# fetching)
@@ -278,7 +278,7 @@ $(document).ready(function() {
 
 
     let puzzleAnswers;
-    
+
     async function fetchTodaysPuzzle() {
       const dayId = getSequentialDay().toString();
       try {
@@ -313,7 +313,7 @@ $(document).ready(function() {
             await fetchRandomPuzzle();
           console.log("No puzzle found for today.");
           toastr.error("No puzzle available for today! Displaying random puzzle.");
-          
+
         }
       } catch (error) {
         console.error("Error retrieving puzzle data:", error);
@@ -348,7 +348,7 @@ $(document).ready(function() {
                   // Word4: Left word (down)
                   $("#cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
                   $("#cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
-                
+
             } else {
                 toastr.error("Failed to fetch a random puzzle.");
             }
@@ -365,7 +365,7 @@ $(document).ready(function() {
 
     // Event handler for the confirmation button inside the modal
     $("#confirmGiveUpBtn").click(function () {
-        
+
         // Clear all user inputs and display correct answers
         $(".cell").each(function() {
             $(this).val('');
@@ -391,7 +391,7 @@ $(document).ready(function() {
 
         // Disable all cells in the game grid
         $(".cell").prop('disabled', true);
-        
+
         // $("#cell-1").css('padding-top', '5px');
         // $("#cell-3").css('padding-top', '6px');
         // $("#cell-4").css('padding-top', '6px');
@@ -407,9 +407,9 @@ $(document).ready(function() {
         //hide the submit and give up buttons
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
-        
+
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
-        
+
         $("#gameBoard").css('display', 'block');
         // Show default words and message
 
@@ -428,7 +428,7 @@ $(document).ready(function() {
 
 
 
-    
+
     let startTime;
 
     // Event listener for the "Play" button
@@ -445,9 +445,9 @@ $(document).ready(function() {
         $("#example").hide();
         $("#viewLeaderboardBtn").hide();
         $("#leaderboard").hide();
-        
+
         startTime = new Date(); // Record the start time
-        
+
         // Scroll to the top of the game board
         document.getElementById('gameBoard').scrollIntoView({ behavior: 'smooth' });
     });
@@ -594,7 +594,7 @@ $(document).ready(function() {
     }
 
 
-    
+
 
     toastr.options = {
       "closeButton": true,
@@ -646,7 +646,7 @@ $(document).ready(function() {
             $(this).select();
             e.preventDefault();
         });
-        
+
         // Also handle mouseup to maintain selection
         $(`#${cellId}`).on('mouseup', function(e) {
             e.preventDefault();
@@ -672,7 +672,7 @@ $(document).ready(function() {
         let currentCell = $(`#${focusableCells[currentCellIndex]}`);
         if (currentCell.val().length > 0) {
             currentCell.val("");
-            
+
         } else if (currentCellIndex > 0) {
             currentCellIndex--; // Move back one cell
             // console.log("Moved to previous cell. Current cell index:", currentCellIndex);
@@ -680,7 +680,7 @@ $(document).ready(function() {
             previousCell.val(""); // Clear the previous cell
             previousCell.focus(); // Focus the previous cell
         }
-        
+
         // Reset any programmatic change flags
         isProgrammaticChange = false;
     }
@@ -748,8 +748,8 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).select();
     });
-    
-    
+
+
 
 
     function resetGameBoard() {
@@ -802,7 +802,7 @@ $(document).ready(function() {
           $('#loginForm').show();   // Show the login form
           $('#signUpBtn').hide();
           $('#logInBtn').show();
-          
+
           $('#playBtn').show();
 
 
@@ -878,7 +878,7 @@ $(document).ready(function() {
             });
     });
 
-    
+
     // Function to display the logged-in message
     function displayLoggedInMessage(username) {
         $('#loggedInAs').text(`Logged in as ${username}`).show();
@@ -937,7 +937,7 @@ $(document).ready(function() {
         $("#example").hide();
         $("#viewSolvedPuzzleBtn").hide();
 
-        
+
         getLeaderboard();
         const user = auth.currentUser;
         if (!user) {
@@ -961,7 +961,7 @@ $(document).ready(function() {
                 $("#cell-2").val(userWordsArray[0].charAt(1));
 
 
-                
+
                 $("#cell-3").val(userWordsArray[0].charAt(2));
                 $("#cell-4").val(userWordsArray[0].charAt(3));
 
@@ -984,14 +984,14 @@ $(document).ready(function() {
 
                 // Disable all cells in the game grid
                 $(".cell").prop('disabled', true);
-                
+
                 // Apply padding to specific cells
                 $("#cell-1, #cell-3, #cell-4, #cell-7, #cell-8, #cell-11, #cell-12, #cell-14").addClass("padded-cell");
 
                 // Show completion time and any success messages
                 $("#gameBoard").css('display', 'block');
                 $("#resultTime").text(`Completed in: ${formattedTime}`).show();
-                
+
                 // Show share button if Web Share API is supported
                 if (navigator.share) {
                     $("#shareButtonContainer").show();
@@ -1013,10 +1013,10 @@ $(document).ready(function() {
                     try {
                         $('#shareLeaderboardTitle').show();
                         const leaderboardContent = document.getElementById('leaderboardContent');
-                        
+
                         // Ensure the content is visible before capturing
                         leaderboardContent.style.display = 'block';
-                        
+
                         // Mobile-specific settings for html2canvas
                         const canvas = await html2canvas(leaderboardContent, {
                             useCORS: true,
@@ -1025,26 +1025,36 @@ $(document).ready(function() {
                             allowTaint: true,
                             backgroundColor: '#ffffff'
                         });
-                        
-                        try {
-                            // Try sharing as image first
-                            const blob = await new Promise((resolve, reject) => {
-                                canvas.toBlob(resolve, 'image/png', 0.9);
-                            });
-                            
-                            if (!blob) throw new Error('Failed to create image');
-                            
-                            const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
 
-                            // Verify file sharing support
-                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        try {
+                            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+                            if (isMobile) {
+                                // Use basic text sharing for mobile
                                 await navigator.share({
                                     title: "Borders Leaderboard",
-                                    text: "Check out my score on Borders!",
-                                    files: [file]
+                                    text: `Check out my score on Borders! Time: ${formattedTime}`,
+                                    url: window.location.href
                                 });
                             } else {
-                                throw new Error('File sharing not supported');
+                                // Desktop sharing with image
+                                const blob = await new Promise((resolve, reject) => {
+                                    canvas.toBlob(resolve, 'image/png', 0.9);
+                                });
+
+                                if (!blob) throw new Error('Failed to create image');
+
+                                const file = new File([blob], "borders_leaderboard.png", { type: "image/png" });
+
+                                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                    await navigator.share({
+                                        title: "Borders Leaderboard",
+                                        text: "Check out my score on Borders!",
+                                        files: [file]
+                                    });
+                                } else {
+                                    throw new Error('File sharing not supported');
+                                }
                             }
                         } catch (shareError) {
                             // Fallback to sharing URL only
@@ -1082,7 +1092,7 @@ $(document).ready(function() {
         $("#viewSolvedPuzzleBtn").hide();
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
-        
+
         // Show the saved correct answers from the puzzle data
         // Assume `puzzleAnswers` contains the correct answers
         $("#cell-1").val(puzzleAnswers.word1.charAt(0));
@@ -1105,13 +1115,13 @@ $(document).ready(function() {
         $("#leaderboard").show();
         getLeaderboard();
 
-        
+
         // Apply padding to specific cells
         $("#cell-1, #cell-3, #cell-4, #cell-7, #cell-8, #cell-11, #cell-12, #cell-14").addClass("padded-cell");
         // Disable all cells in the game grid
         $(".cell").prop('disabled', true);
     }
-    
+
 
     // Function to get all-time best times
 async function getBestTimes() {
@@ -1154,10 +1164,10 @@ async function getMostWins() {
                 const puzzleId = data.puzzleId;
                 const date = new Date(data.date);
                 date.setHours(0, 0, 0, 0);
-                
+
                 // Create a unique key for each puzzle/date combination
                 const key = `${puzzleId}_${date.getTime()}`;
-                
+
                 if (!winCounts[key]) {
                     winCounts[key] = {
                         time: data.time,
@@ -1197,14 +1207,14 @@ function displayWinnersList(winnersList) {
     const leaderboardTable = document.getElementById('leaderboardTable');
     const thead = leaderboardTable.getElementsByTagName('thead')[0];
     const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
-    
+
     // Filter out entries with undefined username
     winnersList = winnersList.filter(winner => 
         winner.username && 
         winner.username !== 'undefined' && 
         winner.username.toLowerCase() !== 'undefined'
     );
-    
+
     // Update table headers for Most 1st Place view
     thead.innerHTML = `
         <tr>
@@ -1213,15 +1223,15 @@ function displayWinnersList(winnersList) {
             <th>Wins</th>
         </tr>
     `;
-    
+
     tbody.innerHTML = '';
-    
+
     winnersList.forEach((winner, index) => {
         const row = tbody.insertRow();
         const rankCell = row.insertCell(0);
         const usernameCell = row.insertCell(1);
         const winsCell = row.insertCell(2);
-        
+
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
         usernameCell.textContent = winner.username;
         winsCell.textContent = winner.wins;
@@ -1321,13 +1331,13 @@ async function getLeaderboard(date = new Date()) {
         const leaderboardDiv = document.getElementById('leaderboard');
         leaderboardDiv.style.display = 'block';
         updateNavigationButtons();
-        
+
         const thead = document.getElementById('leaderboardTable').getElementsByTagName('thead')[0];
         const tbody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
-        
+
         // Determine which view is active
         const activeFilter = $('.filter-btn.active').attr('id');
-        
+
         // Set appropriate headers based on active filter
         if (activeFilter === 'mostWinsFilter') {
             thead.innerHTML = `
@@ -1349,19 +1359,19 @@ async function getLeaderboard(date = new Date()) {
                 </tr>
             `;
         }
-        
+
         tbody.innerHTML = '';
-        
+
         // Filter out entries with undefined username
         const validEntries = leaderboardData.filter(entry => entry.username !== 'undefined' && entry.username !== undefined);
-        
+
         validEntries.forEach((entry, index) => {
             const row = tbody.insertRow();
             if (activeFilter === 'mostWinsFilter') {
                 const rankCell = row.insertCell(0);
                 const usernameCell = row.insertCell(1);
                 const winsCell = row.insertCell(2);
-                
+
                 rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
                 usernameCell.textContent = entry.username;
                 winsCell.textContent = entry.wins;
@@ -1372,13 +1382,13 @@ async function getLeaderboard(date = new Date()) {
                 const dateCell = row.insertCell(3);
                 const puzzleCell = row.insertCell(4);
                 const wordsCell = row.insertCell(5);
-                
+
                 const formattedTime = formatTime(entry.time);
-                
+
                 rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
                 usernameCell.textContent = entry.username;
                 timeCell.textContent = formattedTime;
-                
+
                 const dateObj = new Date(entry.date);
                 const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
                 dateCell.textContent = formattedDate;
@@ -1474,7 +1484,7 @@ async function getLeaderboard(date = new Date()) {
         });
     });
 
-    
 
-    
+
+
 });
