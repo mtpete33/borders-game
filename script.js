@@ -995,20 +995,45 @@ $(document).ready(function() {
                 // Show share button if Web Share API is supported
                 if (navigator.share) {
                     $("#shareButtonContainer").show();
-                    $("#shareBtn").off('click').on('click', async function() {
-                        const today = new Date();
-                        const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
-                        const shareData = {
-                            title: 'Borders',
-                            text: `Borders Puzzle #${currentPuzzleId} - ${formattedDate} - Time: ${formattedTime}`,
-                            url: window.location.href
-                        };
-                        try {
-                            await navigator.share(shareData);
-                        } catch (error) {
-                            console.error('Error sharing:', error);
-                        }
+                    // $("#shareBtn").off('click').on('click', async function() {
+                    //     const today = new Date();
+                    //     const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+                    //     const shareData = {
+                    //         title: 'Borders',
+                    //         text: `Borders Puzzle #${currentPuzzleId} - ${formattedDate} - Time: ${formattedTime}`,
+                    //         url: window.location.href
+                    //     };
+                    //     try {
+                    //         await navigator.share(shareData);
+                    //     } catch (error) {
+                    //         console.error('Error sharing:', error);
+                    //     }
+                    // });
+                    $('#shareBtn').on('click', function () {
+                        $('#shareLeaderboardTitle').show();
+                        const leaderboardContent = document.getElementById('leaderboardContent'); // Keep this as plain JS for html2canvas
+
+                        // Use html2canvas to capture the leaderboard
+                        html2canvas(leaderboardContent).then((canvas) => {
+                            canvas.toBlob((blob) => {
+                                const file = new File([blob], "leaderboard.png", { type: "image/png" });
+
+                                // Check if the browser supports Web Share API and sharing files
+                                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                    navigator.share({
+                                        title: "Borders Leaderboard",
+                                        text: "Check out the leaderboard!",
+                                        files: [file]
+                                    })
+                                    .then(() => console.log('Shared successfully'))
+                                    .catch((error) => console.error('Error sharing:', error));
+                                } else {
+                                    alert('Your browser does not support sharing files.');
+                                }
+                            });
+                        });
                     });
+
                 }
             } else {
                 console.error("No solved puzzle data found.");

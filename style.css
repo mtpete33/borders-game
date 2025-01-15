@@ -450,16 +450,20 @@ footer a {
 }
 
 #leaderboardTable th, #leaderboardTable td {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
+  border: 1px solid #858585;
   padding: 8px;
   text-align: center;
 }
 
 #leaderboardTable th {
-  background-color: #f2f2f2;
   font-weight: bold;
+  background-color: #c0e0ff;
 }
 
+#shareLeaderboardTitle {
+  margin-top: 0.5em;
+}
 
 
 .form-container {

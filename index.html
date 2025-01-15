@@ -21,6 +21,9 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <!-- <link rel="manifest" href="/site.webmanifest"> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   
 </head>
 
@@ -138,7 +141,7 @@
 
   <div id="resultTime" style="display: none;"></div>
     <div id="shareButtonContainer" style="display: none;">
-        <button id="shareBtn" class="form-button">Share Your Time</button>
+        
     </div>
     <div id="signUpCTA" style="display: none;"><a href="#" id="signupCTAlink">Create an account</a> to track your daily score and add your time to the leaderboard for tomorrow's puzzle!</div>
     
@@ -187,6 +190,7 @@
       </div>
       <div id="leaderboardDate"></div>
     
+    <div id="leaderboardContent">
     <table id="leaderboardTable">
       <thead>
         <tr>
@@ -202,6 +206,11 @@
         <!-- Leaderboard entries will be dynamically added here -->
       </tbody>
     </table>
+      <h1 id="shareLeaderboardTitle" style="text-align: center; display:none;">Borders Leaderboard</h1>
+      <p>bordersgame.replit.app</p>
+    </div>
+
+    <button id="shareBtn" class="form-button">Share Leaderboard</button>
     <br>
     <br>
   </div>
