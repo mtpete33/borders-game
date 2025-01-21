@@ -17,7 +17,10 @@ h1 {
   margin-top:-15px;
   margin-bottom: -10px;
 }
-
+#hundred {
+  color:#dda731;
+  font-weight: bold;
+}
 #landingPage {
   font-size: 1.5em;
   width:60%;
@@ -34,7 +37,7 @@ h1 {
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 1em 0;
+  margin: 2em 0 0 0;
 }
 
 #instructionsBtn:hover {
@@ -48,7 +51,7 @@ h1 {
 }
 
 #instructionsContent.show {
-  max-height: 500px;
+  max-height: 620px;
   transition: max-height 0.5s ease-in;
 }
 
@@ -160,7 +163,7 @@ footer {
   border-radius: 12px; /* Rounded edges */
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover and active */
-  margin-top: 1em;
+  margin-top: .5em;
 }
 #submitBtn {
   margin-top: 8px;
@@ -263,7 +266,7 @@ footer {
 }
 
 #example {
-  width:30em;
+  width:15em;
   margin-top: .75em;
 }
 
@@ -610,10 +613,14 @@ footer a {
   }
 
   #example {
-    width:21em;
+    width:14em;
   }
   #submitBtn {
     margin-top:10px;
+  }
+
+  #instructionsContent.show {
+    max-height: 655px;
   }
 
 }
@@ -665,6 +672,13 @@ h1 {
 }
   h2 {
     margin-top:.25em;
+  }
+  #instructionsContent.show {
+    max-height: 595px;
+  }
+  #instructionsBtn {
+    font-size: 20px;
+    margin: 2em 0 0.5em 0;
   }
   
 }

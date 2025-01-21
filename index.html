@@ -24,6 +24,33 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+  <style>
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+    th, td {
+        border: 1px solid #000;
+        text-align: center;
+        padding: 8px;
+        font-weight:bold;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    /* Target rows 1, 2, 3, and 4 (excluding the header) */
+    tbody tr:nth-child(1) td:nth-child(2),
+    tbody tr:nth-child(1) td:nth-child(3),
+    tbody tr:nth-child(2) td:nth-child(2),
+    tbody tr:nth-child(2) td:nth-child(3),
+    tbody tr:nth-child(3) td:nth-child(2),
+    tbody tr:nth-child(3) td:nth-child(3) {
+        background-color: black;
+        color: white; /* To make text readable */
+    }
+  </style>
+
   
 </head>
 
@@ -33,12 +60,53 @@
   
   <div id="landingPage" style="display: block;">
     <!-- <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1> -->
-    <h1>Borders</h1>
+    <h1>Borders <span id="hundred">100</span></h1>
+    <br>
+    <p id="hundredText">Today we are celebrating our 100th Borders puzzle! Thank you for playing!</p>
+    <table>
+        <thead>
+            <tr>
+                <td>T</td>
+                <td style="background-color:lightblue;">H</td>
+                <td>A</td>
+                <td>N</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="background-color:lightblue;">H</td>
+                <td></td>
+                <td></td>
+                <td style="background-color:lightblue;">K</td>
+            </tr>
+            <tr>
+                <td>A</td>
+                <td></td>
+                <td></td>
+                <td>Y</td>
+            </tr>
+            <tr>
+                <td style="background-color:lightblue;">N</td>
+                <td></td>
+                <td></td>
+                <td style="background-color:lightblue;">O</td>
+            </tr>
+            <tr>
+                <td>K</td>
+                <td>Y</td>
+                <td style="background-color:lightblue;">O</td>
+                <td>U</td>
+            </tr>
+            
+        </tbody>
+    </table>
     <button id="instructionsBtn">Instructions</button>
     <div id="instructionsContent" style="display: none;">
       <p>Welcome to Borders! In this timed, daily word game you fill in the blank squares with letters creating four valid dictionary words <em>across and down</em> (like a crossword) connecting around the border of the grid. A few letters will be filled in already. See example below. Any valid dictionary words are accepted, so there may be more than one solution to each puzzle.</p>
       <p>Click Submit when you finish to stop the clock. Solve the puzzle as quickly as you can!</p>
       <p>Come back each day for a new puzzle.</p>
+
+      <img id="example" src="images/bordersexample.jpg" alt="game example">
     </div>
     <div>
       <button id="playBtn" style="display:none;">Play</button>
@@ -219,7 +287,7 @@
     <br>
   </div>
 
-  <img id="example" src="images/bordersexample.jpg" alt="game example">
+  
   
   <footer>
     <!-- <a href="https://bordersgame.replit.app/"><h1 style="font-size:16px;">Borders</h1></a> -->
