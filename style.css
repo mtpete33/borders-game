@@ -20,6 +20,24 @@ h1 {
 #hundred {
   color:#dda731;
   font-weight: bold;
+  background: linear-gradient(
+    90deg,
+    #dda731 0%,
+    #ffd700 25%,
+    #dda731 50%,
+    #ffd700 75%,
+    #dda731 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
 }
 #landingPage {
   font-size: 1.5em;
