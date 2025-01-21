@@ -500,7 +500,8 @@ footer a {
 
 
 #shareBtn {
-  width: 10em;
+  width: 5em;
+  margin: 1em auto 0 auto;
 }
 
 /* Animation for enlarging button */
@@ -632,7 +633,7 @@ h1 {
     padding: 10px 20px;
   }
 #shareBtn {
-  margin-top:5px;
+  margin-top:10px;
 }
   h2 {
     margin-top:.25em;

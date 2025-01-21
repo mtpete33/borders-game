@@ -1019,7 +1019,7 @@ $(document).ready(function() {
 
                         const today = new Date();
                         const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
-                        const shareText = `Borders Leaderboard - ${formattedDate}\n\n${leaderboardText}\n\nPlay at: ${window.location.href}`;
+                        const shareText = `Borders #${currentPuzzleId} - ${formattedDate}\n\n${leaderboardText}`;
 
                         if (navigator.share) {
                             await navigator.share({
