@@ -1811,7 +1811,7 @@ $('#manageFriendsBtn').click(async function() {
     closeBtn.click(() => modal.remove());
 
     // Close modal when clicking outside
-    modal.click(function(e {
+    modal.click(function(e) {
         if (e.target === this) {
             modal.remove();
         }
