@@ -1588,11 +1588,10 @@ $('#manageFriendsBtn').click(async function() {
     const friendsHeader = $('<h4>').text('Your Friends');
     friendsSection.append(friendsHeader, friendsList);
     
-    // Add buttons
+    // Add close button
     const buttonSection = $('<div>').addClass('modal-buttons');
-    const saveBtn = $('<button>').text('Save').addClass('modal-btn save-btn');
-    const cancelBtn = $('<button>').text('Cancel').addClass('modal-btn cancel-btn');
-    buttonSection.append(saveBtn, cancelBtn);
+    const closeBtn = $('<button>').text('Close').addClass('modal-btn close-btn');
+    buttonSection.append(closeBtn);
     
     // Assemble modal
     modalContent.append(searchSection, friendsSection, buttonSection);
@@ -1680,7 +1679,17 @@ $('#manageFriendsBtn').click(async function() {
         const uid = $(this).data('uid');
         const username = $(this).data('username');
         await addFriend(uid, username);
-        // Refresh friends list
+        // Add to friends list UI immediately
+        const friendElement = $('<div>').addClass('friend-item');
+        friendElement.append(
+            $('<span>').text(username),
+            $('<button>')
+                .addClass('remove-friend-btn')
+                .text('✕')
+                .data('uid', uid)
+        );
+        friendsList.append(friendElement);
+        // Remove from search results
         $(this).closest('.search-result-item').remove();
     });
     
@@ -1690,9 +1699,8 @@ $('#manageFriendsBtn').click(async function() {
         $(this).closest('.friend-item').remove();
     });
     
-    // Handle modal buttons
-    cancelBtn.click(() => modal.remove());
-    saveBtn.click(() => modal.remove());
+    // Handle close button
+    closeBtn.click(() => modal.remove());
     
     // Close modal when clicking outside
     modal.click(function(e) {

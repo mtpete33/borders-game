@@ -671,17 +671,13 @@ footer a {
     transition: background-color 0.3s ease;
 }
 
-.save-btn {
+.close-btn {
     background-color: black;
     color: white;
 }
 
-.save-btn:hover {
+.close-btn:hover {
     background-color: #333;
-}
-
-.cancel-btn:hover {
-    background-color: #d3d5d3;
 }
 
 /* Styling for submit button animation */
