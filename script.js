@@ -58,7 +58,7 @@ $(document).ready(function() {
         $('#friendsFilterBtn, #globalFilterBtn').removeClass('active');
         $(this).addClass('active');
         const activeFilter = $('.filter-btn.active').attr('id');
-
+        
         if (activeFilter === 'bestTimeFilter') {
             getBestTimes();
         } else if (activeFilter === 'mostWinsFilter') {
@@ -889,7 +889,7 @@ $(document).ready(function() {
                     // console.log('Logged in as:', currentUsername);
                     displayLoggedInMessage(currentUsername);
                     // Show success and hide login-related UI elements
-                    toastr.success("Loggedin successfully!");
+                    toastr.success("Logged in successfully!");
                     $("#playBtn").show();
                     $("#manageFriendsBtn").show();
                     $("#signupSuccess").hide();
@@ -1135,11 +1135,11 @@ async function getBestTimes() {
     const statsRef = collection(window.db, "leaderboard");
     const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
     let q;
-
+    
     if (showFriendsOnly && auth.currentUser) {
         const friendsList = await getFriendsList();
         const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
-
+        
         if (friendUids.length > 0) {
             q = query(
                 statsRef,
@@ -1478,16 +1478,8 @@ async function getLeaderboard(date = new Date()) {
                         friendBtn.style.color = '#4CAF50';
                         friendBtn.onclick = async () => {
                             await addFriend(entry.uid, entry.username);
-                            // Get current active filter
-                            const activeFilter = $('.filter-btn.active').attr('id');
-                            // Refresh based on current filter
-                            if (activeFilter === 'bestTimeFilter') {
-                                getBestTimes();
-                            } else if (activeFilter === 'mostWinsFilter') {
-                                getMostWins();
-                            } else {
-                                getLeaderboard(currentLeaderboardDate);
-                            }
+                            // Refresh the leaderboard
+                            getLeaderboard(currentLeaderboardDate);
                         };
                         usernameCell.appendChild(friendBtn);
                     }
@@ -1660,10 +1652,10 @@ async function getFriendsList() {
 $(document).on('click', '#manageFriendsBtn', async function() {
     const modal = $('<div>').addClass('modal').attr('id', 'friendsModal');
     const modalContent = $('<div>').addClass('modal-content friends-modal');
-
+    
     // Add header
     modalContent.append($('<h3>').text('Manage Friends'));
-
+    
     // Add search section
     const searchSection = $('<div>').addClass('search-section');
     const searchInput = $('<input>')
@@ -1675,23 +1667,23 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         .addClass('friend-search-input');
     const searchResults = $('<div>').addClass('search-results');
     searchSection.append(searchInput, searchResults);
-
+    
     // Add current friends section
     const friendsSection = $('<div>').addClass('friends-section');
     const friendsList = $('<div>').addClass('friends-list');
     const friendsHeader = $('<h4>').text('Your Friends');
     friendsSection.append(friendsHeader, friendsList);
-
+    
     // Add close button
     const buttonSection = $('<div>').addClass('modal-buttons');
     const closeBtn = $('<button>').text('Close').addClass('modal-btn close-btn');
     buttonSection.append(closeBtn);
-
+    
     // Assemble modal
     modalContent.append(searchSection, friendsSection, buttonSection);
     modal.append(modalContent);
     $('body').append(modal);
-
+    
     // Load current friends
     try {
         const friends = await getFriendsList();
@@ -1714,19 +1706,19 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         console.error('Error loading friends:', error);
         friendsList.append($('<p>').text('Error loading friends list.'));
     }
-
+    
     // Handle search input
     let searchTimeout;
     searchInput.on('input', function() {
         clearTimeout(searchTimeout);
         const searchTerm = $(this).val().trim();
-
+        
         searchTimeout = setTimeout(async () => {
             if (searchTerm.length < 2) {
                 searchResults.empty();
                 return;
             }
-
+            
             try {
                 const usersRef = collection(window.db, "users");
                 const searchTermLower = searchTerm.toLowerCase();
@@ -1734,13 +1726,13 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                     usersRef,
                     limit(20)
                 );
-
+                
                 const querySnapshot = await getDocs(q);
                 searchResults.empty();
-
+                
                 const currentFriends = await getFriendsList();
                 const matchingUsers = [];
-
+                
                 querySnapshot.forEach(doc => {
                     const userData = doc.data();
                     if (userData.uid !== auth.currentUser.uid && 
@@ -1748,12 +1740,12 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                         matchingUsers.push(userData);
                     }
                 });
-
+                
                 if (matchingUsers.length === 0) {
                     searchResults.append($('<p>').text('No users found'));
                     return;
                 }
-
+                
                 matchingUsers.forEach(userData => {
                     const isFriend = currentFriends.some(friend => friend.uid === userData.uid);
                     const userElement = $('<div>').addClass('search-result-item');
@@ -1764,13 +1756,13 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                             uid: userData.uid,
                             username: userData.username
                         });
-
+                    
                     if (isFriend) {
                         button.prop('disabled', true)
                             .css('opacity', '0.5')
                             .after($('<span>').text(' Already friends').css('color', 'red'));
                     }
-
+                    
                     userElement.append(
                         $('<span>').text(userData.username),
                         button
@@ -1783,7 +1775,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
             }
         }, 500);
     });
-
+    
     // Handle adding/removing friends
     searchResults.on('click', '.add-friend-btn', async function() {
         const uid = $(this).data('uid');
@@ -1800,18 +1792,18 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         );
         friendsList.append(friendElement);
         // Remove from search results
-        $(this).closest('.search-result-item).remove();
+        $(this).closest('.search-result-item').remove();
     });
-
+    
     friendsList.on('click', '.remove-friend-btn', async function() {
         const uid = $(this).data('uid');
         await removeFriend(uid);
         $(this).closest('.friend-item').remove();
     });
-
+    
     // Handle close button
     closeBtn.click(() => modal.remove());
-
+    
     // Close modal when clicking outside
     modal.click(function(e) {
         if (e.target === this) {
