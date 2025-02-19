@@ -213,11 +213,14 @@ $(document).ready(function() {
                 console.log('User logged in with Google:', user);
                 // Extract username from email for Google users
                 const emailUsername = user.email.split('@')[0];
-                // Check and register the Google user if they don't exist in Firestore
-                await registerGoogleUser(user, emailUsername);
-                const userDetails = await getUserDetails(user.uid);
-                const username = userDetails.username || emailUsername || 'Unknown User';
-                displayLoggedInMessage(username);
+                // Always update the username to match email username for Google users
+                const userRef = doc(window.db, "users", user.uid);
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    username: emailUsername,
+                    email: user.email
+                }, { merge: true });
+                displayLoggedInMessage(emailUsername);
                 toastr.success("Logged in successfully!");
                 $("#loginForm").hide();
                 $("#signUpForm").hide();
@@ -1797,7 +1800,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                 .text('✕')
                 .data('uid', uid)
         );
-        friendsList.append(friendElement);
+                friendsList.append(friendElement);
         // Remove from search results
         $(this).closest('.search-result-item').remove();
     });
