@@ -1134,19 +1134,20 @@ $(document).ready(function() {
 async function getBestTimes() {
     const statsRef = collection(window.db, "leaderboard");
     const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+    let q;
     
     if (showFriendsOnly) {
         const friendsList = await getFriendsList();
         const friendUids = friendsList.map(friend => friend.uid);
         
-        const q = query(
+        q = query(
             statsRef,
             where("uid", "in", friendUids),
             orderBy("time", "asc"),
             limit(10)
         );
     } else {
-        const q = query(
+        q = query(
             statsRef,
             orderBy("time", "asc"),
             limit(10)
