@@ -1474,7 +1474,7 @@ async function getLeaderboard(date = new Date()) {
                     if (!isFriend) {
                         const friendBtn = document.createElement('button');
                         friendBtn.className = 'friend-btn';
-                        friendBtn.innerHTML = '<span style="color: #359235; font-weight:bold; font-size:18px;">+</span>';
+                        friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
                         friendBtn.style.color = '#4CAF50';
                         friendBtn.onclick = async () => {
                             await addFriend(entry.uid, entry.username);
@@ -1751,7 +1751,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                     const userElement = $('<div>').addClass('search-result-item');
                     const button = $('<button>')
                         .addClass('add-friend-btn')
-                        .html('<span style="color: #359235; font-weight:bold; font-size:18px;">+</span>')
+                        .html('<span style="color: #359235;  font-size:18px;">+</span>')
                         .data({
                             uid: userData.uid,
                             username: userData.username
