@@ -1279,21 +1279,39 @@ async function getLeaderboard(date = new Date()) {
         const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
         const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
 
-        let queryConstraints = [
-            where("date", ">=", startOfDay.toISOString()),
-            where("date", "<", endOfDay.toISOString()),
-            orderBy("date", "asc"),
-            orderBy("time", "asc"),
-            limit(10)
-        ];
-
-        if (showFriendsOnly) {
-            const friendsList = await getFriendsList();
-            if (friendsList.length > 0) {
-                const friendUids = friendsList.map(friend => friend.uid);
-                queryConstraints.unshift(where("uid", "in", friendUids));
-            }
-        }
+        try {
+            let q;
+            if (showFriendsOnly) {
+                const friendsList = await getFriendsList();
+                if (friendsList.length > 0) {
+                    const friendUids = friendsList.map(friend => friend.uid);
+                    // Include current user's ID in the friends list
+                    if (auth.currentUser) {
+                        friendUids.push(auth.currentUser.uid);
+                    }
+                    q = query(
+                        statsRef,
+                        where("uid", "in", friendUids),
+                        where("date", ">=", startOfDay.toISOString()),
+                        where("date", "<", endOfDay.toISOString()),
+                        orderBy("time", "asc")
+                    );
+                } else {
+                    // If no friends, only show current user's results
+                    if (auth.currentUser) {
+                        q = query(
+                            statsRef,
+                            where("uid", "==", auth.currentUser.uid),
+                            where("date", ">=", startOfDay.toISOString()),
+                            where("date", "<", endOfDay.toISOString()),
+                            orderBy("time", "asc")
+                        );
+                    } else {
+                        displayLeaderboard([]); // Show empty leaderboard if not logged in
+                        return;
+                    }
+                }
+            } else {
 
         // Update the displayed date
         const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
@@ -1304,13 +1322,14 @@ async function getLeaderboard(date = new Date()) {
         });
         $('#leaderboardDate').text(formattedDisplayDate);
 
-        const q = query(
-            statsRef, 
-            where("date", ">=", startOfDay.toISOString()), 
-            where("date", "<", endOfDay.toISOString()), 
-            orderBy("time", "asc"), 
-            limit(10)
-        );
+        q = query(
+                    statsRef,
+                    where("date", ">=", startOfDay.toISOString()),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("time", "asc"),
+                    limit(10)
+                );
+            }
 
         try {
             const querySnapshot = await getDocs(q);
