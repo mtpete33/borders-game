@@ -85,6 +85,7 @@ $(document).ready(function() {
     $('#prevDay').click(function() {
         const prevDay = new Date(currentLeaderboardDate);
         prevDay.setDate(prevDay.getDate() - 1);
+        const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
         getLeaderboard(prevDay);
     });
 
@@ -93,6 +94,7 @@ $(document).ready(function() {
         nextDay.setDate(nextDay.getDate() + 1);
         const today = new Date();
         if (nextDay <= today) {
+            const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
             getLeaderboard(nextDay);
         }
     });
@@ -1291,8 +1293,52 @@ async function getLeaderboard(date = new Date()) {
             const friendsList = await getFriendsList();
             if (friendsList.length > 0) {
                 const friendUids = friendsList.map(friend => friend.uid);
-                queryConstraints.unshift(where("uid", "in", friendUids));
+                // Create a new query with friends filter
+                const q = query(
+                    statsRef,
+                    where("uid", "in", friendUids),
+                    where("date", ">=", startOfDay.toISOString()),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("date", "asc"),
+                    orderBy("time", "asc"),
+                    limit(10)
+                );
+                
+                try {
+                    const querySnapshot = await getDocs(q);
+                    const leaderboardData = [];
+                    querySnapshot.docs.forEach(doc => {
+                        const data = doc.data();
+                        if (!data.hasGivenUp) {
+                            leaderboardData.push(data);
+                        }
+                    });
+                    displayLeaderboard(leaderboardData);
+                    return; // Exit early since we've handled the display
+                } catch (error) {
+                    console.error('Error fetching friends leaderboard:', error);
+                }
+            } else {
+                // If no friends, show empty leaderboard
+                displayLeaderboard([]);
+                return;
             }
+        }
+
+        // If not showing friends or if friends query failed, proceed with global query
+        const q = query(statsRef, ...queryConstraints);
+        try {
+            const querySnapshot = await getDocs(q);
+            const leaderboardData = [];
+            querySnapshot.docs.forEach(doc => {
+                const data = doc.data();
+                if (!data.hasGivenUp) {
+                    leaderboardData.push(data);
+                }
+            });
+            displayLeaderboard(leaderboardData);
+        } catch (error) {
+            console.error('Error fetching leaderboard:', error);
         }
 
         // Update the displayed date
