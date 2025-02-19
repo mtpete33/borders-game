@@ -1635,9 +1635,17 @@ async function getFriendsList() {
     try {
         const friendsRef = doc(window.db, "friends", user.uid);
         const friendsDoc = await getDoc(friendsRef);
-        return friendsDoc.exists() ? friendsDoc.data().friendsList : [];
+        if (!friendsDoc.exists()) {
+            // If document doesn't exist, create it with empty friends list
+            await setDoc(friendsRef, { friendsList: [] });
+            return [];
+        }
+        return friendsDoc.data().friendsList || [];
     } catch (error) {
         console.error("Error getting friends list:", error);
+        if (error.code === 'permission-denied') {
+            toastr.error("Unable to access friends list. Please try again later.");
+        }
         return [];
     }
 }
