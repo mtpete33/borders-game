@@ -1293,8 +1293,10 @@ async function getLeaderboard(date = new Date()) {
             const friendsList = await getFriendsList();
             if (friendsList.length > 0) {
                 const friendUids = friendsList.map(friend => friend.uid);
+                friendUids.push(auth.currentUser.uid); // Include current user
                 q = query(
                     statsRef,
+                    where("uid", "in", friendUids),
                     where("date", ">=", startOfDay.toISOString()),
                     where("date", "<", endOfDay.toISOString()),
                     orderBy("date"),
@@ -1302,8 +1304,10 @@ async function getLeaderboard(date = new Date()) {
                     limit(10)
                 );
             } else {
+                // If no friends, only show current user's results
                 q = query(
                     statsRef,
+                    where("uid", "==", auth.currentUser.uid),
                     where("date", ">=", startOfDay.toISOString()),
                     where("date", "<", endOfDay.toISOString()),
                     orderBy("date"),
