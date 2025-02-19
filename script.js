@@ -1636,7 +1636,7 @@ $('#manageFriendsBtn').click(async function() {
     const searchInput = $('<input>')
         .attr({
             type: 'text',
-            placeholder: 'Search users by username or email',
+            placeholder: 'Search by username',
             id: 'friendSearchInput'
         })
         .addClass('friend-search-input');
