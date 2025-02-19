@@ -1297,7 +1297,7 @@ async function getLeaderboard(date = new Date()) {
                     statsRef,
                     where("uid", "in", friendUids),
                     where("date", ">=", startOfDay.toISOString()),
-                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("date", "asc"),
                     orderBy("time", "asc"),
                     limit(10)
                 );
@@ -1305,7 +1305,7 @@ async function getLeaderboard(date = new Date()) {
                 q = query(
                     statsRef,
                     where("date", ">=", startOfDay.toISOString()),
-                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("date", "asc"),
                     orderBy("time", "asc"),
                     limit(10)
                 );
@@ -1314,7 +1314,7 @@ async function getLeaderboard(date = new Date()) {
             q = query(
                 statsRef,
                 where("date", ">=", startOfDay.toISOString()),
-                where("date", "<", endOfDay.toISOString()),
+                orderBy("date", "asc"),
                 orderBy("time", "asc"),
                 limit(10)
             );
