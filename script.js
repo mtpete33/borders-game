@@ -1570,11 +1570,13 @@ async function addFriend(friendUid, friendUsername) {
 
         if (friendsDoc.exists()) {
             const currentFriends = friendsDoc.data().friendsList || [];
-            if (!currentFriends.some(friend => friend.uid === friendUid)) {
-                await setDoc(friendsRef, {
-                    friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
-                });
+            if (currentFriends.some(friend => friend.uid === friendUid)) {
+                toastr.error("User is already on your friend list");
+                return;
             }
+            await setDoc(friendsRef, {
+                friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
+            });
         } else {
             await setDoc(friendsRef, {
                 friendsList: [{ uid: friendUid, username: friendUsername }]
@@ -1694,37 +1696,53 @@ $('#manageFriendsBtn').click(async function() {
             
             try {
                 const usersRef = collection(window.db, "users");
+                const searchTermLower = searchTerm.toLowerCase();
                 const q = query(
                     usersRef,
-                    where("username", ">=", searchTerm),
-                    where("username", "<=", searchTerm + '\uf8ff'),
-                    limit(5)
+                    limit(20)
                 );
                 
                 const querySnapshot = await getDocs(q);
                 searchResults.empty();
                 
-                if (querySnapshot.empty) {
+                const currentFriends = await getFriendsList();
+                const matchingUsers = [];
+                
+                querySnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    if (userData.uid !== auth.currentUser.uid && 
+                        userData.username.toLowerCase().includes(searchTermLower)) {
+                        matchingUsers.push(userData);
+                    }
+                });
+                
+                if (matchingUsers.length === 0) {
                     searchResults.append($('<p>').text('No users found'));
                     return;
                 }
                 
-                querySnapshot.forEach(doc => {
-                    const userData = doc.data();
-                    if (userData.uid !== auth.currentUser.uid) {
-                        const userElement = $('<div>').addClass('search-result-item');
-                        userElement.append(
-                            $('<span>').text(userData.username),
-                            $('<button>')
-                                .addClass('add-friend-btn')
-                                .text('+')
-                                .data({
-                                    uid: userData.uid,
-                                    username: userData.username
-                                })
-                        );
-                        searchResults.append(userElement);
+                matchingUsers.forEach(userData => {
+                    const isFriend = currentFriends.some(friend => friend.uid === userData.uid);
+                    const userElement = $('<div>').addClass('search-result-item');
+                    const button = $('<button>')
+                        .addClass('add-friend-btn')
+                        .text('+')
+                        .data({
+                            uid: userData.uid,
+                            username: userData.username
+                        });
+                    
+                    if (isFriend) {
+                        button.prop('disabled', true)
+                            .css('opacity', '0.5')
+                            .after($('<span>').text(' Already friends').css('color', 'red'));
                     }
+                    
+                    userElement.append(
+                        $('<span>').text(userData.username),
+                        button
+                    );
+                    searchResults.append(userElement);
                 });
             } catch (error) {
                 console.error('Error searching users:', error);
