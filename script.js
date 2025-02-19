@@ -1297,16 +1297,16 @@ async function getLeaderboard(date = new Date()) {
                     statsRef,
                     where("uid", "in", friendUids),
                     where("date", ">=", startOfDay.toISOString()),
-                    orderBy("date", "asc"),
-                    orderBy("time", "asc"),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("date"),
                     limit(10)
                 );
             } else {
                 q = query(
                     statsRef,
                     where("date", ">=", startOfDay.toISOString()),
-                    orderBy("date", "asc"),
-                    orderBy("time", "asc"),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("date"),
                     limit(10)
                 );
             }
@@ -1314,15 +1314,15 @@ async function getLeaderboard(date = new Date()) {
             q = query(
                 statsRef,
                 where("date", ">=", startOfDay.toISOString()),
-                orderBy("date", "asc"),
-                orderBy("time", "asc"),
+                where("date", "<", endOfDay.toISOString()),
+                orderBy("date"),
                 limit(10)
             );
         }
 
         try {
             const querySnapshot = await getDocs(q);
-            const leaderboardData = [];
+            let leaderboardData = [];
 
             for (const doc of querySnapshot.docs) {
                 const data = doc.data();
@@ -1345,6 +1345,8 @@ async function getLeaderboard(date = new Date()) {
 
                 leaderboardData.push(data);
             }
+            // Sort by time in ascending order (fastest first)
+            leaderboardData.sort((a, b) => a.time - b.time);
             displayLeaderboard(leaderboardData);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
