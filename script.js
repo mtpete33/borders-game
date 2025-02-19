@@ -39,9 +39,9 @@ $(document).ready(function() {
         alert("For the best experience, please open this page in an external browser. Click the three dots at the top right corner and select 'Open in external browser'.");
     }
 
-    
+
     $('#playBtn').hide();
-    
+
     $('#instructionsBtn').click(function() {
         const content = $('#instructionsContent');
         content.toggleClass('show');
@@ -822,7 +822,7 @@ $(document).ready(function() {
 
           $('#playBtn').show();
           $("#manageFriendsBtn").show();
-          
+
 
 
             // Store the username in Firestore linked to the user ID
@@ -1319,10 +1319,14 @@ async function getLeaderboard(date = new Date()) {
     }
 
 
-    function displayLeaderboard(leaderboardData) {
+    async function displayLeaderboard(leaderboardData) {
         const leaderboardDiv = document.getElementById('leaderboard');
         leaderboardDiv.style.display = 'block';
         updateNavigationButtons();
+
+        const user = auth.currentUser;
+        const friendsList = user ? await getFriendsList() : [];
+        const isShowingFriends = $('#friendsFilterBtn').hasClass('active');
 
         const thead = document.getElementById('leaderboardTable').getElementsByTagName('thead')[0];
         const tbody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
@@ -1378,7 +1382,24 @@ async function getLeaderboard(date = new Date()) {
                 const formattedTime = formatTime(entry.time);
 
                 rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
-                usernameCell.textContent = entry.username;
+                // Create username cell with add/remove friend button
+                usernameCell.innerHTML = entry.username;
+                if (user && entry.uid !== user.uid) {
+                    const isFriend = friendsList.some(friend => friend.uid === entry.uid);
+                    const friendBtn = document.createElement('button');
+                    friendBtn.className = 'friend-btn';
+                    friendBtn.innerHTML = isFriend ? '❌' : '➕';
+                    friendBtn.onclick = async () => {
+                        if (isFriend) {
+                            await removeFriend(entry.uid);
+                        } else {
+                            await addFriend(entry.uid, entry.username);
+                        }
+                        // Refresh the leaderboard
+                        getLeaderboard(currentLeaderboardDate);
+                    };
+                    usernameCell.appendChild(friendBtn);
+                }
                 timeCell.textContent = formattedTime;
 
                 const dateObj = new Date(entry.date);
@@ -1476,7 +1497,75 @@ async function getLeaderboard(date = new Date()) {
         });
     });
 
+// Friend management functions
+async function addFriend(friendUid, friendUsername) {
+    const user = auth.currentUser;
+    if (!user) {
+        toastr.error("Please log in to add friends");
+        return;
+    }
 
+    try {
+        const friendsRef = doc(window.db, "friends", user.uid);
+        const friendsDoc = await getDoc(friendsRef);
 
+        if (friendsDoc.exists()) {
+            const currentFriends = friendsDoc.data().friendsList || [];
+            if (!currentFriends.some(friend => friend.uid === friendUid)) {
+                await setDoc(friendsRef, {
+                    friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
+                });
+            }
+        } else {
+            await setDoc(friendsRef, {
+                friendsList: [{ uid: friendUid, username: friendUsername }]
+            });
+        }
+        toastr.success(`Added ${friendUsername} to friends!`);
+    } catch (error) {
+        console.error("Error adding friend:", error);
+        toastr.error("Failed to add friend");
+    }
+}
+
+async function removeFriend(friendUid) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        const friendsRef = doc(window.db, "friends", user.uid);
+        const friendsDoc = await getDoc(friendsRef);
+
+        if (friendsDoc.exists()) {
+            const currentFriends = friendsDoc.data().friendsList;
+            const updatedFriends = currentFriends.filter(friend => friend.uid !== friendUid);
+            await setDoc(friendsRef, { friendsList: updatedFriends });
+            toastr.success("Friend removed!");
+        }
+    } catch (error) {
+        console.error("Error removing friend:", error);
+        toastr.error("Failed to remove friend");
+    }
+}
+
+async function getFriendsList() {
+    const user = auth.currentUser;
+    if (!user) return [];
+
+    try {
+        const friendsRef = doc(window.db, "friends", user.uid);
+        const friendsDoc = await getDoc(friendsRef);
+        return friendsDoc.exists() ? friendsDoc.data().friendsList : [];
+    } catch (error) {
+        console.error("Error getting friends list:", error);
+        return [];
+    }
+}
+
+// Event listener for the "Manage Friends" button
+    $('#manageFriendsBtn').click(function(){
+        // Implement friend management UI here
+        alert("Manage Friends Button Clicked!");
+    });
 
 });
