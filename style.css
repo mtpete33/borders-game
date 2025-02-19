@@ -561,13 +561,14 @@ footer a {
 /* Friend button styles */
 .friend-btn {
     margin-left: 8px;
-    padding: 2px 6px;
+    padding: 0 4px;
     font-size: 12px;
     background: none;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
+
 }
 
 .friend-btn:hover {

@@ -1474,7 +1474,7 @@ async function getLeaderboard(date = new Date()) {
                     if (!isFriend) {
                         const friendBtn = document.createElement('button');
                         friendBtn.className = 'friend-btn';
-                        friendBtn.innerHTML = '➕';
+                        friendBtn.innerHTML = '<span style="color: #359235; font-weight:bold; font-size:18px;">+</span>';
                         friendBtn.style.color = '#4CAF50';
                         friendBtn.onclick = async () => {
                             await addFriend(entry.uid, entry.username);
