@@ -1136,16 +1136,25 @@ async function getBestTimes() {
     const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
     let q;
     
-    if (showFriendsOnly) {
+    if (showFriendsOnly && auth.currentUser) {
         const friendsList = await getFriendsList();
-        const friendUids = friendsList.map(friend => friend.uid);
+        const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
         
-        q = query(
-            statsRef,
-            where("uid", "in", friendUids),
-            orderBy("time", "asc"),
-            limit(10)
-        );
+        if (friendUids.length > 0) {
+            q = query(
+                statsRef,
+                where("uid", "in", friendUids),
+                orderBy("time", "asc"),
+                limit(10)
+            );
+        } else {
+            q = query(
+                statsRef,
+                where("uid", "==", auth.currentUser.uid),
+                orderBy("time", "asc"),
+                limit(10)
+            );
+        }
     } else {
         q = query(
             statsRef,
