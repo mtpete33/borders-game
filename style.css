@@ -582,6 +582,108 @@ footer a {
     75% { transform: translateX(5px); }
 }
 
+/* Friend Management Modal Styles */
+.friends-modal {
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.friend-search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.search-results {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 6px;
+}
+
+.search-result-item, .friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result-item:last-child, .friend-item:last-child {
+    border-bottom: none;
+}
+
+.add-friend-btn, .remove-friend-btn {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-friend-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.remove-friend-btn:hover {
+    background-color: #ff4444;
+    color: white;
+    border-color: #ff4444;
+}
+
+.friends-section {
+    margin: 20px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.friends-list {
+    border: 1px solid #eee;
+    border-radius: 6px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border: 1.5px solid black;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: "Josefin Sans", sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn {
+    background-color: black;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #333;
+}
+
+.cancel-btn:hover {
+    background-color: #d3d5d3;
+}
+
 /* Styling for submit button animation */
 #submitBtn.swell {
     animation: swell 0.5s ease-in-out; /* Swell animation */

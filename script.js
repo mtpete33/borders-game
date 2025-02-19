@@ -1563,9 +1563,143 @@ async function getFriendsList() {
 }
 
 // Event listener for the "Manage Friends" button
-    $('#manageFriendsBtn').click(function(){
-        // Implement friend management UI here
-        alert("Manage Friends Button Clicked!");
+$('#manageFriendsBtn').click(async function() {
+    const modal = $('<div>').addClass('modal').attr('id', 'friendsModal');
+    const modalContent = $('<div>').addClass('modal-content friends-modal');
+    
+    // Add header
+    modalContent.append($('<h3>').text('Manage Friends'));
+    
+    // Add search section
+    const searchSection = $('<div>').addClass('search-section');
+    const searchInput = $('<input>')
+        .attr({
+            type: 'text',
+            placeholder: 'Search users by username or email',
+            id: 'friendSearchInput'
+        })
+        .addClass('friend-search-input');
+    const searchResults = $('<div>').addClass('search-results');
+    searchSection.append(searchInput, searchResults);
+    
+    // Add current friends section
+    const friendsSection = $('<div>').addClass('friends-section');
+    const friendsList = $('<div>').addClass('friends-list');
+    const friendsHeader = $('<h4>').text('Your Friends');
+    friendsSection.append(friendsHeader, friendsList);
+    
+    // Add buttons
+    const buttonSection = $('<div>').addClass('modal-buttons');
+    const saveBtn = $('<button>').text('Save').addClass('modal-btn save-btn');
+    const cancelBtn = $('<button>').text('Cancel').addClass('modal-btn cancel-btn');
+    buttonSection.append(saveBtn, cancelBtn);
+    
+    // Assemble modal
+    modalContent.append(searchSection, friendsSection, buttonSection);
+    modal.append(modalContent);
+    $('body').append(modal);
+    
+    // Load current friends
+    try {
+        const friends = await getFriendsList();
+        if (friends.length === 0) {
+            friendsList.append($('<p>').text("You haven't added any friends yet."));
+        } else {
+            friends.forEach(friend => {
+                const friendElement = $('<div>').addClass('friend-item');
+                friendElement.append(
+                    $('<span>').text(friend.username),
+                    $('<button>')
+                        .addClass('remove-friend-btn')
+                        .text('✕')
+                        .data('uid', friend.uid)
+                );
+                friendsList.append(friendElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading friends:', error);
+        friendsList.append($('<p>').text('Error loading friends list.'));
+    }
+    
+    // Handle search input
+    let searchTimeout;
+    searchInput.on('input', function() {
+        clearTimeout(searchTimeout);
+        const searchTerm = $(this).val().trim();
+        
+        searchTimeout = setTimeout(async () => {
+            if (searchTerm.length < 2) {
+                searchResults.empty();
+                return;
+            }
+            
+            try {
+                const usersRef = collection(window.db, "users");
+                const q = query(
+                    usersRef,
+                    where("username", ">=", searchTerm),
+                    where("username", "<=", searchTerm + '\uf8ff'),
+                    limit(5)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                searchResults.empty();
+                
+                if (querySnapshot.empty) {
+                    searchResults.append($('<p>').text('No users found'));
+                    return;
+                }
+                
+                querySnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    if (userData.uid !== auth.currentUser.uid) {
+                        const userElement = $('<div>').addClass('search-result-item');
+                        userElement.append(
+                            $('<span>').text(userData.username),
+                            $('<button>')
+                                .addClass('add-friend-btn')
+                                .text('+')
+                                .data({
+                                    uid: userData.uid,
+                                    username: userData.username
+                                })
+                        );
+                        searchResults.append(userElement);
+                    }
+                });
+            } catch (error) {
+                console.error('Error searching users:', error);
+                searchResults.append($('<p>').text('Error searching users'));
+            }
+        }, 500);
     });
+    
+    // Handle adding/removing friends
+    searchResults.on('click', '.add-friend-btn', async function() {
+        const uid = $(this).data('uid');
+        const username = $(this).data('username');
+        await addFriend(uid, username);
+        // Refresh friends list
+        $(this).closest('.search-result-item').remove();
+    });
+    
+    friendsList.on('click', '.remove-friend-btn', async function() {
+        const uid = $(this).data('uid');
+        await removeFriend(uid);
+        $(this).closest('.friend-item').remove();
+    });
+    
+    // Handle modal buttons
+    cancelBtn.click(() => modal.remove());
+    saveBtn.click(() => modal.remove());
+    
+    // Close modal when clicking outside
+    modal.click(function(e) {
+        if (e.target === this) {
+            modal.remove();
+        }
+    });
+});
 
 });
