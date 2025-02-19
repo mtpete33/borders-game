@@ -24,34 +24,14 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  <style>
-    table {
-        width: 50%;
-        border-collapse: collapse;
-        margin: 20px auto;
-    }
-    th, td {
-        border: 1px solid #000;
-        text-align: center;
-        padding: 8px;
-        font-weight:bold;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    /* Target rows 1, 2, 3, and 4 (excluding the header) */
-    tbody tr:nth-child(1) td:nth-child(2),
-    tbody tr:nth-child(1) td:nth-child(3),
-    tbody tr:nth-child(2) td:nth-child(2),
-    tbody tr:nth-child(2) td:nth-child(3),
-    tbody tr:nth-child(3) td:nth-child(2),
-    tbody tr:nth-child(3) td:nth-child(3) {
-        background-color: black;
-        color: white; /* To make text readable */
-    }
-  </style>
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "q7rg5jr2z0");
+  </script>
 
-  
 </head>
 
 <body>
@@ -60,46 +40,8 @@
   
   <div id="landingPage" style="display: block;">
     <!-- <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1> -->
-    <h1>Borders <span id="hundred">100</span></h1>
-    <br>
-    <p id="hundredText">Today we are celebrating our 100th Borders puzzle! Thank you for playing!</p>
-    <table>
-        <thead>
-            <tr>
-                <td>T</td>
-                <td style="background-color:lightblue;">H</td>
-                <td>A</td>
-                <td>N</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="background-color:lightblue;">H</td>
-                <td></td>
-                <td></td>
-                <td style="background-color:lightblue;">K</td>
-            </tr>
-            <tr>
-                <td>A</td>
-                <td></td>
-                <td></td>
-                <td>Y</td>
-            </tr>
-            <tr>
-                <td style="background-color:lightblue;">N</td>
-                <td></td>
-                <td></td>
-                <td style="background-color:lightblue;">O</td>
-            </tr>
-            <tr>
-                <td>K</td>
-                <td>Y</td>
-                <td style="background-color:lightblue;">O</td>
-                <td>U</td>
-            </tr>
-            
-        </tbody>
-    </table>
+    <h1>Borders</h1>
+    
     <button id="instructionsBtn">Instructions</button>
     <div id="instructionsContent" style="display: none;">
       <p>Welcome to Borders! In this timed, daily word game you fill in the blank squares with letters creating four valid dictionary words <em>across and down</em> (like a crossword) connecting around the border of the grid. A few letters will be filled in already. See example below. Any valid dictionary words are accepted, so there may be more than one solution to each puzzle.</p>
@@ -109,8 +51,10 @@
       <img id="example" src="images/bordersexample.jpg" alt="game example">
     </div>
     <div>
+      <button id="manageFriendsBtn" style="display:none;">Manage Friends</button>
       <button id="playBtn" style="display:none;">Play</button>
       <button id="viewSolvedBtn" style="display:none;">View Solved Puzzle</button>
+      
       
       </div>
     
@@ -119,7 +63,7 @@
     </div>
     <a href="#" id="logoutLink" style="display:none;">Logout</a>
     <button id="signUpBtn">Sign Up</button>
-    <button id="logInBtn">Log In With Email</button>
+    <button id="logInBtn">Email Login</button>
   </div>
 
   <button id="googleLoginBtn" style="display:inline-flex;">
@@ -253,6 +197,10 @@
         <button class="nav-arrow" id="prevDay">&#9664;</button>
         <h2>Leaderboard</h2>
         <button class="nav-arrow" id="nextDay">&#9654;</button>
+      </div>
+
+      <div id="friendsOrGlobal">
+        <button id="friendsFilterBtn">Friends</button><button id="globalFilterBtn" class="active">Global</button>
       </div>
     
       <div class="leaderboard-filters">

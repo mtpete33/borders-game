@@ -30,6 +30,16 @@ let isProgrammaticChange = false;
 
 
 $(document).ready(function() {
+    function isInstagramBrowser() {
+        let ua = navigator.userAgent || navigator.vendor || window.opera;
+        return (ua.indexOf("Instagram") > -1);
+    }
+
+    if (isInstagramBrowser()) {
+        alert("For the best experience, please open this page in an external browser. Click the three dots at the top right corner and select 'Open in external browser'.");
+    }
+
+    
     $('#playBtn').hide();
     
     $('#instructionsBtn').click(function() {
@@ -139,6 +149,7 @@ $(document).ready(function() {
 
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
+                    $("#manageFriendsBtn").show();
                     if (data.hasGivenUp) {
                         await fetchTodaysPuzzle();
                     }
@@ -810,6 +821,8 @@ $(document).ready(function() {
           $('#logInBtn').show();
 
           $('#playBtn').show();
+          $("#manageFriendsBtn").show();
+          
 
 
             // Store the username in Firestore linked to the user ID
@@ -863,6 +876,7 @@ $(document).ready(function() {
                     // Show success and hide login-related UI elements
                     toastr.success("Logged in successfully!");
                     $("#playBtn").show();
+                    $("#manageFriendsBtn").show();
                     $("#signupSuccess").hide();
                     $("#loginForm").hide();
                     $("#logInBtn").hide();
