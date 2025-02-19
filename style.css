@@ -587,55 +587,15 @@ footer a {
     75% { transform: translateX(5px); }
 }
 
-/* Game End Modal Styles */
-.game-end-modal {
+/* Friend Management Modal Styles */
+.friends-modal {
+    /* width: 90%; */
+    /* max-width: 500px; */
     padding: 20px;
     background: white;
     border-radius: 12px;
-    width: 90%;
-    max-width: 800px;
+    width: 315px;
     margin: 0 auto;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-}
-
-.tab-button {
-    padding: 10px 20px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: "Josefin Sans", sans-serif;
-    font-size: 16px;
-    opacity: 0.6;
-}
-
-.tab-button.active {
-    opacity: 1;
-    border-bottom: 2px solid #000;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* Friend Management Modal Styles */
-.friends-modal {
-    padding: 20px;
-    background: white;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .search-section {
