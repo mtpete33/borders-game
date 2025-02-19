@@ -1662,7 +1662,8 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         .attr({
             type: 'text',
             placeholder: 'Search by username',
-            id: 'friendSearchInput'
+            id: 'friendSearchInput',
+            autocomplete: 'off'
         })
         .addClass('friend-search-input');
     const searchResults = $('<div>').addClass('search-results');

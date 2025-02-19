@@ -568,7 +568,7 @@ footer a {
     padding: 0 4px;
     font-size: 12px;
     background: none;
-    border: 1px solid #ccc;
+    border: 1px solid #6b6b6b;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -576,7 +576,7 @@ footer a {
 }
 
 .friend-btn:hover {
-    background-color: #f0f0f0;
+    background-color: #c7c7c7;
     border-color: #999;
 }
 
@@ -596,6 +596,7 @@ footer a {
     border-radius: 12px;
     width: 315px;
     margin: 0 auto;
+    border: 5px solid black;
 }
 
 .search-section {
@@ -693,6 +694,9 @@ footer a {
 
 .close-btn:hover {
     background-color: #333;
+}
+#newFriendsAlert {
+  color: #000000;
 }
 
 /* Styling for submit button animation */
