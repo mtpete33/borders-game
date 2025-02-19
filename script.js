@@ -1471,19 +1471,18 @@ async function getLeaderboard(date = new Date()) {
                 usernameCell.innerHTML = entry.username;
                 if (user && entry.uid !== user.uid) {
                     const isFriend = friendsList.some(friend => friend.uid === entry.uid);
-                    const friendBtn = document.createElement('button');
-                    friendBtn.className = 'friend-btn';
-                    friendBtn.innerHTML = isFriend ? '❌' : '➕';
-                    friendBtn.onclick = async () => {
-                        if (isFriend) {
-                            await removeFriend(entry.uid);
-                        } else {
+                    if (!isFriend) {
+                        const friendBtn = document.createElement('button');
+                        friendBtn.className = 'friend-btn';
+                        friendBtn.innerHTML = '➕';
+                        friendBtn.style.color = '#4CAF50';
+                        friendBtn.onclick = async () => {
                             await addFriend(entry.uid, entry.username);
-                        }
-                        // Refresh the leaderboard
-                        getLeaderboard(currentLeaderboardDate);
-                    };
-                    usernameCell.appendChild(friendBtn);
+                            // Refresh the leaderboard
+                            getLeaderboard(currentLeaderboardDate);
+                        };
+                        usernameCell.appendChild(friendBtn);
+                    }
                 }
                 timeCell.textContent = formattedTime;
 
