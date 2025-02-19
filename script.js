@@ -1636,8 +1636,12 @@ async function getFriendsList() {
         const friendsRef = doc(window.db, "friends", user.uid);
         const friendsDoc = await getDoc(friendsRef);
         if (!friendsDoc.exists()) {
-            // If document doesn't exist, create it with empty friends list
-            await setDoc(friendsRef, { friendsList: [] });
+            try {
+                await setDoc(friendsRef, { friendsList: [] });
+            } catch (setError) {
+                console.error("Error creating friends document:", setError);
+                return [];
+            }
             return [];
         }
         return friendsDoc.data().friendsList || [];
