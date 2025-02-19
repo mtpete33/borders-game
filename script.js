@@ -1751,8 +1751,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                     const userElement = $('<div>').addClass('search-result-item');
                     const button = $('<button>')
                         .addClass('add-friend-btn')
-                        .text('➕')
-                        .css('color', '#4CAF50')
+                        .html('<span style="color: #359235; font-weight:bold; font-size:18px;">+</span>')
                         .data({
                             uid: userData.uid,
                             username: userData.username
