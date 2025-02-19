@@ -1311,9 +1311,9 @@ async function getLeaderboard(date = new Date()) {
                         return;
                     }
                 }
-            } else {
+            }
 
-        // Update the displayed date
+            // Update the displayed date
         const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
             weekday: 'long',
             month: 'long', 
