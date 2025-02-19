@@ -596,7 +596,7 @@ footer a {
 }
 
 .friend-search-input {
-    width: 70%;
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -674,7 +674,6 @@ footer a {
 .close-btn {
     background-color: black;
     color: white;
-    margin: 0 auto;
 }
 
 .close-btn:hover {
