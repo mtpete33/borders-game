@@ -1,0 +1,24 @@
+Checking for document with user ID and puzzle ID: HVzGFf7yzIgp7DLbM9T4A1M4jqI2 128
+Fetching user details for UID: HVzGFf7yzIgp7DLbM9T4A1M4jqI2
+Leaderboard data retrieved: 
+Object {hasCompleted: true, uid: "HVzGFf7yzIgp7DLbM9T4A1M4jqI2", time: 30.908, hasGivenUp: false, words: Array(4), …}
+User data found: {"username":"Michael Peterson","email":"mtpete33@gmail.com","uid":"HVzGFf7yzIgp7DLbM9T4A1M4jqI2"}
+Checking for document with user ID and puzzle ID: HVzGFf7yzIgp7DLbM9T4A1M4jqI2 128
+Leaderboard data retrieved: 
+Object {date: "2025-02-19T14:35:06.625Z", username: "Michael Peterson", hasCompleted: true, puzzleId: 128, time: 30.908, …}
+Error fetching leaderboard: 
+FirebaseError {code: "failed-precondition", customData: undefined, name: "FirebaseError", toString: ƒ}
+code: "failed-precondition"
+customData: undefined
+name: "FirebaseError"
+toString: ƒ ()=>`${this.name}: [code=${this.code}]: ${this.message}`
+message: "The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/borders-game/firestore/indexes?create_composite=ClBwcm9qZWN0cy9ib3JkZXJzLWdhbWUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2xlYWRlcmJvYXJkL2luZGV4ZXMvXxABGgcKA3VpZBABGggKBHRpbWUQARoICgRkYXRlEAEaDAoIX19uYW1lX18QAQ .↵The query contains range and inequality filters on multiple fields, please refer to the documentation for index selection best practices: https://cloud.google.com/firestore/docs/query-data/multiple-range-fields."
+stack: "FirebaseError: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/borders-game/firestore/indexes?create_composite=ClBwcm9qZWN0cy9ib3JkZXJzLWdhbWUvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2xlYWRlcmJvYXJkL2luZGV4ZXMvXxABGgcKA3VpZBABGggKBHRpbWUQARoICgRkYXRlEAEaDAoIX19uYW1lX18QAQ .↵The query contains range and inequality filters on multiple fields, please refer to the documentation for index selection best practices: https://cloud.google.com/firestore/docs/query-data/multiple-range-fields."
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: Object
+
+at t.value (https://16794f99-7cef-438b-b9dc-d13bbfda9ed8-00-3kew4vngx0s0f.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://16794f99-7cef-438b-b9dc-d13bbfda9ed8-00-3kew4vngx0s0f.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://16794f99-7cef-438b-b9dc-d13bbfda9ed8-00-3kew4vngx0s0f.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://16794f99-7cef-438b-b9dc-d13bbfda9ed8-00-3kew4vngx0s0f.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
