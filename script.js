@@ -1279,22 +1279,6 @@ async function getLeaderboard(date = new Date()) {
         const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
         const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
 
-        let queryConstraints = [
-            where("date", ">=", startOfDay.toISOString()),
-            where("date", "<", endOfDay.toISOString()),
-            orderBy("date", "asc"),
-            orderBy("time", "asc"),
-            limit(10)
-        ];
-
-        if (showFriendsOnly) {
-            const friendsList = await getFriendsList();
-            if (friendsList.length > 0) {
-                const friendUids = friendsList.map(friend => friend.uid);
-                queryConstraints.unshift(where("uid", "in", friendUids));
-            }
-        }
-
         // Update the displayed date
         const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
             weekday: 'long',
@@ -1304,13 +1288,37 @@ async function getLeaderboard(date = new Date()) {
         });
         $('#leaderboardDate').text(formattedDisplayDate);
 
-        const q = query(
-            statsRef, 
-            where("date", ">=", startOfDay.toISOString()), 
-            where("date", "<", endOfDay.toISOString()), 
-            orderBy("time", "asc"), 
-            limit(10)
-        );
+        let q;
+        if (showFriendsOnly) {
+            const friendsList = await getFriendsList();
+            if (friendsList.length > 0) {
+                const friendUids = friendsList.map(friend => friend.uid);
+                q = query(
+                    statsRef,
+                    where("uid", "in", friendUids),
+                    where("date", ">=", startOfDay.toISOString()),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("time", "asc"),
+                    limit(10)
+                );
+            } else {
+                q = query(
+                    statsRef,
+                    where("date", ">=", startOfDay.toISOString()),
+                    where("date", "<", endOfDay.toISOString()),
+                    orderBy("time", "asc"),
+                    limit(10)
+                );
+            }
+        } else {
+            q = query(
+                statsRef,
+                where("date", ">=", startOfDay.toISOString()),
+                where("date", "<", endOfDay.toISOString()),
+                orderBy("time", "asc"),
+                limit(10)
+            );
+        }
 
         try {
             const querySnapshot = await getDocs(q);
