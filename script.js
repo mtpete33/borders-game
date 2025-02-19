@@ -53,6 +53,21 @@ $(document).ready(function() {
         $(this).addClass('active');
     });
 
+    // Friends/Global filter click handlers
+    $('#friendsFilterBtn, #globalFilterBtn').click(function() {
+        $('#friendsFilterBtn, #globalFilterBtn').removeClass('active');
+        $(this).addClass('active');
+        const activeFilter = $('.filter-btn.active').attr('id');
+        
+        if (activeFilter === 'bestTimeFilter') {
+            getBestTimes();
+        } else if (activeFilter === 'mostWinsFilter') {
+            getMostWins();
+        } else {
+            getLeaderboard(new Date());
+        }
+    });
+
     $('#todayFilter').click(function() {
         $('#leaderboardDate').show();
         getLeaderboard(new Date());
@@ -1118,11 +1133,25 @@ $(document).ready(function() {
     // Function to get all-time best times
 async function getBestTimes() {
     const statsRef = collection(window.db, "leaderboard");
-    const q = query(
-        statsRef,
-        orderBy("time", "asc"),
-        limit(10)
-    );
+    const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+    
+    if (showFriendsOnly) {
+        const friendsList = await getFriendsList();
+        const friendUids = friendsList.map(friend => friend.uid);
+        
+        const q = query(
+            statsRef,
+            where("uid", "in", friendUids),
+            orderBy("time", "asc"),
+            limit(10)
+        );
+    } else {
+        const q = query(
+            statsRef,
+            orderBy("time", "asc"),
+            limit(10)
+        );
+    }
 
     try {
         const querySnapshot = await getDocs(q);
@@ -1144,9 +1173,22 @@ async function getBestTimes() {
 // Function to get users with most wins
 async function getMostWins() {
     const statsRef = collection(window.db, "leaderboard");
+    const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
     try {
         // Get all entries
-        const querySnapshot = await getDocs(statsRef);
+        let querySnapshot;
+        if (showFriendsOnly) {
+            const friendsList = await getFriendsList();
+            const friendUids = friendsList.map(friend => friend.uid);
+            if (friendUids.length > 0) {
+                const q = query(statsRef, where("uid", "in", friendUids));
+                querySnapshot = await getDocs(q);
+            } else {
+                querySnapshot = { docs: [] };
+            }
+        } else {
+            querySnapshot = await getDocs(statsRef);
+        }
         const winCounts = {};
 
         // Group first place wins by user
@@ -1235,6 +1277,23 @@ async function getLeaderboard(date = new Date()) {
         currentLeaderboardDate = date;
         const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+
+        let queryConstraints = [
+            where("date", ">=", startOfDay.toISOString()),
+            where("date", "<", endOfDay.toISOString()),
+            orderBy("date", "asc"),
+            orderBy("time", "asc"),
+            limit(10)
+        ];
+
+        if (showFriendsOnly) {
+            const friendsList = await getFriendsList();
+            if (friendsList.length > 0) {
+                const friendUids = friendsList.map(friend => friend.uid);
+                queryConstraints.unshift(where("uid", "in", friendUids));
+            }
+        }
 
         // Update the displayed date
         const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
