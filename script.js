@@ -1650,7 +1650,7 @@ async function getFriendsList() {
 }
 
 // Event listener for the "Manage Friends" button
-$('#manageFriendsBtn').click(async function() {
+$(document).on('click', '#manageFriendsBtn', async function() {
     const modal = $('<div>').addClass('modal').attr('id', 'friendsModal');
     const modalContent = $('<div>').addClass('modal-content friends-modal');
     
