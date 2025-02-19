@@ -1295,10 +1295,10 @@ async function getLeaderboard(date = new Date()) {
                 const friendUids = friendsList.map(friend => friend.uid);
                 q = query(
                     statsRef,
-                    where("uid", "in", friendUids),
                     where("date", ">=", startOfDay.toISOString()),
                     where("date", "<", endOfDay.toISOString()),
                     orderBy("date"),
+                    orderBy("time", "asc"),
                     limit(10)
                 );
             } else {
@@ -1307,6 +1307,7 @@ async function getLeaderboard(date = new Date()) {
                     where("date", ">=", startOfDay.toISOString()),
                     where("date", "<", endOfDay.toISOString()),
                     orderBy("date"),
+                    orderBy("time", "asc"),
                     limit(10)
                 );
             }
@@ -1316,6 +1317,7 @@ async function getLeaderboard(date = new Date()) {
                 where("date", ">=", startOfDay.toISOString()),
                 where("date", "<", endOfDay.toISOString()),
                 orderBy("date"),
+                orderBy("time", "asc"),
                 limit(10)
             );
         }
