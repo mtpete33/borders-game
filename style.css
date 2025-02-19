@@ -200,6 +200,7 @@ footer {
   font-size: 16px;
   margin: 0 auto 0 2px;
   border: 1px solid black;
+  cursor: pointer;
 }
 #friendsFilterBtn.active, #globalFilterBtn.active {
   background-color: black;
@@ -633,6 +634,13 @@ footer a {
     padding: 4px 8px;
     cursor: pointer;
     transition: all 0.2s ease;
+
+}
+.add-friend-btn {
+    color: #4CAF50;
+}
+.remove-friend-btn {
+    color: #ff4444;
 }
 
 .add-friend-btn:hover {
