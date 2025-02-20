@@ -1664,10 +1664,20 @@ async function addFriend(friendUid, friendUsername) {
 
         if (friendsDoc.exists()) {
             const currentFriends = friendsDoc.data().friendsList || [];
-            if (currentFriends.some(friend => friend.uid === friendUid)) {
-                toastr.error("User is already on your friend list");
+            const existingFriendIndex = currentFriends.findIndex(friend => friend.uid === friendUid);
+            
+            if (existingFriendIndex !== -1) {
+                // Update username if it's different
+                if (currentFriends[existingFriendIndex].username !== friendUsername) {
+                    currentFriends[existingFriendIndex].username = friendUsername;
+                    await setDoc(friendsRef, { friendsList: currentFriends });
+                    toastr.info(`Updated ${friendUsername}'s information`);
+                } else {
+                    toastr.error("User is already on your friend list");
+                }
                 return;
             }
+            
             await setDoc(friendsRef, {
                 friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
             });
