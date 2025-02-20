@@ -1860,7 +1860,9 @@ $(document).on('click', '#manageFriendsBtn', async function() {
                 .text('✕')
                 .data('uid', uid)
         );
-                friendsList.append(friendElement);
+                // Remove "no friends" message if it exists
+        friendsList.find('p').remove();
+        friendsList.append(friendElement);
         // Remove from search results
         $(this).closest('.search-result-item').remove();
     });
