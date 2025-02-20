@@ -212,8 +212,20 @@ $(document).ready(function() {
                 const user = result.user;
                 console.log('User logged in with Google:', user);
                 // Extract username from email for Google users
-                const emailUsername = user.email.split('@')[0];
-                // Always update the username to match email username for Google users
+                let emailUsername = user.email.split('@')[0];
+
+                // Check if username exists and append random numbers if needed
+                const usersRef = collection(window.db, "users");
+                const q = query(usersRef, where("username", "==", emailUsername));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    // Username exists, append random numbers
+                    const randomNum = Math.floor(Math.random() * 100);
+                    emailUsername = `${emailUsername}${randomNum}`;
+                }
+
+                // Update user document with the potentially modified username
                 const userRef = doc(window.db, "users", user.uid);
                 await setDoc(userRef, {
                     uid: user.uid,
@@ -811,13 +823,37 @@ $(document).ready(function() {
     }
 
     // Sign-Up Functionality
-    $('#signUpSubmitBtn').click(function() {
+    $('#signUpSubmitBtn').click(async function() {
       const username = $('#username').val();
       const email = $('#email').val();
         if (!isValidEmail(email)) {
             toastr.error("Please enter a valid email address.");
             return;
         }
+
+        // Check for spaces in username
+        if (username.includes(' ')) {
+            $('#usernameError').text('Username cannot contain spaces').css('color', 'red');
+            return;
+        }
+
+        // Check if username already exists
+        try {
+            const usersRef = collection(window.db, "users");
+            const q = query(usersRef, where("username", "==", username));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                $('#usernameError').text('Username already taken').css('color', 'red');
+                return;
+            }
+            $('#usernameError').text(''); // Clear error if username is valid
+        } catch (error) {
+            console.error("Error checking username:", error);
+            toastr.error("Error validating username");
+            return;
+        }
+
       const password = $('#password').val();
       const confirmPassword = $('#confirmPassword').val();
 
