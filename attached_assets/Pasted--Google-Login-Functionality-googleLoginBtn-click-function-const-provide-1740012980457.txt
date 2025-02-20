@@ -1,0 +1,46 @@
+
+    // Google Login Functionality
+    $('#googleLoginBtn').click(function() {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then(async (result) => {
+                const user = result.user;
+                console.log('User logged in with Google:', user);
+                // Extract username from email for Google users
+                let emailUsername = user.email.split('@')[0];
+
+                // Check if username exists and append random numbers if needed
+                const usersRef = collection(window.db, "users");
+                const q = query(usersRef, where("username", "==", emailUsername));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    // Username exists, append random numbers
+                    const randomNum = Math.floor(Math.random() * 100);
+                    emailUsername = `${emailUsername}${randomNum}`;
+                }
+
+                // Update user document with the potentially modified username
+                const userRef = doc(window.db, "users", user.uid);
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    username: emailUsername,
+                    email: user.email
+                }, { merge: true });
+                displayLoggedInMessage(emailUsername);
+                toastr.success("Logged in successfully!");
+                $("#loginForm").hide();
+                $("#signUpForm").hide();
+                $("#signUpBtn").hide();
+                $("#googleLoginBtn").hide();
+                $("#logInBtn").hide();
+
+                // Check if puzzle is already completed before showing Play button
+                decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+
+            })
+            .catch((error) => {
+                console.error('Error during Google login:', error.message);
+                toastr.error('Error: ' + error.message);
+            });
+    });
