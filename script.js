@@ -1297,6 +1297,9 @@ async function displayWinnersList(winnersList) {
         winner.username.toLowerCase() !== 'undefined'
     );
 
+    // Get list of friend UIDs for easier comparison
+    const friendUids = friendsList.map(friend => friend.uid);
+
     // Update table headers for Most 1st Place view
     thead.innerHTML = `
         <tr>
@@ -1318,20 +1321,17 @@ async function displayWinnersList(winnersList) {
         
         // Create username cell with add friend button
         usernameCell.innerHTML = winner.username;
-        if (user && winner.uid !== user.uid) {
-            const isFriend = friendsList.some(friend => friend.uid === winner.uid);
-            if (!isFriend) {
-                const friendBtn = document.createElement('button');
-                friendBtn.className = 'friend-btn';
-                friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
-                friendBtn.style.color = '#4CAF50';
-                friendBtn.onclick = async () => {
-                    await addFriend(winner.uid, winner.username);
-                    // Refresh the leaderboard
-                    getMostWins();
-                };
-                usernameCell.appendChild(friendBtn);
-            }
+        if (user && winner.uid && winner.uid !== user.uid && !friendUids.includes(winner.uid)) {
+            const friendBtn = document.createElement('button');
+            friendBtn.className = 'friend-btn';
+            friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
+            friendBtn.style.color = '#4CAF50';
+            friendBtn.onclick = async () => {
+                await addFriend(winner.uid, winner.username);
+                // Refresh the leaderboard
+                getMostWins();
+            };
+            usernameCell.appendChild(friendBtn);
         }
         
         winsCell.textContent = winner.wins;
