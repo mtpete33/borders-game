@@ -214,18 +214,22 @@ $(document).ready(function() {
                 // Extract username from email for Google users
                 let emailUsername = user.email.split('@')[0];
 
-                // Check if username exists and append random numbers if needed
+                // Check if username exists
                 const usersRef = collection(window.db, "users");
                 const q = query(usersRef, where("username", "==", emailUsername));
                 const querySnapshot = await getDocs(q);
 
                 if (!querySnapshot.empty) {
-                    // Username exists, append random numbers
-                    const randomNum = Math.floor(Math.random() * 100);
-                    emailUsername = `${emailUsername}${randomNum}`;
+                    // Check if the existing username belongs to a different user
+                    const existingUser = querySnapshot.docs[0].data();
+                    if (existingUser.email !== user.email) {
+                        // Only append random numbers if it's a different user
+                        const randomNum = Math.floor(Math.random() * 100);
+                        emailUsername = `${emailUsername}${randomNum}`;
+                    }
                 }
 
-                // Update user document with the potentially modified username
+                // Update user document with the username
                 const userRef = doc(window.db, "users", user.uid);
                 await setDoc(userRef, {
                     uid: user.uid,
@@ -882,7 +886,7 @@ $(document).ready(function() {
               .then(() => {
                 // console.log('User data stored successfully');
                 // Redirect or show login success message
-                // alert("Account created successfully! Please login.");
+                // alert("Account created successfully!Please login.");
                 toastr.success("Account created successfully!");
                 $('#signUpForm').hide();
                   $('#logInBtn').hide();
