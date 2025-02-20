@@ -64,7 +64,7 @@ $(document).ready(function() {
         } else if (activeFilter === 'mostWinsFilter') {
             getMostWins();
         } else {
-            getLeaderboard(new Date());
+            getLeaderboard(currentLeaderboardDate);
         }
     });
 
