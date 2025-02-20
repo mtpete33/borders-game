@@ -17,6 +17,10 @@ h1 {
   margin-top:-15px;
   margin-bottom: -10px;
 }
+h2 {
+  margin:.25em 0 .14em 0;
+  font-size: 30px;
+}
 
 #landingPage {
   font-size: 1.5em;
@@ -610,7 +614,7 @@ footer a {
     border-radius: 12px;
     width: 315px;
     margin: 0 auto;
-    border: 5px solid black;
+    border: 3px solid black;
 }
 
 .search-section {
@@ -618,9 +622,9 @@ footer a {
 }
 
 .friend-search-input {
-    width: 70%;
+    width: 65%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #bfbfbf;
     border-radius: 6px;
     font-size: 16px;
     margin-bottom: 10px;
@@ -649,7 +653,7 @@ footer a {
     background: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 6px 10px;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -680,7 +684,7 @@ footer a {
 }
 
 .friends-list {
-    border: 1px solid #eee;
+    border: 1px solid #bfbfbf;
     border-radius: 6px;
 }
 
@@ -836,7 +840,8 @@ h1 {
   margin-top:15px;
 }
   h2 {
-    margin-top:.25em;
+    margin: 0 0 .14em 0;
+    font-size: 30px;
   }
   #instructionsContent.show {
     max-height: 595px;
@@ -849,6 +854,9 @@ h1 {
     font-size: 21px;
   }
   #manageFriendsBtn {
+    font-size: 21px;
+  }
+  .close-btn {
     font-size: 21px;
   }
   

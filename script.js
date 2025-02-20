@@ -478,6 +478,7 @@ $(document).ready(function() {
         $("#giveUpBtn").hide();
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
     });
+    
     // Event handler for cancel button inside the modal
     $("#cancelGiveUpBtn").click(function() {
         $("#giveUpModal").hide();
