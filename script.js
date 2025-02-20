@@ -837,22 +837,9 @@ $(document).ready(function() {
             return;
         }
 
-        // Check if username already exists
-        try {
-            const usersRef = collection(window.db, "users");
-            const q = query(usersRef, where("username", "==", username));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                $('#usernameError').text('Username already taken').css('color', 'red');
-                return;
-            }
-            $('#usernameError').text(''); // Clear error if username is valid
-        } catch (error) {
-            console.error("Error checking username:", error);
-            toastr.error("Error validating username");
-            return;
-        }
+        // Proceed with account creation without checking username
+        // We'll validate uniqueness when writing to the users collection
+        $('#usernameError').text(''); // Clear any previous errors
 
       const password = $('#password').val();
       const confirmPassword = $('#confirmPassword').val();
