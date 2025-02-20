@@ -1251,12 +1251,14 @@ async function getMostWins() {
                 if (!winCounts[key]) {
                     winCounts[key] = {
                         time: data.time,
-                        username: data.username
+                        username: data.username,
+                        uid: data.uid
                     };
                 } else if (data.time < winCounts[key].time) {
                     winCounts[key] = {
                         time: data.time,
-                        username: data.username
+                        username: data.username,
+                        uid: data.uid
                     };
                 }
             }
@@ -1265,12 +1267,23 @@ async function getMostWins() {
         // Count wins per user
         const userWins = {};
         Object.values(winCounts).forEach(win => {
-            userWins[win.username] = (userWins[win.username] || 0) + 1;
+            if (!userWins[win.username]) {
+                userWins[win.username] = {
+                    wins: 1,
+                    uid: win.uid
+                };
+            } else {
+                userWins[win.username].wins++;
+            }
         });
 
         // Convert to array and sort
         const sortedWins = Object.entries(userWins)
-            .map(([username, wins]) => ({ username, wins }))
+            .map(([username, data]) => ({ 
+                username, 
+                wins: data.wins,
+                uid: data.uid 
+            }))
             .sort((a, b) => b.wins - a.wins)
             .slice(0, 10);
 
