@@ -149,7 +149,18 @@ $(document).ready(function() {
         const user = auth.currentUser;
         if (user) {
             const statsRef = collection(window.db, "leaderboard");
-            const q = query(statsRef, where("uid", "==", user.uid), where("puzzleId", "==", currentPuzzleId));
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const q = query(
+                statsRef, 
+                where("uid", "==", user.uid), 
+                where("puzzleId", "==", currentPuzzleId),
+                where("date", ">=", today.toISOString()),
+                where("date", "<", tomorrow.toISOString())
+            );
 
             console.log("Checking for document with user ID and puzzle ID:", user.uid, currentPuzzleId);
 
@@ -171,7 +182,7 @@ $(document).ready(function() {
                     return; // Exit early to prevent Play button from showing
                 }
             }
-            // Only show Play button if puzzle not completed/given up
+            // Only show Play button if puzzle not completed/given up today
             $("#playBtn").show();
         }
     }
@@ -421,12 +432,31 @@ $(document).ready(function() {
     });
 
     // Event handler for the confirmation button inside the modal
-    $("#confirmGiveUpBtn").click(function () {
+    $("#confirmGiveUpBtn").click(async function () {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                // Store the give up state in leaderboard
+                const statsRef = collection(window.db, "leaderboard");
+                const userDoc = await getDoc(doc(window.db, "users", user.uid));
+                const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
+                
+                await addDoc(statsRef, {
+                    puzzleId: currentPuzzleId,
+                    date: new Date().toISOString(),
+                    uid: user.uid,
+                    username: username,
+                    hasGivenUp: true,
+                    hasCompleted: false
+                });
+            } catch (error) {
+                console.error("Error storing give up state:", error);
+            }
+        }
 
         // Clear all user inputs and display correct answers
         $(".cell").each(function() {
             $(this).val('');
-
         });
         // Display the correct answers
         $("#cell-1").val(puzzleAnswers.word1.charAt(0));
