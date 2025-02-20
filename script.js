@@ -1283,10 +1283,12 @@ async function getMostWins() {
 }
 
 // Function to display winners list
-function displayWinnersList(winnersList) {
+async function displayWinnersList(winnersList) {
     const leaderboardTable = document.getElementById('leaderboardTable');
     const thead = leaderboardTable.getElementsByTagName('thead')[0];
     const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
+    const user = auth.currentUser;
+    const friendsList = user ? await getFriendsList() : [];
 
     // Filter out entries with undefined username
     winnersList = winnersList.filter(winner => 
@@ -1313,7 +1315,25 @@ function displayWinnersList(winnersList) {
         const winsCell = row.insertCell(2);
 
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
-        usernameCell.textContent = winner.username;
+        
+        // Create username cell with add friend button
+        usernameCell.innerHTML = winner.username;
+        if (user && winner.uid !== user.uid) {
+            const isFriend = friendsList.some(friend => friend.uid === winner.uid);
+            if (!isFriend) {
+                const friendBtn = document.createElement('button');
+                friendBtn.className = 'friend-btn';
+                friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
+                friendBtn.style.color = '#4CAF50';
+                friendBtn.onclick = async () => {
+                    await addFriend(winner.uid, winner.username);
+                    // Refresh the leaderboard
+                    getMostWins();
+                };
+                usernameCell.appendChild(friendBtn);
+            }
+        }
+        
         winsCell.textContent = winner.wins;
     });
 }
