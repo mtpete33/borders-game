@@ -1263,73 +1263,62 @@ async function getMostWins() {
     const statsRef = collection(window.db, "leaderboard");
     const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
     try {
-        // Get all entries
+        // Get all completed entries
+        const baseQuery = query(statsRef, where("hasCompleted", "==", true));
         let querySnapshot;
-        if (showFriendsOnly) {
+        
+        if (showFriendsOnly && auth.currentUser) {
             const friendsList = await getFriendsList();
-            const friendUids = friendsList.map(friend => friend.uid);
+            const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
             if (friendUids.length > 0) {
-                const q = query(statsRef, where("uid", "in", friendUids));
-                querySnapshot = await getDocs(q);
+                querySnapshot = await getDocs(query(statsRef, 
+                    where("hasCompleted", "==", true),
+                    where("uid", "in", friendUids)
+                ));
             } else {
                 querySnapshot = { docs: [] };
             }
         } else {
-            querySnapshot = await getDocs(statsRef);
+            querySnapshot = await getDocs(baseQuery);
         }
 
-        // First, group all entries by puzzle ID
+        // Group entries by puzzle ID
         const puzzleGroups = {};
         querySnapshot.docs.forEach(doc => {
             const data = doc.data();
-            if (!data.hasGivenUp && data.hasCompleted) {
-                const puzzleId = data.puzzleId;
-                if (!puzzleGroups[puzzleId]) {
-                    puzzleGroups[puzzleId] = [];
-                }
-                puzzleGroups[puzzleId].push(data);
+            const puzzleId = data.puzzleId;
+            if (!puzzleGroups[puzzleId]) {
+                puzzleGroups[puzzleId] = [];
             }
+            puzzleGroups[puzzleId].push(data);
         });
 
-        // Then find winners for each puzzle
-        const winCounts = {};
+        // Count wins per user
+        const userWins = {};
         Object.values(puzzleGroups).forEach(puzzleEntries => {
-            // Sort entries by time (fastest first)
+            // Sort by completion time
             puzzleEntries.sort((a, b) => a.time - b.time);
             
             // First place gets a win
             if (puzzleEntries.length > 0) {
                 const winner = puzzleEntries[0];
-                if (!winCounts[winner.username]) {
-                    winCounts[winner.username] = {
+                if (!userWins[winner.username]) {
+                    userWins[winner.username] = {
                         wins: 1,
                         uid: winner.uid
                     };
                 } else {
-                    winCounts[winner.username].wins++;
+                    userWins[winner.username].wins++;
                 }
-            }
-        });
-
-        // Count wins per user
-        const userWins = {};
-        Object.values(winCounts).forEach(win => {
-            if (!userWins[win.username]) {
-                userWins[win.username] = {
-                    wins: 1,
-                    uid: win.uid
-                };
-            } else {
-                userWins[win.username].wins++;
             }
         });
 
         // Convert to array and sort
         const sortedWins = Object.entries(userWins)
-            .map(([username, data]) => ({ 
-                username, 
+            .map(([username, data]) => ({
+                username,
                 wins: data.wins,
-                uid: data.uid 
+                uid: data.uid
             }))
             .sort((a, b) => b.wins - a.wins)
             .slice(0, 10);
