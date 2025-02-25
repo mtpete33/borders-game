@@ -1409,7 +1409,12 @@ async function getLeaderboard(date = new Date()) {
         });
         $('#leaderboardDate').text(formattedDisplayDate);
 
-        const currentPuzzleId = getSequentialDay();
+        // Calculate puzzle ID for the selected date
+        const startDateMs = new Date(Date.UTC(2024, 9, 15)).getTime();
+        const selectedDateMs = startOfDay.getTime();
+        const daysDiff = Math.floor((selectedDateMs - startDateMs) / (1000 * 60 * 60 * 24));
+        const puzzleId = daysDiff + 1;
+        
         let q;
         if (showFriendsOnly) {
             const friendsList = await getFriendsList();
