@@ -1424,7 +1424,7 @@ async function getLeaderboard(date = new Date()) {
                 q = query(
                     statsRef,
                     where("uid", "in", friendUids),
-                    where("puzzleId", "==", currentPuzzleId),
+                    where("puzzleId", "==", puzzleId),
                     orderBy("date"),
                     orderBy("time", "asc"),
                     limit(20)
@@ -1434,7 +1434,7 @@ async function getLeaderboard(date = new Date()) {
                 q = query(
                     statsRef,
                     where("uid", "==", auth.currentUser.uid),
-                    where("puzzleId", "==", currentPuzzleId),
+                    where("puzzleId", "==", puzzleId),
                     orderBy("date"),
                     orderBy("time", "asc"),
                     limit(10)
@@ -1443,7 +1443,7 @@ async function getLeaderboard(date = new Date()) {
         } else {
             q = query(
                 statsRef,
-                where("puzzleId", "==", currentPuzzleId),
+                where("puzzleId", "==", puzzleId),
                 orderBy("date"),
                 orderBy("time", "asc"),
                 limit(20)
