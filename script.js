@@ -1409,6 +1409,7 @@ async function getLeaderboard(date = new Date()) {
         });
         $('#leaderboardDate').text(formattedDisplayDate);
 
+        const currentPuzzleId = getSequentialDay();
         let q;
         if (showFriendsOnly) {
             const friendsList = await getFriendsList();
@@ -1418,8 +1419,7 @@ async function getLeaderboard(date = new Date()) {
                 q = query(
                     statsRef,
                     where("uid", "in", friendUids),
-                    where("date", ">=", startOfDay.toISOString()),
-                    where("date", "<", endOfDay.toISOString()),
+                    where("puzzleId", "==", currentPuzzleId),
                     orderBy("date"),
                     orderBy("time", "asc"),
                     limit(20)
@@ -1429,8 +1429,7 @@ async function getLeaderboard(date = new Date()) {
                 q = query(
                     statsRef,
                     where("uid", "==", auth.currentUser.uid),
-                    where("date", ">=", startOfDay.toISOString()),
-                    where("date", "<", endOfDay.toISOString()),
+                    where("puzzleId", "==", currentPuzzleId),
                     orderBy("date"),
                     orderBy("time", "asc"),
                     limit(10)
@@ -1439,8 +1438,7 @@ async function getLeaderboard(date = new Date()) {
         } else {
             q = query(
                 statsRef,
-                where("date", ">=", startOfDay.toISOString()),
-                where("date", "<", endOfDay.toISOString()),
+                where("puzzleId", "==", currentPuzzleId),
                 orderBy("date"),
                 orderBy("time", "asc"),
                 limit(20)
