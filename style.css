@@ -456,13 +456,13 @@ footer {
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 } */
-footer a {
+/* footer a {
   color: black;
   text-decoration: none;
   width: 5em;
   display: inline-block;
   margin: 0 auto;
-}
+} */
 
 .leaderboard-header {
   display: flex;
@@ -471,6 +471,10 @@ footer a {
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
+#leaderboardTable tr:first-child {
+    background-color: #e6ffe6;
+}
+
 
 .nav-arrow {
   background: white;

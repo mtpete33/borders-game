@@ -36,8 +36,19 @@ $(document).ready(function() {
     }
 
     if (isInstagramBrowser()) {
-        alert("For the best experience, please open this page in an external browser. Click the three dots at the top right corner and select 'Open in external browser'.");
+        alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
     }
+
+    // function isFacebookInAppBrowser() {
+    //     let ua = navigator.userAgent || navigator.vendor || window.opera;
+    //     return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+    // }
+
+    // if (isFacebookInAppBrowser()) {
+    //     alert("To log in, please open this link in your default browser.");
+    //     window.location.href = "https://bordersgame.replit.app";
+    // }
+
 
 
     $('#playBtn').hide();
@@ -1212,21 +1223,21 @@ async function getBestTimes() {
                 statsRef,
                 where("uid", "in", friendUids),
                 orderBy("time", "asc"),
-                limit(10)
+                limit(20)
             );
         } else {
             q = query(
                 statsRef,
                 where("uid", "==", auth.currentUser.uid),
                 orderBy("time", "asc"),
-                limit(10)
+                limit(20)
             );
         }
     } else {
         q = query(
             statsRef,
             orderBy("time", "asc"),
-            limit(10)
+            limit(20)
         );
     }
 
@@ -1411,7 +1422,7 @@ async function getLeaderboard(date = new Date()) {
                     where("date", "<", endOfDay.toISOString()),
                     orderBy("date"),
                     orderBy("time", "asc"),
-                    limit(10)
+                    limit(20)
                 );
             } else {
                 // If no friends, only show current user's results
@@ -1432,7 +1443,7 @@ async function getLeaderboard(date = new Date()) {
                 where("date", "<", endOfDay.toISOString()),
                 orderBy("date"),
                 orderBy("time", "asc"),
-                limit(10)
+                limit(20)
             );
         }
 
@@ -1757,6 +1768,8 @@ async function getFriendsList() {
         return [];
     }
 }
+
+
 
 // Event listener for the "Manage Friends" button
 $(document).on('click', '#manageFriendsBtn', async function() {
