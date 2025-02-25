@@ -1277,31 +1277,36 @@ async function getMostWins() {
         } else {
             querySnapshot = await getDocs(statsRef);
         }
-        const winCounts = {};
 
-        // Group first place wins by user
+        // First, group all entries by puzzle ID
+        const puzzleGroups = {};
         querySnapshot.docs.forEach(doc => {
             const data = doc.data();
-            if (!data.hasGivenUp) {
+            if (!data.hasGivenUp && data.hasCompleted) {
                 const puzzleId = data.puzzleId;
-                const date = new Date(data.date);
-                date.setHours(0, 0, 0, 0);
+                if (!puzzleGroups[puzzleId]) {
+                    puzzleGroups[puzzleId] = [];
+                }
+                puzzleGroups[puzzleId].push(data);
+            }
+        });
 
-                // Create a unique key for each puzzle/date combination
-                const key = `${puzzleId}_${date.getTime()}`;
-
-                if (!winCounts[key]) {
-                    winCounts[key] = {
-                        time: data.time,
-                        username: data.username,
-                        uid: data.uid
+        // Then find winners for each puzzle
+        const winCounts = {};
+        Object.values(puzzleGroups).forEach(puzzleEntries => {
+            // Sort entries by time (fastest first)
+            puzzleEntries.sort((a, b) => a.time - b.time);
+            
+            // First place gets a win
+            if (puzzleEntries.length > 0) {
+                const winner = puzzleEntries[0];
+                if (!winCounts[winner.username]) {
+                    winCounts[winner.username] = {
+                        wins: 1,
+                        uid: winner.uid
                     };
-                } else if (data.time < winCounts[key].time) {
-                    winCounts[key] = {
-                        time: data.time,
-                        username: data.username,
-                        uid: data.uid
-                    };
+                } else {
+                    winCounts[winner.username].wins++;
                 }
             }
         });
