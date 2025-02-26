@@ -109,7 +109,6 @@ let validWords = [];
 let isProgrammaticChange = false;
 
 
-
 // Ensure Firebase Auth is available before calling getRedirectResult
 $(document).ready(async function () {
     console.log("jQuery document ready.");
