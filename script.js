@@ -15,11 +15,12 @@ let provider;
 // Initialize auth after imports are loaded
 async function initializeFirebase() {
   const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');
-  const { getAuth, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
+  const { getAuth, GoogleAuthProvider, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
   
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   provider = new GoogleAuthProvider();
+  window.getRedirectResult = getRedirectResult; // Make it globally available
   
   // Now initialize auth state listener
   auth.onAuthStateChanged((user) => {
