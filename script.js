@@ -884,7 +884,7 @@ auth.onAuthStateChanged((user) => {
                     console.warn('Web Share API is not supported in this browser.');
                 }
             } else {
-                $("#signUpCTA).css('display', 'block');
+                $("#signUpCTA").css('display', 'block');
                 getLeaderboard();
                 // console.error('User UID is missing. Could not store player stats.');
             }
