@@ -25,8 +25,15 @@ const provider = new GoogleAuthProvider();
 
 // Initialize auth state listener immediately
 auth.onAuthStateChanged((user) => {
+  console.log("Auth state changed. User:", user ? {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    providerId: user.providerId,
+    metadata: user.metadata
+  } : 'No user');
   if (user) {
-    console.log("User is signed in:", user);
+    console.log("User is signed in with full details:", user);
     displayLoggedInMessage(user.displayName || user.email);
     $("#loginForm").hide();
     $("#signUpForm").hide();
@@ -345,24 +352,35 @@ $(document).ready(async function () {
     // Google Login Button Handler
     $('#googleLoginBtn').click(async function() {
     try {
+        console.log('Google login button clicked');
         if (!auth) {
             console.error('Auth is not initialized');
             toastr.error('Authentication service not ready. Please try again.');
             return;
         }
+        console.log('Auth is initialized, proceeding with sign in');
         const provider = new GoogleAuthProvider();
         provider.addScope('email');
         provider.addScope('profile');
+        console.log('Starting redirect sign in process...');
         await signInWithRedirect(auth, provider);
         
-        // Get redirect result immediately after redirect
+        console.log('After redirect, checking result...');
         const result = await getRedirectResult(auth);
-        if (result) {
-            console.log("Redirect result received:", result);
+        console.log('Redirect result:', result);
+        
+        if (result && result.user) {
+            console.log('User data from redirect:', result.user);
             await handleGoogleSignIn(result.user);
+        } else {
+            console.log('No result from redirect yet');
         }
     } catch (error) {
-        console.error('Error during Google sign in:', error);
+        console.error('Detailed error during Google sign in:', {
+            code: error.code,
+            message: error.message,
+            stack: error.stack
+        });
         if (error.code === 'auth/network-request-failed') {
             toastr.error('Network error. Please check your connection.');
         } else if (error.code === 'auth/popup-closed-by-user') {
