@@ -280,52 +280,64 @@ $(document).ready(async function() {
     // Google Login Functionality with Redirect
     $('#googleLoginBtn').click(function() {
         const provider = new GoogleAuthProvider();
-        signInWithRedirect(auth, provider);
+        signInWithRedirect(auth, provider).catch(error => {
+            console.error('Error during redirect:', error);
+            toastr.error('Error starting login: ' + error.message);
+        });
     });
-    // Handle Google sign-in result
-    auth.onAuthStateChanged(async (user) => {
-        if (user && user.providerData[0].providerId === 'google.com') {
-            try {
-                let emailUsername = user.email.split('@')[0];
 
-                // Check if username exists
-                const usersRef = collection(window.db, "users");
-                const q = query(usersRef, where("username", "==", emailUsername));
-                const querySnapshot = await getDocs(q);
+    // Handle redirect result on page load
+    getRedirectResult(auth)
+        .then(async (result) => {
+            if (result) {
+                const user = result.user;
+                if (user && user.providerData[0].providerId === 'google.com') {
+                    try {
+                        let emailUsername = user.email.split('@')[0];
 
-                if (!querySnapshot.empty) {
-                    const existingUser = querySnapshot.docs[0].data();
-                    if (existingUser.email !== user.email) {
-                        const randomNum = Math.floor(Math.random() * 100);
-                        emailUsername = `${emailUsername}${randomNum}`;
+                        // Check if username exists
+                        const usersRef = collection(window.db, "users");
+                        const q = query(usersRef, where("username", "==", emailUsername));
+                        const querySnapshot = await getDocs(q);
+
+                        if (!querySnapshot.empty) {
+                            const existingUser = querySnapshot.docs[0].data();
+                            if (existingUser.email !== user.email) {
+                                const randomNum = Math.floor(Math.random() * 100);
+                                emailUsername = `${emailUsername}${randomNum}`;
+                            }
+                        }
+
+                        // Update user document
+                        const userRef = doc(window.db, "users", user.uid);
+                        await setDoc(userRef, {
+                            uid: user.uid,
+                            username: emailUsername,
+                            email: user.email
+                        }, { merge: true });
+                        
+                        displayLoggedInMessage(emailUsername);
+                        toastr.success("Logged in successfully!");
+                        $("#loginForm").hide();
+                        $("#signUpForm").hide();
+                        $("#signUpBtn").hide();
+                        $("#googleLoginBtn").hide();
+                        $("#logInBtn").hide();
+                        $("#playBtn").show();
+                        $("#manageFriendsBtn").show();
+
+                        decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+                    } catch (error) {
+                        console.error('Error during Google login:', error);
+                        toastr.error('Error: ' + error.message);
                     }
                 }
-
-                // Update user document
-                const userRef = doc(window.db, "users", user.uid);
-                await setDoc(userRef, {
-                    uid: user.uid,
-                    username: emailUsername,
-                    email: user.email
-                }, { merge: true });
-                
-                displayLoggedInMessage(emailUsername);
-                toastr.success("Logged in successfully!");
-                $("#loginForm").hide();
-                $("#signUpForm").hide();
-                $("#signUpBtn").hide();
-                $("#googleLoginBtn").hide();
-                $("#logInBtn").hide();
-                $("#playBtn").show();
-                $("#manageFriendsBtn").show();
-
-                decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
-            } catch (error) {
-                console.error('Error during Google login:', error);
-                toastr.error('Error: ' + error.message);
             }
-        }
-    });
+        })
+        .catch((error) => {
+            console.error('Error getting redirect result:', error);
+            toastr.error('Error completing login: ' + error.message);
+        });
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
