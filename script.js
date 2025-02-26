@@ -1,7 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
+import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
@@ -13,6 +12,7 @@ const firebaseConfig = {
   measurementId: "G-MLSC33TSZ6"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -226,7 +226,7 @@ $(document).ready(async function () {
             today.setHours(0, 0, 0, 0);
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-            
+
             const q = query(
                 statsRef, 
                 where("uid", "==", user.uid), 
@@ -309,7 +309,7 @@ $(document).ready(async function () {
                 username: emailUsername,
                 email: user.email
             }, { merge: true });
-            
+
             displayLoggedInMessage(emailUsername);
             toastr.success("Logged in successfully!");
             $("#loginForm").hide();
@@ -328,12 +328,13 @@ $(document).ready(async function () {
     }
 
     // Google Login Functionality with Redirect
-    $('#googleLoginBtn').click(function() {
-        const provider = new GoogleAuthProvider();
-        signInWithRedirect(auth, provider).catch(error => {
+    $('#googleLoginBtn').click(async function() {
+        try {
+            await signInWithRedirect(auth, provider);
+        } catch (error) {
             console.error('Error during redirect:', error);
             toastr.error('Error starting login: ' + error.message);
-        });
+        }
     });
 
     // Handle redirect result on page load
@@ -365,7 +366,7 @@ $(document).ready(async function () {
                             username: emailUsername,
                             email: user.email
                         }, { merge: true });
-                        
+
                         displayLoggedInMessage(emailUsername);
                         toastr.success("Logged in successfully!");
                         $("#loginForm").hide();
@@ -410,17 +411,17 @@ $(document).ready(async function () {
             $('#logInBtn').hide();
             $('#googleLoginBtn').hide();
             $('#loginForm').hide();
-            
+
             // Show user-specific elements
             $('#manageFriendsBtn').show();
             $('#loggedInAs').show();
             $('#logoutLink').show();
-            
+
             try {
                 // Update username display
                 const username = await getUserDetails(user.uid);
                 $('#loggedInAs').text(`Logged in as ${username}`);
-                
+
                 // Check puzzle completion status and update buttons
                 await decideButtonDisplay();
             } catch (error) {
@@ -432,7 +433,7 @@ $(document).ready(async function () {
             $('#logInBtn').show();
             $('#googleLoginBtn').show();
             $('#loginForm').hide();
-            
+
             // Hide user-specific elements
             $('#manageFriendsBtn').hide();
             $('#loggedInAs').hide();
@@ -589,7 +590,7 @@ $(document).ready(async function () {
                 const statsRef = collection(window.db, "leaderboard");
                 const userDoc = await getDoc(doc(window.db, "users", user.uid));
                 const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
-                
+
                 await addDoc(statsRef, {
                     puzzleId: currentPuzzleId,
                     date: new Date().toISOString(),
@@ -657,7 +658,7 @@ $(document).ready(async function () {
         $("#giveUpBtn").hide();
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
     });
-    
+
     // Event handler for cancel button inside the modal
     $("#cancelGiveUpBtn").click(function() {
         $("#giveUpModal").hide();
@@ -1404,7 +1405,7 @@ async function getMostWins() {
         // Get all completed entries
         const baseQuery = query(statsRef, where("hasCompleted", "==", true));
         let querySnapshot;
-        
+
         if (showFriendsOnly && auth.currentUser) {
             const friendsList = await getFriendsList();
             const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
@@ -1436,7 +1437,7 @@ async function getMostWins() {
         Object.values(puzzleGroups).forEach(puzzleEntries => {
             // Sort by completion time
             puzzleEntries.sort((a, b) => a.time - b.time);
-            
+
             // First place gets a win
             if (puzzleEntries.length > 0) {
                 const winner = puzzleEntries[0];
@@ -1505,7 +1506,7 @@ async function displayWinnersList(winnersList) {
         const winsCell = row.insertCell(2);
 
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
-        
+
         // Create username cell with add friend button
         usernameCell.innerHTML = winner.username;
         if (user && winner.uid && winner.uid !== user.uid && !friendUids.includes(winner.uid)) {
@@ -1520,7 +1521,7 @@ async function displayWinnersList(winnersList) {
             };
             usernameCell.appendChild(friendBtn);
         }
-        
+
         winsCell.textContent = winner.wins;
     });
 }
@@ -1546,7 +1547,7 @@ async function getLeaderboard(date = new Date()) {
         const selectedDateMs = startOfDay.getTime();
         const daysDiff = Math.floor((selectedDateMs - startDateMs) / (1000 * 60 * 60 * 24));
         const puzzleId = daysDiff + 1;
-        
+
         let q;
         if (showFriendsOnly) {
             const friendsList = await getFriendsList();
@@ -1842,7 +1843,7 @@ async function addFriend(friendUid, friendUsername) {
         if (friendsDoc.exists()) {
             const currentFriends = friendsDoc.data().friendsList || [];
             const existingFriendIndex = currentFriends.findIndex(friend => friend.uid === friendUid);
-            
+
             if (existingFriendIndex !== -1) {
                 // Update username if it's different
                 if (currentFriends[existingFriendIndex].username !== friendUsername) {
@@ -1854,7 +1855,7 @@ async function addFriend(friendUid, friendUsername) {
                 }
                 return;
             }
-            
+
             await setDoc(friendsRef, {
                 friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
             });
@@ -2072,4 +2073,3 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         }
     });
 });
-
