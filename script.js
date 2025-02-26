@@ -292,21 +292,42 @@ $(document).ready(function() {
     // Function to toggle the visibility of login-related buttons
     function toggleAuthButtons(user) {
         if (user) {
+            // Hide login-related buttons
             $('#signUpBtn').hide();
             $('#logInBtn').hide();
             $('#googleLoginBtn').hide();
-            $('#loggedInAs').text(`Logged in as ${user.displayName || 'User'}`).show();
+            $('#loginForm').hide();
+            
+            // Show user-specific elements
+            $('#manageFriendsBtn').show();
+            $('#loggedInAs').show();
+            $('#logoutLink').show();
+            
+            // Update username display
+            getUserDetails(user.uid).then(username => {
+                $('#loggedInAs').text(`Logged in as ${username}`);
+            });
         } else {
+            // Show login-related buttons
             $('#signUpBtn').show();
             $('#logInBtn').show();
             $('#googleLoginBtn').show();
+            
+            // Hide user-specific elements
+            $('#manageFriendsBtn').hide();
             $('#loggedInAs').hide();
+            $('#logoutLink').hide();
+            $('#playBtn').hide();
+            $('#viewSolvedBtn').hide();
         }
     }
 
-    // Call this function initially on page load and whenever auth state changes to hide/show correct buttons
+    // Call this function initially on page load and whenever auth state changes
     auth.onAuthStateChanged((user) => {
         toggleAuthButtons(user);
+        if (user) {
+            decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
+        }
     });
 
 
