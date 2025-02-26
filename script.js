@@ -363,58 +363,40 @@ $(document).ready(async function () {
     }
 });
 
-    // Handle redirect result on page load
-    getRedirectResult(auth)
-        .then(async (result) => {
-            if (result) {
-                const user = result.user;
-                if (user && user.providerData[0].providerId === 'google.com') {
-                    try {
-                        let emailUsername = user.email.split('@')[0];
+// Handle redirect result on page load
+getRedirectResult(auth)
+    .then(async (result) => {
+        if (result && result.user) {
+            const user = result.user;
+            try {
+                let emailUsername = user.email.split('@')[0];
 
-                        // Check if username exists
-                        const usersRef = collection(window.db, "users");
-                        const q = query(usersRef, where("username", "==", emailUsername));
-                        const querySnapshot = await getDocs(q);
+                // Register/update the Google user
+                await registerGoogleUser(user, emailUsername);
 
-                        if (!querySnapshot.empty) {
-                            const existingUser = querySnapshot.docs[0].data();
-                            if (existingUser.email !== user.email) {
-                                const randomNum = Math.floor(Math.random() * 100);
-                                emailUsername = `${emailUsername}${randomNum}`;
-                            }
-                        }
+                // Update UI
+                displayLoggedInMessage(emailUsername);
+                toastr.success("Logged in successfully!");
+                $("#loginForm").hide();
+                $("#signUpForm").hide();
+                $("#signUpBtn").hide();
+                $("#googleLoginBtn").hide();
+                $("#logInBtn").hide();
+                $("#playBtn").show();
+                $("#manageFriendsBtn").show();
+                $("#logoutLink").show();
 
-                        // Update user document
-                        const userRef = doc(window.db, "users", user.uid);
-                        await setDoc(userRef, {
-                            uid: user.uid,
-                            username: emailUsername,
-                            email: user.email
-                        }, { merge: true });
-
-                        displayLoggedInMessage(emailUsername);
-                        toastr.success("Logged in successfully!");
-                        $("#loginForm").hide();
-                        $("#signUpForm").hide();
-                        $("#signUpBtn").hide();
-                        $("#googleLoginBtn").hide();
-                        $("#logInBtn").hide();
-                        $("#playBtn").show();
-                        $("#manageFriendsBtn").show();
-
-                        decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
-                    } catch (error) {
-                        console.error('Error during Google login:', error);
-                        toastr.error('Error: ' + error.message);
-                    }
-                }
+                await decideButtonDisplay();
+            } catch (error) {
+                console.error('Error during Google login:', error);
+                toastr.error('Error: ' + error.message);
             }
-        })
-        .catch((error) => {
-            console.error('Error getting redirect result:', error);
-            toastr.error('Error completing login: ' + error.message);
-        });
+        }
+    })
+    .catch((error) => {
+        console.error('Error getting redirect result:', error);
+        toastr.error('Error completing login: ' + error.message);
+    });
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -1826,7 +1808,7 @@ async function getLeaderboard(date = new Date()) {
 
         // Event listener for the "Create an account" link
         $('#signupCTAlink').click(function(event) {
-            event.preventDefault(); // Prevent default anchor behavior
+            event.preventDefault(); // Prevent default anchorbehavior
             // Hide the CTA message and show the sign-up form
             $('#signUpCTA').hide();
             $('#signUpForm').show();
