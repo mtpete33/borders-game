@@ -345,6 +345,9 @@ $(document).ready(async function () {
     // Google Login Button Handler
     $('#googleLoginBtn').click(async function() {
     try {
+        const provider = new GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
         await signInWithRedirect(auth, provider);
     } catch (error) {
         console.error('Error during Google sign in:', error);
@@ -352,40 +355,40 @@ $(document).ready(async function () {
     }
 });
 
-// Handle redirect result on page load
-getRedirectResult(auth)
-    .then(async (result) => {
-        if (result && result.user) {
-            const user = result.user;
-            try {
-                let emailUsername = user.email.split('@')[0];
-
-                // Register/update the Google user
-                await registerGoogleUser(user, emailUsername);
-
-                // Update UI
-                displayLoggedInMessage(emailUsername);
-                toastr.success("Logged in successfully!");
-                $("#loginForm").hide();
-                $("#signUpForm").hide();
-                $("#signUpBtn").hide();
-                $("#googleLoginBtn").hide();
-                $("#logInBtn").hide();
-                $("#playBtn").show();
-                $("#manageFriendsBtn").show();
-                $("#logoutLink").show();
-
-                await decideButtonDisplay();
-            } catch (error) {
-                console.error('Error during Google login:', error);
-                toastr.error('Error: ' + error.message);
-            }
-        }
-    })
-    .catch((error) => {
-        console.error('Error getting redirect result:', error);
-        toastr.error('Error completing login: ' + error.message);
-    });
+// Handle redirect result immediately after auth initialization
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        getRedirectResult(auth)
+            .then(async (result) => {
+                if (result && result.user) {
+                    try {
+                        let emailUsername = result.user.email.split('@')[0];
+                        await registerGoogleUser(result.user, emailUsername);
+                        displayLoggedInMessage(emailUsername);
+                        toastr.success("Logged in successfully!");
+                        $("#loginForm").hide();
+                        $("#signUpForm").hide();
+                        $("#signUpBtn").hide();
+                        $("#googleLoginBtn").hide();
+                        $("#logInBtn").hide();
+                        $("#playBtn").show();
+                        $("#manageFriendsBtn").show();
+                        $("#logoutLink").show();
+                        await decideButtonDisplay();
+                    } catch (error) {
+                        console.error('Error during Google login:', error);
+                        toastr.error('Error: ' + error.message);
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error('Error getting redirect result:', error);
+                if (error.code !== 'auth/credential-already-in-use') {
+                    toastr.error('Error completing login: ' + error.message);
+                }
+            });
+    }
+});
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
