@@ -1,3 +1,7 @@
+// Import Firebase modules
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { getAuth, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
 // Initialize Firebase app
 const firebaseConfig = {
   apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
@@ -9,18 +13,14 @@ const firebaseConfig = {
   measurementId: "G-MLSC33TSZ6"
 };
 
-let auth;
-let provider;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 // Initialize auth after imports are loaded
 async function initializeFirebase() {
-  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');
-  const { getAuth, GoogleAuthProvider, getRedirectResult } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
-  
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  provider = new GoogleAuthProvider();
-  window.getRedirectResult = getRedirectResult; // Make it globally available
+  // Initialize auth state listener
+  auth.onAuthStateChanged((user) => {
   
   // Now initialize auth state listener
   auth.onAuthStateChanged((user) => {
@@ -359,7 +359,6 @@ $(document).ready(async function () {
     // Google Login Functionality with Redirect
     $('#googleLoginBtn').click(async function() {
     try {
-        const { signInWithRedirect } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
         await signInWithRedirect(auth, provider);
     } catch (error) {
         console.error('Error during redirect:', error);
