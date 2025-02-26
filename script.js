@@ -1,13 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { 
-    getAuth, 
-    signInWithRedirect, 
-    getRedirectResult, 
-    GoogleAuthProvider, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword,
-    signOut 
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
