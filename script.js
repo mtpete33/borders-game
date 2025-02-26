@@ -22,7 +22,13 @@ function updateNavigationButtons() {
 }
 
 
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { 
+    getAuth, 
+    GoogleAuthProvider,
+    signInWithRedirect,
+    getRedirectResult,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 let validWords = [];
 let isProgrammaticChange = false;
