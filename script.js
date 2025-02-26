@@ -2,6 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/fireba
 import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
   authDomain: "borders-game.firebaseapp.com",
@@ -22,6 +23,26 @@ window.GoogleAuthProvider = GoogleAuthProvider;
 window.provider = provider;
 window.signInWithRedirect = signInWithRedirect;
 window.getRedirectResult = getRedirectResult;
+
+// Wait for DOM to be fully loaded before using Firebase
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM fully loaded.");
+
+    if (!window.auth) {
+        console.error("Firebase Auth is not initialized yet.");
+    } else {
+        console.log("Firebase Auth successfully initialized.");
+    }
+
+    // Check auth state
+    window.auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            console.log("User is signed in:", user);
+        } else {
+            console.log("No user is signed in.");
+        }
+    });
+});
 
 
 let currentLeaderboardDate = new Date();
@@ -49,18 +70,27 @@ let isProgrammaticChange = false;
 
 
 
-$(document).ready(async function() {
-    // Handle redirect result
+// Ensure Firebase Auth is available before calling getRedirectResult
+$(document).ready(async function () {
+    console.log("jQuery document ready.");
+
+    if (!window.auth) {
+        console.error("Auth is still not available in jQuery ready. Retrying...");
+        return;
+    }
+
     try {
-        const result = await getRedirectResult(auth);
+        const result = await getRedirectResult(window.auth);
         if (result) {
             // Handle successful login after redirect
             const user = result.user;
+            console.log("User signed in via redirect:", user);
             handleGoogleSignIn(user);
         }
     } catch (error) {
         console.error("Error handling redirect result:", error);
     }
+});
 
     function isInstagramBrowser() {
         let ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -143,7 +173,7 @@ $(document).ready(async function() {
 // getLeaderboard(); // <----comment this out
 
     // const auth = getAuth();
-    const auth = window.auth;
+    // const auth = window.auth;
 
     // On auth state change, fetch and display user details
     auth.onAuthStateChanged(async (user) => {
@@ -2043,4 +2073,3 @@ $(document).on('click', '#manageFriendsBtn', async function() {
     });
 });
 
-});
