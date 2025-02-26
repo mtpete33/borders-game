@@ -1,5 +1,27 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
+  authDomain: "borders-game.firebaseapp.com",
+  projectId: "borders-game",
+  storageBucket: "borders-game.appspot.com",
+  messagingSenderId: "575743641828",
+  appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
+  measurementId: "G-MLSC33TSZ6"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Make Firebase Auth functions and instances globally available
+window.auth = auth;
+window.GoogleAuthProvider = GoogleAuthProvider;
+window.provider = provider;
+window.signInWithRedirect = signInWithRedirect;
+window.getRedirectResult = getRedirectResult;
 
 
 let currentLeaderboardDate = new Date();

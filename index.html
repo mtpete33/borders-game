@@ -18,31 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-    import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
-      authDomain: "borders-game.firebaseapp.com",
-      projectId: "borders-game",
-      storageBucket: "borders-game.appspot.com",
-      messagingSenderId: "575743641828",
-      appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
-      measurementId: "G-MLSC33TSZ6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    
-    // Make Firebase Auth functions and instances globally available
-    window.auth = auth;
-    window.GoogleAuthProvider = GoogleAuthProvider;
-    window.provider = provider;
-    window.signInWithRedirect = signInWithRedirect;
-    window.getRedirectResult = getRedirectResult;
-  </script>
+  <script type="module" src="script.js"></script>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
