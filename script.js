@@ -366,13 +366,13 @@ $(document).ready(async function () {
         }
     }
 
-    // Google Login Functionality with Redirect
+    // Google Login Button Handler
     $('#googleLoginBtn').click(async function() {
     try {
         await signInWithRedirect(auth, provider);
     } catch (error) {
-        console.error('Error during redirect:', error);
-        toastr.error('Error starting login: ' + error.message);
+        console.error('Error during Google sign in:', error);
+        toastr.error('Error: ' + error.message);
     }
 });
 
