@@ -226,14 +226,18 @@ $(document).ready(function() {
         }
     }
 
-    // Google Login Functionality
+    // Google Login Functionality with Redirect
     $('#googleLoginBtn').click(function() {
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then(async (result) => {
+        signInWithRedirect(auth, provider);
+    });
+
+    // Handle redirect result
+    getRedirectResult(auth)
+        .then(async (result) => {
+            if (result) {
                 const user = result.user;
                 console.log('User logged in with Google:', user);
-                // Extract username from email for Google users
                 let emailUsername = user.email.split('@')[0];
 
                 // Check if username exists
@@ -242,16 +246,14 @@ $(document).ready(function() {
                 const querySnapshot = await getDocs(q);
 
                 if (!querySnapshot.empty) {
-                    // Check if the existing username belongs to a different user
                     const existingUser = querySnapshot.docs[0].data();
                     if (existingUser.email !== user.email) {
-                        // Only append random numbers if it's a different user
                         const randomNum = Math.floor(Math.random() * 100);
                         emailUsername = `${emailUsername}${randomNum}`;
                     }
                 }
 
-                // Update user document with the username
+                // Update user document
                 const userRef = doc(window.db, "users", user.uid);
                 await setDoc(userRef, {
                     uid: user.uid,
@@ -266,15 +268,13 @@ $(document).ready(function() {
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
 
-                // Check if puzzle is already completed before showing Play button
                 decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
-
-            })
-            .catch((error) => {
-                console.error('Error during Google login:', error.message);
-                toastr.error('Error: ' + error.message);
-            });
-    });
+            }
+        })
+        .catch((error) => {
+            console.error('Error during Google login:', error.message);
+            toastr.error('Error: ' + error.message);
+        });
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
