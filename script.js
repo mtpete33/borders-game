@@ -1,10 +1,16 @@
-import { GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { 
+  getAuth,
+  GoogleAuthProvider, 
+  signInWithRedirect, 
+  getRedirectResult, 
+  onAuthStateChanged 
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 const provider = new GoogleAuthProvider();
-const auth = window.auth;
+const auth = getAuth();
 
 // Initialize auth state listener immediately
-onAuthStateChanged(auth, (user) => {
+auth.onAuthStateChanged((user) => {
   if (user) {
     console.log("User is signed in:", user);
     handleGoogleSignIn(user);
