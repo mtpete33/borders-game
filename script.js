@@ -22,14 +22,26 @@ function updateNavigationButtons() {
 }
 
 
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 let validWords = [];
 let isProgrammaticChange = false;
 
 
 
-$(document).ready(function() {
+$(document).ready(async function() {
+    // Handle redirect result
+    try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+            // Handle successful login after redirect
+            const user = result.user;
+            handleGoogleSignIn(user);
+        }
+    } catch (error) {
+        console.error("Error handling redirect result:", error);
+    }
+
     function isInstagramBrowser() {
         let ua = navigator.userAgent || navigator.vendor || window.opera;
         return (ua.indexOf("Instagram") > -1);
@@ -226,13 +238,50 @@ $(document).ready(function() {
         }
     }
 
+    async function handleGoogleSignIn(user) {
+        try {
+            let emailUsername = user.email.split('@')[0];
+            const usersRef = collection(window.db, "users");
+            const q = query(usersRef, where("username", "==", emailUsername));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const existingUser = querySnapshot.docs[0].data();
+                if (existingUser.email !== user.email) {
+                    const randomNum = Math.floor(Math.random() * 100);
+                    emailUsername = `${emailUsername}${randomNum}`;
+                }
+            }
+
+            const userRef = doc(window.db, "users", user.uid);
+            await setDoc(userRef, {
+                uid: user.uid,
+                username: emailUsername,
+                email: user.email
+            }, { merge: true });
+            
+            displayLoggedInMessage(emailUsername);
+            toastr.success("Logged in successfully!");
+            $("#loginForm").hide();
+            $("#signUpForm").hide();
+            $("#signUpBtn").hide();
+            $("#googleLoginBtn").hide();
+            $("#logInBtn").hide();
+            $("#playBtn").show();
+            $("#manageFriendsBtn").show();
+
+            decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+        } catch (error) {
+            console.error('Error during Google login:', error);
+            toastr.error('Error: ' + error.message);
+        }
+    }
+
     // Google Login Functionality with Redirect
     $('#googleLoginBtn').click(function() {
         const provider = new GoogleAuthProvider();
         signInWithRedirect(auth, provider);
     });
-
-    // Handle redirect result
     // Handle Google sign-in result
     auth.onAuthStateChanged(async (user) => {
         if (user && user.providerData[0].providerId === 'google.com') {
