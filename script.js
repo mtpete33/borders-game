@@ -1,6 +1,12 @@
 // Import Firebase modules
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithRedirect, 
+    getRedirectResult,
+    onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
 // Initialize Firebase app
 const firebaseConfig = {
@@ -14,8 +20,18 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
+// Initialize auth state listener immediately
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is signed in:", user);
+    handleGoogleSignIn(user);
+  } else {
+    console.log("No user is signed in.");
+  }
+});
 
 // Handle redirect result immediately
 getRedirectResult(auth)
