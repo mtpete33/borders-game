@@ -1,27 +1,7 @@
-// Import Firebase modules
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { 
-    getAuth, 
-    GoogleAuthProvider, 
-    signInWithRedirect, 
-    getRedirectResult,
-    onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 
-// Initialize Firebase app
-const firebaseConfig = {
-  apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
-  authDomain: "borders-game.firebaseapp.com", 
-  projectId: "borders-game",
-  storageBucket: "borders-game.appspot.com",
-  messagingSenderId: "575743641828",
-  appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
-  measurementId: "G-MLSC33TSZ6"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const auth = window.auth;
 
 // Initialize auth state listener immediately
 onAuthStateChanged(auth, (user) => {
