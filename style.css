@@ -806,6 +806,11 @@ footer {
 h1 {
   font-size:1.7em;
 }
+  h2 {
+    margin: 0 0 .14em 0;
+    font-size: 30px;
+  }
+  
 .cell:focus {
   caret-color: transparent;
   border-top: 0.3rem solid #42ff58; /* Converted 4px to rem */
@@ -842,11 +847,12 @@ h1 {
   }
 #shareBtn {
   margin-top:15px;
+  font-size: 17px;
 }
-  h2 {
-    margin: 0 0 .14em 0;
-    font-size: 30px;
+  #manageFriendsBtn {
+    font-size: 17px;
   }
+
   #instructionsContent.show {
     max-height: 595px;
   }
@@ -862,6 +868,16 @@ h1 {
   }
   .close-btn {
     font-size: 21px;
+  }
+  #friendsFilterBtn, #globalFilterBtn {
+    font-size: 21px;
+  }
+  .filter-btn {
+    font-size:17px;
+  }
+  
+  #leaderboardTable th, #leaderboardTable td {
+    padding: 4px;
   }
   
 }
