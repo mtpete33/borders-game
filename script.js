@@ -363,15 +363,14 @@ $(document).ready(async function () {
         const provider = new GoogleAuthProvider();
         provider.addScope('email');
         provider.addScope('profile');
-        
-        // Add custom parameters for better domain verification
+
+        // Add custom parameters for sign in
         provider.setCustomParameters({
-            prompt: 'select_account',
-            hd: window.location.hostname // Restrict to hosted domain
+            prompt: 'select_account'
         });
 
-        console.log('Starting redirect sign in process with domain:', window.location.hostname);
-        
+        console.log('Starting redirect sign in process');
+
         try {
             await signInWithRedirect(auth, provider);
         } catch (redirectError) {
@@ -379,10 +378,10 @@ $(document).ready(async function () {
             toastr.error('Failed to start login process. Please try again.');
             return;
         }
-        
+
         console.log('Getting redirect result...');
         const result = await getRedirectResult(auth);
-        
+
         if (result && result.user) {
             console.log('Login successful:', {
                 email: result.user.email,
@@ -885,7 +884,7 @@ auth.onAuthStateChanged((user) => {
                     console.warn('Web Share API is not supported in this browser.');
                 }
             } else {
-                $("#signUpCTA").css('display', 'block');
+                $("#signUpCTA).css('display', 'block');
                 getLeaderboard();
                 // console.error('User UID is missing. Could not store player stats.');
             }
