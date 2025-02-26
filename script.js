@@ -1,10 +1,7 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
+// Initialize Firebase app
 const firebaseConfig = {
   apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
-  authDomain: "borders-game.firebaseapp.com",
+  authDomain: "borders-game.firebaseapp.com", 
   projectId: "borders-game",
   storageBucket: "borders-game.appspot.com",
   messagingSenderId: "575743641828",
@@ -12,17 +9,48 @@ const firebaseConfig = {
   measurementId: "G-MLSC33TSZ6"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+let auth;
+let provider;
 
-// Make Firebase Auth functions and instances globally available
-window.auth = auth;
-window.GoogleAuthProvider = GoogleAuthProvider;
-window.provider = provider;
-window.signInWithRedirect = signInWithRedirect;
-window.getRedirectResult = getRedirectResult;
+// Initialize auth after imports are loaded
+async function initializeFirebase() {
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js');
+  const { getAuth, GoogleAuthProvider } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
+  
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  provider = new GoogleAuthProvider();
+  
+  // Now initialize auth state listener
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log("User is signed in:", user);
+      $('#loggedInAs').text(`Logged in as ${user.displayName || user.email}`).show();
+      $("#loginForm").hide();
+      $("#signUpForm").hide();
+      $("#signUpBtn").hide();
+      $("#googleLoginBtn").hide();
+      $("#logInBtn").hide();
+      $("#playBtn").show();
+      $("#manageFriendsBtn").show();
+      $("#logoutLink").show();
+    } else {
+      console.log("No user is signed in.");
+      $('#loggedInAs').hide();
+      $("#logoutLink").hide();
+      $("#signUpBtn").show();
+      $("#logInBtn").show();
+      $("#googleLoginBtn").show();
+      $("#playBtn").hide();
+      $("#manageFriendsBtn").hide();
+    }
+  });
+}
+
+// Initialize Firebase when document is ready
+$(document).ready(() => {
+  initializeFirebase();
+});
 
 // Wait for DOM to be fully loaded before using Firebase
 document.addEventListener("DOMContentLoaded", () => {
@@ -329,13 +357,14 @@ $(document).ready(async function () {
 
     // Google Login Functionality with Redirect
     $('#googleLoginBtn').click(async function() {
-        try {
-            await signInWithRedirect(auth, provider);
-        } catch (error) {
-            console.error('Error during redirect:', error);
-            toastr.error('Error starting login: ' + error.message);
-        }
-    });
+    try {
+        const { signInWithRedirect } = await import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js');
+        await signInWithRedirect(auth, provider);
+    } catch (error) {
+        console.error('Error during redirect:', error);
+        toastr.error('Error starting login: ' + error.message);
+    }
+});
 
     // Handle redirect result on page load
     getRedirectResult(auth)
