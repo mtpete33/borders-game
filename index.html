@@ -34,10 +34,12 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    
     window.auth = auth;
-    window.GoogleAuthProvider = GoogleAuthProvider;
-    window.signInWithRedirect = signInWithRedirect;
-    window.getRedirectResult = getRedirectResult;
+    window.provider = provider;
+    window.signInWithRedirect = (auth, provider) => signInWithRedirect(auth, provider);
+    window.getRedirectResult = (auth) => getRedirectResult(auth);
   </script>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
