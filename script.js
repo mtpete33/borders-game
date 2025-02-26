@@ -21,9 +21,6 @@ const provider = new GoogleAuthProvider();
 async function initializeFirebase() {
   // Initialize auth state listener
   auth.onAuthStateChanged((user) => {
-  
-  // Now initialize auth state listener
-  auth.onAuthStateChanged((user) => {
     if (user) {
       console.log("User is signed in:", user);
       $('#loggedInAs').text(`Logged in as ${user.displayName || user.email}`).show();
