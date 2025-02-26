@@ -345,13 +345,31 @@ $(document).ready(async function () {
     // Google Login Button Handler
     $('#googleLoginBtn').click(async function() {
     try {
+        if (!auth) {
+            console.error('Auth is not initialized');
+            toastr.error('Authentication service not ready. Please try again.');
+            return;
+        }
         const provider = new GoogleAuthProvider();
         provider.addScope('email');
         provider.addScope('profile');
         await signInWithRedirect(auth, provider);
+        
+        // Get redirect result immediately after redirect
+        const result = await getRedirectResult(auth);
+        if (result) {
+            console.log("Redirect result received:", result);
+            await handleGoogleSignIn(result.user);
+        }
     } catch (error) {
         console.error('Error during Google sign in:', error);
-        toastr.error('Error: ' + error.message);
+        if (error.code === 'auth/network-request-failed') {
+            toastr.error('Network error. Please check your connection.');
+        } else if (error.code === 'auth/popup-closed-by-user') {
+            toastr.info('Sign-in cancelled.');
+        } else {
+            toastr.error('Error signing in: ' + error.message);
+        }
     }
 });
 
