@@ -3,8 +3,7 @@ import {
   getAuth,
   GoogleAuthProvider, 
   signInWithRedirect, 
-  getRedirectResult, 
-  onAuthStateChanged,
+  getRedirectResult,
   signOut 
 } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
 import { getFirestore, collection, doc, getDoc, setDoc, addDoc, query, where, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
@@ -28,9 +27,25 @@ const provider = new GoogleAuthProvider();
 auth.onAuthStateChanged((user) => {
   if (user) {
     console.log("User is signed in:", user);
-    handleGoogleSignIn(user);
+    displayLoggedInMessage(user.displayName || user.email);
+    $("#loginForm").hide();
+    $("#signUpForm").hide();
+    $("#signUpBtn").hide();
+    $("#googleLoginBtn").hide();
+    $("#logInBtn").hide();
+    $("#playBtn").show();
+    $("#manageFriendsBtn").show();
+    $("#logoutLink").show();
+    decideButtonDisplay();
   } else {
     console.log("No user is signed in.");
+    $('#loggedInAs').hide();
+    $("#logoutLink").hide();
+    $("#signUpBtn").show();
+    $("#logInBtn").show();
+    $("#googleLoginBtn").show();
+    $("#playBtn").hide();
+    $("#manageFriendsBtn").hide();
   }
 });
 
@@ -48,29 +63,7 @@ getRedirectResult(auth)
 // Initialize auth after imports are loaded
 async function initializeFirebase() {
   // Initialize auth state listener
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      console.log("User is signed in:", user);
-      $('#loggedInAs').text(`Logged in as ${user.displayName || user.email}`).show();
-      $("#loginForm").hide();
-      $("#signUpForm").hide();
-      $("#signUpBtn").hide();
-      $("#googleLoginBtn").hide();
-      $("#logInBtn").hide();
-      $("#playBtn").show();
-      $("#manageFriendsBtn").show();
-      $("#logoutLink").show();
-    } else {
-      console.log("No user is signed in.");
-      $('#loggedInAs').hide();
-      $("#logoutLink").hide();
-      $("#signUpBtn").show();
-      $("#logInBtn").show();
-      $("#googleLoginBtn").show();
-      $("#playBtn").hide();
-      $("#manageFriendsBtn").hide();
-    }
-  });
+  //This is redundant and removed in the updated code above.
 }
 
 // Initialize Firebase when document is ready
@@ -88,14 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Firebase Auth successfully initialized.");
     }
 
-    // Check auth state
-    window.auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            console.log("User is signed in:", user);
-        } else {
-            console.log("No user is signed in.");
-        }
-    });
+    // Check auth state - This is redundant and removed in the updated code above.
 });
 
 
@@ -230,31 +216,7 @@ $(document).ready(async function () {
     // const auth = window.auth;
 
     // On auth state change, fetch and display user details
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
-            try {
-                // Fetch the username from Firestore for both authentication methods
-                // const username = await getUserDetails(user.uid);
-                // currentUsername = username || 'Unknown User';
-                const username = await getUserDetails(user.uid);
-                // currentUsername = userDetails.username || 'Unknown User';
-                displayLoggedInMessage(username);
-
-            } catch (error) {
-                console.error('Error fetching user details:', error.message);
-            }
-        } else {
-            $('#loggedInAs').text(''); // Clear if logged out
-            // User is signed out
-            // $("#playBtn").show();
-            $("#viewSolvedBtn").hide();
-
-        }
-        decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
-    });
-
-
+    //This is redundant and removed in the updated code above.
 
     // Load the word list on page load
     fetch('filtered_word_list.json')
@@ -922,7 +884,7 @@ getRedirectResult(auth)
         });
 
         // Also handle mouseup to maintain selection
-        $(`#${cellId}`).on('mouseup', function(e) {
+        $(`#${cellId}`).on('mouseup',function(e) {
             e.preventDefault();
             $(this).select();
         });
