@@ -233,11 +233,10 @@ $(document).ready(function() {
     });
 
     // Handle redirect result
-    getRedirectResult(auth)
-        .then(async (result) => {
-            if (result) {
-                const user = result.user;
-                console.log('User logged in with Google:', user);
+    // Handle Google sign-in result
+    auth.onAuthStateChanged(async (user) => {
+        if (user && user.providerData[0].providerId === 'google.com') {
+            try {
                 let emailUsername = user.email.split('@')[0];
 
                 // Check if username exists
@@ -260,6 +259,7 @@ $(document).ready(function() {
                     username: emailUsername,
                     email: user.email
                 }, { merge: true });
+                
                 displayLoggedInMessage(emailUsername);
                 toastr.success("Logged in successfully!");
                 $("#loginForm").hide();
@@ -267,14 +267,16 @@ $(document).ready(function() {
                 $("#signUpBtn").hide();
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
+                $("#playBtn").show();
+                $("#manageFriendsBtn").show();
 
                 decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+            } catch (error) {
+                console.error('Error during Google login:', error);
+                toastr.error('Error: ' + error.message);
             }
-        })
-        .catch((error) => {
-            console.error('Error during Google login:', error.message);
-            toastr.error('Error: ' + error.message);
-        });
+        }
+    });
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -290,7 +292,7 @@ $(document).ready(function() {
     $('#loginForm').hide();
 
     // Function to toggle the visibility of login-related buttons
-    function toggleAuthButtons(user) {
+    async function toggleAuthButtons(user) {
         if (user) {
             // Hide login-related buttons
             $('#signUpBtn').hide();
@@ -303,15 +305,22 @@ $(document).ready(function() {
             $('#loggedInAs').show();
             $('#logoutLink').show();
             
-            // Update username display
-            getUserDetails(user.uid).then(username => {
+            try {
+                // Update username display
+                const username = await getUserDetails(user.uid);
                 $('#loggedInAs').text(`Logged in as ${username}`);
-            });
+                
+                // Check puzzle completion status and update buttons
+                await decideButtonDisplay();
+            } catch (error) {
+                console.error("Error updating UI:", error);
+            }
         } else {
-            // Show login-related buttons
+            // Reset to initial state for logged out users
             $('#signUpBtn').show();
             $('#logInBtn').show();
             $('#googleLoginBtn').show();
+            $('#loginForm').hide();
             
             // Hide user-specific elements
             $('#manageFriendsBtn').hide();
@@ -319,16 +328,13 @@ $(document).ready(function() {
             $('#logoutLink').hide();
             $('#playBtn').hide();
             $('#viewSolvedBtn').hide();
+            $('#gameBoard').hide();
+            $('#landingPage').show();
         }
     }
 
-    // Call this function initially on page load and whenever auth state changes
-    auth.onAuthStateChanged((user) => {
-        toggleAuthButtons(user);
-        if (user) {
-            decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
-        }
-    });
+    // Initialize auth state listener
+    auth.onAuthStateChanged(toggleAuthButtons);
 
 
 
