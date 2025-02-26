@@ -358,35 +358,62 @@ $(document).ready(async function () {
             toastr.error('Authentication service not ready. Please try again.');
             return;
         }
-        console.log('Auth is initialized, proceeding with sign in');
+
+        // Initialize provider with custom parameters
         const provider = new GoogleAuthProvider();
         provider.addScope('email');
         provider.addScope('profile');
-        console.log('Starting redirect sign in process...');
-        await signInWithRedirect(auth, provider);
         
-        console.log('After redirect, checking result...');
+        // Add custom parameters for better domain verification
+        provider.setCustomParameters({
+            prompt: 'select_account',
+            hd: window.location.hostname // Restrict to hosted domain
+        });
+
+        console.log('Starting redirect sign in process with domain:', window.location.hostname);
+        
+        try {
+            await signInWithRedirect(auth, provider);
+        } catch (redirectError) {
+            console.error('Error during redirect:', redirectError);
+            toastr.error('Failed to start login process. Please try again.');
+            return;
+        }
+        
+        console.log('Getting redirect result...');
         const result = await getRedirectResult(auth);
-        console.log('Redirect result:', result);
         
         if (result && result.user) {
-            console.log('User data from redirect:', result.user);
+            console.log('Login successful:', {
+                email: result.user.email,
+                domain: result.user.email.split('@')[1]
+            });
             await handleGoogleSignIn(result.user);
         } else {
-            console.log('No result from redirect yet');
+            console.log('No result from redirect - user may have cancelled');
         }
     } catch (error) {
-        console.error('Detailed error during Google sign in:', {
+        console.error('Login error:', {
             code: error.code,
             message: error.message,
             stack: error.stack
         });
-        if (error.code === 'auth/network-request-failed') {
-            toastr.error('Network error. Please check your connection.');
-        } else if (error.code === 'auth/popup-closed-by-user') {
-            toastr.info('Sign-in cancelled.');
-        } else {
-            toastr.error('Error signing in: ' + error.message);
+
+        switch(error.code) {
+            case 'auth/unauthorized-domain':
+                toastr.error('This domain is not authorized for Google Sign-In. Please contact support.');
+                break;
+            case 'auth/network-request-failed':
+                toastr.error('Network error. Please check your connection.');
+                break;
+            case 'auth/popup-closed-by-user':
+                toastr.info('Sign-in cancelled.');
+                break;
+            case 'auth/operation-not-supported-in-this-environment':
+                toastr.error('Google Sign-In is not supported in this browser environment.');
+                break;
+            default:
+                toastr.error(`Sign-in error: ${error.message}`);
         }
     }
 });
