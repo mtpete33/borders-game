@@ -192,6 +192,60 @@ footer {
   background-color:#ffffff;
   padding: 7px 16px;
 }
+
+/* Guest Play Section Styling */
+#guestPlaySection {
+  margin-top: 2em;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1.5em;
+}
+
+#guestPlayInfo {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+  line-height: 1.4;
+}
+
+#guestPlayBtn {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: white;
+  color: black;
+  padding: 9px 16px;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#guestPlayBtn:hover {
+  background-color: #d3d5d3;
+}
+
+#guestGameBoard {
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+  margin: 2em auto;
+}
+
+#guestBackBtn {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: white;
+  color: black;
+  margin-top: 1.5em;
+  padding: 9px 16px;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#guestBackBtn:hover {
+  background-color: #d3d5d3;
+}
+
 /* Friends or Global Filters*/
 #friendsOrGlobal {
 

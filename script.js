@@ -39,6 +39,31 @@ $(document).ready(function() {
     // if (isInstagramBrowser()) {
     //     alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
     // }
+    
+    // Handle Guest Play button click
+    $('#guestPlayBtn').click(function() {
+        // Hide landing page and login elements
+        $('#landingPage').hide();
+        $('#loginForm').hide();
+        $('#signUpForm').hide();
+        $('#googleLoginBtn').hide();
+        
+        // Show guest game board
+        $('#guestGameBoard').show();
+        
+        // For future implementation: Fetch yesterday's puzzle
+        console.log("Guest play button clicked - will load yesterday's puzzle");
+    });
+    
+    // Handle Guest Back button click
+    $('#guestBackBtn').click(function() {
+        // Hide guest game board
+        $('#guestGameBoard').hide();
+        
+        // Show landing page
+        $('#landingPage').show();
+        $('#googleLoginBtn').show();
+    });
 
 
 
