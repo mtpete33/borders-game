@@ -1,96 +1,5 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { 
-  getAuth,
-  GoogleAuthProvider, 
-  signInWithRedirect, 
-  getRedirectResult,
-  signOut 
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc, query, where, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
-  authDomain: "borders-game.firebaseapp.com",
-  projectId: "borders-game",
-  storageBucket: "borders-game.appspot.com",
-  messagingSenderId: "575743641828",
-  appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
-  measurementId: "G-MLSC33TSZ6"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-
-// Initialize auth state listener immediately
-auth.onAuthStateChanged((user) => {
-  console.log("Auth state changed. User:", user ? {
-    uid: user.uid,
-    email: user.email,
-    displayName: user.displayName,
-    providerId: user.providerId,
-    metadata: user.metadata
-  } : 'No user');
-  if (user) {
-    console.log("User is signed in with full details:", user);
-    displayLoggedInMessage(user.displayName || user.email);
-    $("#loginForm").hide();
-    $("#signUpForm").hide();
-    $("#signUpBtn").hide();
-    $("#googleLoginBtn").hide();
-    $("#logInBtn").hide();
-    $("#playBtn").show();
-    $("#manageFriendsBtn").show();
-    $("#logoutLink").show();
-    decideButtonDisplay();
-  } else {
-    console.log("No user is signed in.");
-    $('#loggedInAs').hide();
-    $("#logoutLink").hide();
-    $("#signUpBtn").show();
-    $("#logInBtn").show();
-    $("#googleLoginBtn").show();
-    $("#playBtn").hide();
-    $("#manageFriendsBtn").hide();
-  }
-});
-
-// Handle redirect result immediately
-getRedirectResult(auth)
-  .then((result) => {
-    if (result && result.user) {
-      handleGoogleSignIn(result.user);
-    }
-  })
-  .catch((error) => {
-    console.error('Error during Google sign in:', error);
-  });
-
-// Initialize auth after imports are loaded
-async function initializeFirebase() {
-  // Initialize auth state listener
-  //This is redundant and removed in the updated code above.
-}
-
-// Initialize Firebase when document is ready
-$(document).ready(() => {
-  initializeFirebase();
-});
-
-// Wait for DOM to be fully loaded before using Firebase
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM fully loaded.");
-
-    if (!window.auth) {
-        console.error("Firebase Auth is not initialized yet.");
-    } else {
-        console.log("Firebase Auth successfully initialized.");
-    }
-
-    // Check auth state - This is redundant and removed in the updated code above.
-});
-
+import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 let currentLeaderboardDate = new Date();
 
@@ -112,49 +21,23 @@ function updateNavigationButtons() {
     $('#nextDay').prop('disabled', currentDate >= today);
 }
 
+
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
 let validWords = [];
 let isProgrammaticChange = false;
 
 
-// Ensure Firebase Auth is available before calling getRedirectResult
-$(document).ready(async function () {
-    console.log("jQuery document ready.");
 
-    if (!window.auth) {
-        console.error("Auth is still not available in jQuery ready. Retrying...");
-        return;
-    }
-
-    try {
-        const result = await getRedirectResult(window.auth);
-        if (result) {
-            // Handle successful login after redirect
-            const user = result.user;
-            console.log("User signed in via redirect:", user);
-            handleGoogleSignIn(user);
-        }
-    } catch (error) {
-        console.error("Error handling redirect result:", error);
-    }
-});
-
-    function isInstagramBrowser() {
-        let ua = navigator.userAgent || navigator.vendor || window.opera;
-        return (ua.indexOf("Instagram") > -1);
-    }
-
-    if (isInstagramBrowser()) {
-        alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
-    }
-
-    // function isFacebookInAppBrowser() {
+$(document).ready(function() {
+    
+    // function isInstagramBrowser() {
     //     let ua = navigator.userAgent || navigator.vendor || window.opera;
-    //     return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+    //     return (ua.indexOf("Instagram") > -1);
     // }
 
-    // if (isFacebookInAppBrowser()) {
-    //     alert("To log in, please open this link in your default browser.");
-    //     window.location.href = "https://bordersgame.replit.app";
+    // if (isInstagramBrowser()) {
+    //     alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
     // }
 
 
@@ -219,10 +102,34 @@ $(document).ready(async function () {
 // getLeaderboard(); // <----comment this out
 
     // const auth = getAuth();
-    // const auth = window.auth;
+    const auth = window.auth;
 
     // On auth state change, fetch and display user details
-    //This is redundant and removed in the updated code above.
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
+            try {
+                // Fetch the username from Firestore for both authentication methods
+                // const username = await getUserDetails(user.uid);
+                // currentUsername = username || 'Unknown User';
+                const username = await getUserDetails(user.uid);
+                // currentUsername = userDetails.username || 'Unknown User';
+                displayLoggedInMessage(username);
+
+            } catch (error) {
+                console.error('Error fetching user details:', error.message);
+            }
+        } else {
+            $('#loggedInAs').text(''); // Clear if logged out
+            // User is signed out
+            // $("#playBtn").show();
+            $("#viewSolvedBtn").hide();
+
+        }
+        decideButtonDisplay().catch(error => console.error("Error during deciding button display:", error));
+    });
+
+
 
     // Load the word list on page load
     fetch('filtered_word_list.json')
@@ -248,7 +155,7 @@ $(document).ready(async function () {
             today.setHours(0, 0, 0, 0);
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-
+            
             const q = query(
                 statsRef, 
                 where("uid", "==", user.uid), 
@@ -310,91 +217,55 @@ $(document).ready(async function () {
         }
     }
 
-    async function handleGoogleSignIn(user) {
-        try {
-            let emailUsername = user.email.split('@')[0];
-            const usersRef = collection(window.db, "users");
-            const q = query(usersRef, where("username", "==", emailUsername));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                const existingUser = querySnapshot.docs[0].data();
-                if (existingUser.email !== user.email) {
-                    const randomNum = Math.floor(Math.random() * 100);
-                    emailUsername = `${emailUsername}${randomNum}`;
-                }
-            }
-
-            const userRef = doc(window.db, "users", user.uid);
-            await setDoc(userRef, {
-                uid: user.uid,
-                username: emailUsername,
-                email: user.email
-            }, { merge: true });
-
-            displayLoggedInMessage(emailUsername);
-            toastr.success("Logged in successfully!");
-            $("#loginForm").hide();
-            $("#signUpForm").hide();
-            $("#signUpBtn").hide();
-            $("#googleLoginBtn").hide();
-            $("#logInBtn").hide();
-            $("#playBtn").show();
-            $("#manageFriendsBtn").show();
-
-            decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
-        } catch (error) {
-            console.error('Error during Google login:', error);
-            toastr.error('Error: ' + error.message);
-        }
-    }
-
-    // Google Login Button Handler
+    // Google Login Functionality
     $('#googleLoginBtn').click(function() {
-    const provider = new GoogleAuthProvider();
-    provider.addScope('email');
-    provider.addScope('profile');
-    
-    signInWithRedirect(auth, provider).catch(error => {
-        console.error('Error during Google login:', error);
-        toastr.error('Error: ' + error.message);
-    });
-});
-
-// Handle redirect result immediately after auth initialization
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        getRedirectResult(auth)
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
             .then(async (result) => {
-                if (result && result.user) {
-                    try {
-                        let emailUsername = result.user.email.split('@')[0];
-                        await registerGoogleUser(result.user, emailUsername);
-                        displayLoggedInMessage(emailUsername);
-                        toastr.success("Logged in successfully!");
-                        $("#loginForm").hide();
-                        $("#signUpForm").hide();
-                        $("#signUpBtn").hide();
-                        $("#googleLoginBtn").hide();
-                        $("#logInBtn").hide();
-                        $("#playBtn").show();
-                        $("#manageFriendsBtn").show();
-                        $("#logoutLink").show();
-                        await decideButtonDisplay();
-                    } catch (error) {
-                        console.error('Error during Google login:', error);
-                        toastr.error('Error: ' + error.message);
+                const user = result.user;
+                console.log('User logged in with Google:', user);
+                // Extract username from email for Google users
+                let emailUsername = user.email.split('@')[0];
+
+                // Check if username exists
+                const usersRef = collection(window.db, "users");
+                const q = query(usersRef, where("username", "==", emailUsername));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    // Check if the existing username belongs to a different user
+                    const existingUser = querySnapshot.docs[0].data();
+                    if (existingUser.email !== user.email) {
+                        // Only append random numbers if it's a different user
+                        const randomNum = Math.floor(Math.random() * 100);
+                        emailUsername = `${emailUsername}${randomNum}`;
                     }
                 }
+
+                // Update user document with the username
+                const userRef = doc(window.db, "users", user.uid);
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    username: emailUsername,
+                    email: user.email
+                }, { merge: true });
+                displayLoggedInMessage(emailUsername);
+                toastr.success("Logged in successfully!");
+                $("#loginForm").hide();
+                $("#signUpForm").hide();
+                $("#signUpBtn").hide();
+                $("#googleLoginBtn").hide();
+                $("#logInBtn").hide();
+
+                // Check if puzzle is already completed before showing Play button
+                decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+
             })
             .catch((error) => {
-                console.error('Error getting redirect result:', error);
-                if (error.code !== 'auth/credential-already-in-use') {
-                    toastr.error('Error completing login: ' + error.message);
-                }
+                console.error('Error during Google login:', error.message);
+                toastr.error('Error: ' + error.message);
             });
-    }
-});
+    });
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -410,49 +281,24 @@ auth.onAuthStateChanged((user) => {
     $('#loginForm').hide();
 
     // Function to toggle the visibility of login-related buttons
-    async function toggleAuthButtons(user) {
+    function toggleAuthButtons(user) {
         if (user) {
-            // Hide login-related buttons
             $('#signUpBtn').hide();
             $('#logInBtn').hide();
             $('#googleLoginBtn').hide();
-            $('#loginForm').hide();
-
-            // Show user-specific elements
-            $('#manageFriendsBtn').show();
-            $('#loggedInAs').show();
-            $('#logoutLink').show();
-
-            try {
-                // Update username display
-                const username = await getUserDetails(user.uid);
-                $('#loggedInAs').text(`Logged in as ${username}`);
-
-                // Check puzzle completion status and update buttons
-                await decideButtonDisplay();
-            } catch (error) {
-                console.error("Error updating UI:", error);
-            }
+            $('#loggedInAs').text(`Logged in as ${user.displayName || 'User'}`).show();
         } else {
-            // Reset to initial state for logged out users
             $('#signUpBtn').show();
             $('#logInBtn').show();
             $('#googleLoginBtn').show();
-            $('#loginForm').hide();
-
-            // Hide user-specific elements
-            $('#manageFriendsBtn').hide();
             $('#loggedInAs').hide();
-            $('#logoutLink').hide();
-            $('#playBtn').hide();
-            $('#viewSolvedBtn').hide();
-            $('#gameBoard').hide();
-            $('#landingPage').show();
         }
     }
 
-    // Initialize auth state listener
-    auth.onAuthStateChanged(toggleAuthButtons);
+    // Call this function initially on page load and whenever auth state changes to hide/show correct buttons
+    auth.onAuthStateChanged((user) => {
+        toggleAuthButtons(user);
+    });
 
 
 
@@ -596,7 +442,7 @@ auth.onAuthStateChanged((user) => {
                 const statsRef = collection(window.db, "leaderboard");
                 const userDoc = await getDoc(doc(window.db, "users", user.uid));
                 const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
-
+                
                 await addDoc(statsRef, {
                     puzzleId: currentPuzzleId,
                     date: new Date().toISOString(),
@@ -664,7 +510,7 @@ auth.onAuthStateChanged((user) => {
         $("#giveUpBtn").hide();
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
     });
-
+    
     // Event handler for cancel button inside the modal
     $("#cancelGiveUpBtn").click(function() {
         $("#giveUpModal").hide();
@@ -892,7 +738,7 @@ auth.onAuthStateChanged((user) => {
         });
 
         // Also handle mouseup to maintain selection
-        $(`#${cellId}`).on('mouseup',function(e) {
+        $(`#${cellId}`).on('mouseup', function(e) {
             e.preventDefault();
             $(this).select();
         });
@@ -1411,7 +1257,7 @@ async function getMostWins() {
         // Get all completed entries
         const baseQuery = query(statsRef, where("hasCompleted", "==", true));
         let querySnapshot;
-
+        
         if (showFriendsOnly && auth.currentUser) {
             const friendsList = await getFriendsList();
             const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
@@ -1443,7 +1289,7 @@ async function getMostWins() {
         Object.values(puzzleGroups).forEach(puzzleEntries => {
             // Sort by completion time
             puzzleEntries.sort((a, b) => a.time - b.time);
-
+            
             // First place gets a win
             if (puzzleEntries.length > 0) {
                 const winner = puzzleEntries[0];
@@ -1512,7 +1358,7 @@ async function displayWinnersList(winnersList) {
         const winsCell = row.insertCell(2);
 
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
-
+        
         // Create username cell with add friend button
         usernameCell.innerHTML = winner.username;
         if (user && winner.uid && winner.uid !== user.uid && !friendUids.includes(winner.uid)) {
@@ -1527,7 +1373,7 @@ async function displayWinnersList(winnersList) {
             };
             usernameCell.appendChild(friendBtn);
         }
-
+        
         winsCell.textContent = winner.wins;
     });
 }
@@ -1553,7 +1399,7 @@ async function getLeaderboard(date = new Date()) {
         const selectedDateMs = startOfDay.getTime();
         const daysDiff = Math.floor((selectedDateMs - startDateMs) / (1000 * 60 * 60 * 24));
         const puzzleId = daysDiff + 1;
-
+        
         let q;
         if (showFriendsOnly) {
             const friendsList = await getFriendsList();
@@ -1806,7 +1652,7 @@ async function getLeaderboard(date = new Date()) {
 
         // Event listener for the "Create an account" link
         $('#signupCTAlink').click(function(event) {
-            event.preventDefault(); // Prevent default anchorbehavior
+            event.preventDefault(); // Prevent default anchor behavior
             // Hide the CTA message and show the sign-up form
             $('#signUpCTA').hide();
             $('#signUpForm').show();
@@ -1849,7 +1695,7 @@ async function addFriend(friendUid, friendUsername) {
         if (friendsDoc.exists()) {
             const currentFriends = friendsDoc.data().friendsList || [];
             const existingFriendIndex = currentFriends.findIndex(friend => friend.uid === friendUid);
-
+            
             if (existingFriendIndex !== -1) {
                 // Update username if it's different
                 if (currentFriends[existingFriendIndex].username !== friendUsername) {
@@ -1861,7 +1707,7 @@ async function addFriend(friendUid, friendUsername) {
                 }
                 return;
             }
-
+            
             await setDoc(friendsRef, {
                 friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
             });
@@ -2078,4 +1924,6 @@ $(document).on('click', '#manageFriendsBtn', async function() {
             modal.remove();
         }
     });
+});
+
 });

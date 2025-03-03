@@ -17,28 +17,6 @@
   <!-- Toastr JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyCll82_qmIjuFIuItdfU6gRTMLKXzndkq4",
-      authDomain: "borders-game.firebaseapp.com",
-      projectId: "borders-game",
-      storageBucket: "borders-game.appspot.com",
-      messagingSenderId: "575743641828",
-      appId: "1:575743641828:web:7d6fcdc9f059780cff44f1",
-      measurementId: "G-MLSC33TSZ6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    window.auth = getAuth(app);
-    window.db = getFirestore(app);
-  </script>
-  <script type="module" src="script.js"></script>
-
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -59,7 +37,14 @@
 
 <body>
 
-  
+  <div id="inAppWarning" style="display:none; margin-top: 275px;">
+    <p>You’re using the Instagram or Facebook in-app browser.  
+      <strong>Google Login won’t work here.</strong>  
+      Please open Borders in your default browser by clicking the three dots, and choosing 'Open in external browser'.</p>
+
+  </div>
+
+  <div id="normalContent">
   
   <div id="landingPage" style="display: block;">
     <!-- <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1> -->
@@ -274,11 +259,11 @@
 
   <script type="module">
   // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
   import { getFirestore, doc, getDoc, collection, query, where, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
     import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-    import { signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -310,7 +295,21 @@
       const currentYear = new Date().getFullYear();
       // Set the year in the HTML
       document.getElementById('year').textContent = currentYear;
+
+      function isInAppBrowser() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        if (isInAppBrowser()) {
+          document.getElementById('inAppWarning').style.display = 'block';
+          document.getElementById('normalContent').style.display = 'none';
+        }
+      });
     </script>
+
+  </div>
 </body>
 
 </html>
