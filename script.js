@@ -367,7 +367,7 @@ $(document).ready(function() {
             
             // Display the leaderboard
             const leaderboardHTML = `
-                <h4>Yesterday's Puzzle Leaderboard</h4>
+                <h2>Leaderboard</h2>
                 <table id="guestLeaderboardTable" class="leaderboard-table">
                     <thead>
                         <tr>
