@@ -193,7 +193,7 @@ $(document).ready(function() {
             $("#guestSubmitBtn").css('display', 'none');
             $("#guestGiveUpBtn").css('display', 'none');
 
-            $("#virtual-keyboard").hide();
+            $("#guest-virtual-keyboard").hide();
             
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
             $("#guestSignUpCTA").show();
@@ -335,7 +335,7 @@ $(document).ready(function() {
         $("#guestSubmitBtn").css('display', 'none');
         $("#guestGiveUpBtn").css('display', 'none');
 
-        $("#virtual-keyboard").hide();
+        $("#guest-virtual-keyboard").hide();
 
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
