@@ -79,6 +79,7 @@ h2 {
   font-size: 2rem;  /* Converted 24px to rem*/
   font-weight: bold;
   text-align: center;
+  font-family: "Josefin Sans", sans-serif;
   border: 1px solid black;
   border-radius: 0;
   -webkit-appearance: none;
@@ -303,6 +304,9 @@ footer {
 .guest-filled-cell {
   background-color: #daedff;
   color: #2b2b2b;
+}
+#guest-cell-1, #guest-cell-2, #guest-cell-3, #guest-cell-4, #guest-cell-5, #guest-cell-6, #guest-cell-7, #guest-cell-8, #guest-cell-9, #guest-cell-10, #guest-cell-11, #guest-cell-12, #guest-cell-13, #guest-cell-14 {
+  padding-top: 6.4px;
 }
 
 .guest-key {
