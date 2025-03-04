@@ -188,7 +188,10 @@ $(document).ready(function() {
             // Formatting the elapsed time
             const formattedTime = formatTime(elapsedTime);
 
+            // Hide both Submit and Give Up buttons
             $("#guestSubmitBtn").css('display', 'none');
+            $("#guestGiveUpBtn").css('display', 'none');
+            
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
             $("#guestSignUpCTA").show();
             
