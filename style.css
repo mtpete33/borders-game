@@ -389,17 +389,40 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 26px;
+    min-width: 22px;
     height: 45px;
+    padding: 0 2px;
     /* font-size: 1rem; */
   }
 
   .guest-key-del {
-    min-width: 60px;
+    min-width: 40px;
+  }
+  
+  #guest-virtual-keyboard .keyboard-row {
+    gap: 3px;
   }
   
   #guestLeaderboardContainer {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .guest-key {
+    min-width: 18px;
+    height: 40px;
+    font-size: 0.9rem;
+    padding: 0 1px;
+  }
+
+  .guest-key-del {
+    min-width: 35px;
+  }
+  
+  #guest-virtual-keyboard .keyboard-row {
+    gap: 2px;
+    margin-bottom: 6px;
   }
 }
 
