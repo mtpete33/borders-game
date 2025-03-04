@@ -196,9 +196,39 @@ $(document).ready(function() {
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
             $("#guestSignUpCTA").show();
             
+            // Create and show Share button
+            const yesterdayPuzzleId = getYesterdaysPuzzleId();
+            const shareButtonHTML = `<button id="guestShareBtn" class="form-button">Share</button>`;
+            $("#guestSignUpCTA").after(shareButtonHTML);
+            
+            // Add click handler for Share button
+            $("#guestShareBtn").click(async function() {
+                try {
+                    if (navigator.share) {
+                        const shareData = {
+                            title: 'Borders',
+                            text: `Borders Puzzle #${yesterdayPuzzleId} - Time: ${formattedTime}`,
+                            url: window.location.href
+                        };
+                        await navigator.share(shareData);
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        const shareText = `Borders Puzzle #${yesterdayPuzzleId} - Time: ${formattedTime}`;
+                        const textarea = document.createElement('textarea');
+                        textarea.value = shareText;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        toastr.success('Score copied to clipboard!');
+                    }
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            });
+            
             // Store the score in localStorage
             try {
-                const yesterdayPuzzleId = getYesterdaysPuzzleId();
                 const guestScore = {
                     puzzleId: yesterdayPuzzleId,
                     time: elapsedTime,
@@ -491,6 +521,14 @@ $(document).ready(function() {
             if (!guestIsProgrammaticChange && $(this).val().length === 1 && index < guestFocusableCells.length - 1) {
                 guestCurrentCellIndex++;
                 $(`#${guestFocusableCells[guestCurrentCellIndex]}`).focus().select();
+            }
+        });
+        
+        // Add Enter key handler for each cell
+        $(`#${cellId}`).on('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                $("#guestSubmitBtn").click(); // Trigger guest submit button
             }
         });
     });
