@@ -208,33 +208,32 @@
   
   <!-- Leaderboard Element -->
   <div id="guestGameBoard" style="display:none;">
-    <h1>Borders</h1>
-    <h3>Playing Yesterday's Puzzle as Guest</h3>
-    
+    <h1 id="guestH1">Borders</h1>
+
     <div class="crossword" id="guestCrossword">
       <input type="text" maxlength="1" id="guest-cell-1" class="cell" autocomplete="off">
-      <input type="text" maxlength="1" id="guest-cell-2" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-2" class="cell guest-filled-cell" autocomplete="off" disabled>
       <input type="text" maxlength="1" id="guest-cell-3" class="cell" autocomplete="off">
       <input type="text" maxlength="1" id="guest-cell-4" class="cell" autocomplete="off">
 
-      <input type="text" maxlength="1" id="guest-cell-5" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-5" class="cell guest-filled-cell" autocomplete="off" disabled>
       <div class="black-cell"></div>
       <div class="black-cell"></div>
-      <input type="text" maxlength="1" id="guest-cell-6" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-6" class="cell guest-filled-cell" autocomplete="off" disabled>
 
       <input type="text" maxlength="1" id="guest-cell-7" class="cell" autocomplete="off">
       <div class="black-cell"></div>
       <div class="black-cell"></div>
       <input type="text" maxlength="1" id="guest-cell-8" class="cell" autocomplete="off">
 
-      <input type="text" maxlength="1" id="guest-cell-9" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-9" class="cell guest-filled-cell" autocomplete="off" disabled>
       <div class="black-cell"></div>
       <div class="black-cell"></div>
-      <input type="text" maxlength="1" id="guest-cell-10" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-10" class="cell guest-filled-cell" autocomplete="off" disabled>
 
       <input type="text" maxlength="1" id="guest-cell-11" class="cell" autocomplete="off">
       <input type="text" maxlength="1" id="guest-cell-12" class="cell" autocomplete="off">
-      <input type="text" maxlength="1" id="guest-cell-13" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-13" class="cell guest-filled-cell" autocomplete="off" disabled>
       <input type="text" maxlength="1" id="guest-cell-14" class="cell" autocomplete="off">
     </div>
 
@@ -278,6 +277,7 @@
     </div>
 
     <div id="guestResultTime" style="display: none;"></div>
+    <h5>Playing as Guest</h5>
     <div id="guestSignUpCTA" style="display: none;">
       Create an account to track your daily score and add your time to the leaderboard!
       <button id="guestSignUpBtn" class="form-button">Sign Up Now</button>

@@ -222,22 +222,25 @@ footer {
 #guestPlayBtn:hover {
   background-color: #d3d5d3;
 }
+#guestH1 {
+  margin-top: -33px;
+}
 
 #guestGameBoard {
   text-align: center;
   width: 90%;
   max-width: 600px;
-  margin: 2em auto;
+  margin: 0 auto;
 }
 
-#guestCrossword {
+/* #guestCrossword {
   display: grid;
   grid-template-columns: repeat(4, 3.75rem);
   grid-template-rows: repeat(5, 3.75rem);
   grid-gap: 0.75rem;
   justify-content: center;
   margin-top: 2.2rem;
-}
+} */
 
 #guestBackBtn, #guestSubmitBtn {
   font-family: "Josefin Sans", sans-serif;
@@ -290,6 +293,10 @@ footer {
 #guestSignUpBtn:hover {
   background-color: #d3d5d3;
 }
+.guest-filled-cell {
+  background-color: #daedff;
+  color: #2b2b2b;
+}
 
 .guest-key {
   min-width: 45px;
@@ -329,9 +336,9 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 32px;
+    min-width: 28px;
     height: 45px;
-    font-size: 1rem;
+    /* font-size: 1rem; */
   }
 
   .guest-key-del {
