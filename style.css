@@ -359,6 +359,7 @@ footer {
   width: 100%;
   border-collapse: collapse;
   margin-top: 5px;
+  font-size: 14px;
 }
 
 #guestLeaderboardTable th, #guestLeaderboardTable td {
@@ -374,6 +375,16 @@ footer {
 
 #guestLeaderboardTable tr:first-child {
   background-color: #e6ffe6;
+}
+
+@media (max-width: 600px) {
+  #guestLeaderboardTable {
+    font-size: 12px;
+  }
+  
+  #guestLeaderboardTable th, #guestLeaderboardTable td {
+    padding: 4px;
+  }
 }
 
 @media (max-width: 768px) {

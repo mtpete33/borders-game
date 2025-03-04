@@ -374,16 +374,31 @@ $(document).ready(function() {
                             <th>Rank</th>
                             <th>User</th>
                             <th>Time</th>
+                            <th>Date</th>
+                            <th>Puzzle #</th>
+                            <th>Answers</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${leaderboardData.map((entry, index) => `
-                            <tr>
+                        ${leaderboardData.map((entry, index) => {
+                            // Format the date
+                            const dateObj = entry.date ? new Date(entry.date) : new Date();
+                            const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+                            
+                            // Get answers or placeholder
+                            const answers = entry.words ? entry.words.join(', ') : 'No words submitted';
+                            
+                            return `
+                            <tr ${index === 0 ? 'style="background-color: #e6ffe6;"' : ''}>
                                 <td>${index + 1}${getOrdinalSuffix(index + 1)}</td>
                                 <td>${entry.username}</td>
                                 <td>${formatTime(entry.time)}</td>
+                                <td>${formattedDate}</td>
+                                <td>${entry.puzzleId}</td>
+                                <td>${answers}</td>
                             </tr>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </tbody>
                 </table>
             `;
