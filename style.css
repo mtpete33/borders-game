@@ -254,7 +254,7 @@ footer {
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 0.5em auto;
-  display: block !important; /* Force block display to ensure vertical stacking */
+  display: block; /* Block display to ensure vertical stacking */
 }
 
 #guestGiveUpBtn {

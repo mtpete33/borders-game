@@ -300,8 +300,8 @@ $(document).ready(function() {
         $("#guestGiveUpModal").hide();
         
         // Hide the submit and give up buttons
-        $("#guestSubmitBtn").hide();
-        $("#guestGiveUpBtn").hide();
+        $("#guestSubmitBtn").css('display', 'none');
+        $("#guestGiveUpBtn").css('display', 'none');
 
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
