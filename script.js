@@ -62,10 +62,12 @@ $(document).ready(function() {
         });
         // Hide and reset any completion message or related UI elements
         $("#guestResultTime").hide().text('');
-        $("#guestSubmitBtn").show(); // Show the submit button if it was previously hidden
-        $("#guestGiveUpBtn").show(); // Show the give up button
+        $("#guestSubmitBtn").show().css('display', 'block'); // Show the submit button as block to stack vertically
+        $("#guestGiveUpBtn").show().css('display', 'block'); // Show the give up button as block to stack vertically
         $("#guestSignUpCTA").hide();
+        $("#guestLeaderboardContainer").hide(); // Hide leaderboard if visible
     }
+</old_str>
 
     // Function to fetch yesterday's puzzle
     async function fetchYesterdaysPuzzle() {
