@@ -389,18 +389,18 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 22px;
+    min-width: 28px;
     height: 45px;
-    padding: 0 2px;
+    padding: 0 3px;
     /* font-size: 1rem; */
   }
 
   .guest-key-del {
-    min-width: 40px;
+    min-width: 50px;
   }
   
   #guest-virtual-keyboard .keyboard-row {
-    gap: 3px;
+    gap: 5px;
   }
   
   #guestLeaderboardContainer {
@@ -410,18 +410,18 @@ footer {
 
 @media (max-width: 375px) {
   .guest-key {
-    min-width: 18px;
+    min-width: 22px;
     height: 40px;
     font-size: 0.9rem;
-    padding: 0 1px;
+    padding: 0 2px;
   }
 
   .guest-key-del {
-    min-width: 35px;
+    min-width: 40px;
   }
   
   #guest-virtual-keyboard .keyboard-row {
-    gap: 2px;
+    gap: 3px;
     margin-bottom: 6px;
   }
 }
