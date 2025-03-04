@@ -389,7 +389,7 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 30px;
+    min-width: 31px;
     height: 45px;
     padding: 0 3px;
     /* font-size: 1rem; */
@@ -410,7 +410,7 @@ footer {
 
 @media (max-width: 375px) {
   .guest-key {
-    min-width: 22px;
+    min-width: 26px;
     height: 40px;
     font-size: 0.9rem;
     padding: 0 2px;
