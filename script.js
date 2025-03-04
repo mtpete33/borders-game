@@ -40,8 +40,198 @@ $(document).ready(function() {
     //     alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
     // }
     
+    // Variables for guest gameplay
+    let guestStartTime;
+    let guestPuzzleAnswers;
+    let guestCurrentCellIndex = 0;
+    let guestFocusableCells = ["guest-cell-1", "guest-cell-3", "guest-cell-4", "guest-cell-7", "guest-cell-8", "guest-cell-11", "guest-cell-12", "guest-cell-14"];
+    let guestIsProgrammaticChange = false;
+
+    // Function to get yesterday's puzzle ID
+    function getYesterdaysPuzzleId() {
+        const currentDay = getSequentialDay();
+        return Math.max(1, currentDay - 1); // Ensure we don't go below 1
+    }
+
+    // Function to reset the guest game board
+    function resetGuestGameBoard() {
+        // Clear all input cells
+        $('#guestCrossword .cell').each(function() {
+            $(this).val(''); // Clear the value
+            $(this).prop('disabled', false); // Ensure it's enabled if applicable
+        });
+        // Hide and reset any completion message or related UI elements
+        $("#guestResultTime").hide().text('');
+        $("#guestSubmitBtn").show(); // Show the submit button if it was previously hidden
+        $("#guestSignUpCTA").hide();
+    }
+
+    // Function to fetch yesterday's puzzle
+    async function fetchYesterdaysPuzzle() {
+        const yesterdayId = getYesterdaysPuzzleId().toString();
+        try {
+            const docRef = doc(window.db, "puzzles", yesterdayId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const puzzleData = docSnap.data();
+                guestPuzzleAnswers = {
+                    word1: puzzleData.word1,
+                    word2: puzzleData.word2,
+                    word3: puzzleData.word3,
+                    word4: puzzleData.word4
+                };
+                
+                // Update the game board with the puzzle data
+                // Word1: Top word
+                $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+
+                // Word2: Right word (down)
+                $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+                $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
+
+                // Word3: Bottom word (across)
+                $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
+
+                // Word4: Left word (down)
+                $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+                $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+                
+                console.log("Yesterday's puzzle loaded:", yesterdayId);
+            } else {
+                // If yesterday's puzzle doesn't exist, fetch a random puzzle
+                await fetchRandomPuzzleForGuest();
+                console.log("No puzzle found for yesterday. Using random puzzle.");
+            }
+        } catch (error) {
+            console.error("Error retrieving yesterday's puzzle data:", error);
+            await fetchRandomPuzzleForGuest();
+            toastr.error("Error retrieving puzzle data. Using random puzzle.");
+        }
+    }
+
+    // Function to fetch a random puzzle for guest play
+    async function fetchRandomPuzzleForGuest() {
+        const randomPuzzleId = Math.floor(Math.random() * 50) + 1; // Random ID between 1 and 50
+        try {
+            const docRef = doc(window.db, "puzzles", randomPuzzleId.toString());
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const puzzleData = docSnap.data();
+                guestPuzzleAnswers = {
+                    word1: puzzleData.word1,
+                    word2: puzzleData.word2,
+                    word3: puzzleData.word3,
+                    word4: puzzleData.word4,
+                };
+                
+                // Update the game board with the random puzzle data
+                // Word1: Top word
+                $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+
+                // Word2: Right word (down)
+                $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+                $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
+
+                // Word3: Bottom word (across)
+                $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
+
+                // Word4: Left word (down)
+                $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+                $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+                
+            } else {
+                toastr.error("Failed to fetch a random puzzle.");
+            }
+        } catch (error) {
+            console.error("Error fetching random puzzle:", error);
+            toastr.error("Error fetching random puzzle.");
+        }
+    }
+
+    // Function to validate the guest puzzle
+    function validateGuestPuzzle() {
+        // Get all input fields
+        let cells = $("#guestCrossword .cell");
+
+        // Check if all input fields are filled
+        let allFilled = true;
+        cells.each(function() {
+            if ($(this).val().trim() === '') {
+                allFilled = false;
+                return false; // Break loop on finding an empty field
+            }
+        });
+
+        if (!allFilled) {
+            toastr.warning("Please fill in all letters before submitting.");
+            return; // Exit validation function early
+        }
+
+        // Construct words from the user's input
+        let userWord1 = $("#guest-cell-1").val() + $("#guest-cell-2").val() + $("#guest-cell-3").val() + $("#guest-cell-4").val();
+        let userWord2 = $("#guest-cell-4").val() + $("#guest-cell-6").val() + $("#guest-cell-8").val() + $("#guest-cell-10").val() + $("#guest-cell-14").val();
+        let userWord3 = $("#guest-cell-11").val() + $("#guest-cell-12").val() + $("#guest-cell-13").val() + $("#guest-cell-14").val();
+        let userWord4 = $("#guest-cell-1").val() + $("#guest-cell-5").val() + $("#guest-cell-7").val() + $("#guest-cell-9").val() + $("#guest-cell-11").val();
+
+        console.log("Guest user's input words:", userWord1, userWord2, userWord3, userWord4);
+
+        // Validate each word using the isValidWord function
+        const allValid = [userWord1, userWord2, userWord3, userWord4].every(isValidWord);
+
+        if (allValid) {
+            toastr.success("Puzzle Complete!");
+            let endTime = new Date();
+            let elapsedTime = (endTime - guestStartTime) / 1000;
+
+            // Formatting the elapsed time
+            const formattedTime = formatTime(elapsedTime);
+
+            $("#guestSubmitBtn").css('display', 'none');
+            $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
+            $("#guestSignUpCTA").show();
+            
+            // Store the score in localStorage
+            try {
+                const guestScore = {
+                    puzzleId: getYesterdaysPuzzleId(),
+                    time: elapsedTime,
+                    date: new Date().toISOString(),
+                    words: [userWord1, userWord2, userWord3, userWord4]
+                };
+                localStorage.setItem('guestScore', JSON.stringify(guestScore));
+            } catch (e) {
+                console.error("Could not save score to localStorage:", e);
+            }
+            
+            // Disable all cells in the game grid
+            $("#guestCrossword .cell").prop('disabled', true);
+        } else {
+            toastr.error("Some of your words are not valid. Try again.");
+        }
+    }
+
+    // Function to handle deletion in guest mode
+    function handleGuestDelete() {
+        let currentCell = $(`#${guestFocusableCells[guestCurrentCellIndex]}`);
+        if (currentCell.val().length > 0) {
+            currentCell.val("");
+        } else if (guestCurrentCellIndex > 0) {
+            guestCurrentCellIndex--; // Move back one cell
+            let previousCell = $(`#${guestFocusableCells[guestCurrentCellIndex]}`);
+            previousCell.val(""); // Clear the previous cell
+            previousCell.focus(); // Focus the previous cell
+        }
+
+        // Reset any programmatic change flags
+        guestIsProgrammaticChange = false;
+    }
+
     // Handle Guest Play button click
     $('#guestPlayBtn').click(function() {
+        // Reset the game board
+        resetGuestGameBoard();
+        
         // Hide landing page and login elements
         $('#landingPage').hide();
         $('#loginForm').hide();
@@ -51,8 +241,14 @@ $(document).ready(function() {
         // Show guest game board
         $('#guestGameBoard').show();
         
-        // For future implementation: Fetch yesterday's puzzle
-        console.log("Guest play button clicked - will load yesterday's puzzle");
+        // Fetch yesterday's puzzle
+        fetchYesterdaysPuzzle();
+        
+        // Initialize focus and start time
+        $("#guest-cell-1").focus();
+        guestStartTime = new Date();
+        
+        console.log("Guest play button clicked - loading yesterday's puzzle");
     });
     
     // Handle Guest Back button click
@@ -63,6 +259,125 @@ $(document).ready(function() {
         // Show landing page
         $('#landingPage').show();
         $('#googleLoginBtn').show();
+    });
+    
+    // Handle Guest Sign Up button click
+    $(document).on('click', '#guestSignUpBtn', function() {
+        // Hide guest game board
+        $('#guestGameBoard').hide();
+        
+        // Show sign up form
+        $('#signUpForm').show();
+        $('#username').focus();
+    });
+    
+    // Event listener for the guest Submit button
+    $("#guestSubmitBtn").click(function() {
+        validateGuestPuzzle(); // Run the validation for the guest puzzle
+    });
+    
+    // Key event logic for clicks on guest keyboard keys
+    $(".guest-key").click(function() {
+        const key = $(this).data("key");
+        guestIsProgrammaticChange = true; // Mark change as programmatic before any way this happens
+        if (key === "backspace") {
+            handleGuestDelete();
+        } else {
+            $(`#${guestFocusableCells[guestCurrentCellIndex]}`).val(key.toUpperCase());
+            if (guestCurrentCellIndex < guestFocusableCells.length - 1) {
+                guestCurrentCellIndex++;
+                $(`#${guestFocusableCells[guestCurrentCellIndex]}`).focus();
+            }
+        }
+        guestIsProgrammaticChange = false; // Reset after handling input
+    });
+    
+    // Convert all guest user inputs to uppercase
+    $("#guestCrossword .cell").on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+    
+    // Initialize focus on the first cell when the guest game starts
+    $("#guest-cell-1").on('focus', function() {
+        guestCurrentCellIndex = 0;
+    });
+    
+    // Attach event listeners to each guest cell to update currentCellIndex on focus
+    guestFocusableCells.forEach((cellId, index) => {
+        $(`#${cellId}`).on('focus click', function(e) {
+            if (guestCurrentCellIndex !== index) {
+                guestCurrentCellIndex = index; // Update the index of the focused cell
+            }
+            $(this).select();
+            e.preventDefault();
+        });
+
+        // Also handle mouseup to maintain selection
+        $(`#${cellId}`).on('mouseup', function(e) {
+            e.preventDefault();
+            $(this).select();
+        });
+    });
+    
+    // Input event to move focus for guest cells
+    guestFocusableCells.forEach((cellId, index) => {
+        $(`#${cellId}`).on('input', function(event) {
+            if (!guestIsProgrammaticChange && $(this).val().length === 1 && index < guestFocusableCells.length - 1) {
+                guestCurrentCellIndex++;
+                $(`#${guestFocusableCells[guestCurrentCellIndex]}`).focus().select();
+            }
+        });
+    });
+    
+    // Handle keyboard events for navigation and deletion in guest mode
+    $(document).keydown(function(event) {
+        const focusedElement = document.activeElement;
+        const isGuestGameCell = $(focusedElement).hasClass('cell') && focusedElement.id.startsWith('guest-');
+        
+        if (isGuestGameCell) {
+            let nextCell;
+
+            switch(event.key) {
+                case "Backspace":
+                    event.preventDefault();
+                    handleGuestDelete();
+                    break;
+
+                case "ArrowLeft":
+                    if (guestCurrentCellIndex > 0) {
+                        event.preventDefault();
+                        guestCurrentCellIndex--;
+                        nextCell = $(`#${guestFocusableCells[guestCurrentCellIndex]}`);
+                        nextCell.focus();
+                        // Force selection after a brief delay
+                        setTimeout(() => {
+                            nextCell.select();
+                        }, 0);
+                    }
+                    break;
+
+                case "ArrowRight":
+                    if (guestCurrentCellIndex < guestFocusableCells.length - 1) {
+                        event.preventDefault();
+                        guestCurrentCellIndex++;
+                        nextCell = $(`#${guestFocusableCells[guestCurrentCellIndex]}`);
+                        nextCell.focus();
+                        // Force selection after a brief delay
+                        setTimeout(() => {
+                            nextCell.select();
+                        }, 0);
+                    }
+                    break;
+
+                // Handle alphanumeric input
+                default:
+                    if (event.key.length === 1 && event.key.match(/[a-zA-Z]/)) {
+                        // If it's a letter key, select the current content
+                        $(focusedElement).select();
+                    }
+                    break;
+            }
+        }
     });
 
 

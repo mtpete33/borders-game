@@ -209,7 +209,81 @@
   <!-- Leaderboard Element -->
   <div id="guestGameBoard" style="display:none;">
     <h1>Borders</h1>
-    <p>Guest game board here</p>
+    <h3>Playing Yesterday's Puzzle as Guest</h3>
+    
+    <div class="crossword" id="guestCrossword">
+      <input type="text" maxlength="1" id="guest-cell-1" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="guest-cell-2" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-3" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="guest-cell-4" class="cell" autocomplete="off">
+
+      <input type="text" maxlength="1" id="guest-cell-5" class="cell" autocomplete="off" disabled>
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="guest-cell-6" class="cell" autocomplete="off" disabled>
+
+      <input type="text" maxlength="1" id="guest-cell-7" class="cell" autocomplete="off">
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="guest-cell-8" class="cell" autocomplete="off">
+
+      <input type="text" maxlength="1" id="guest-cell-9" class="cell" autocomplete="off" disabled>
+      <div class="black-cell"></div>
+      <div class="black-cell"></div>
+      <input type="text" maxlength="1" id="guest-cell-10" class="cell" autocomplete="off" disabled>
+
+      <input type="text" maxlength="1" id="guest-cell-11" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="guest-cell-12" class="cell" autocomplete="off">
+      <input type="text" maxlength="1" id="guest-cell-13" class="cell" autocomplete="off" disabled>
+      <input type="text" maxlength="1" id="guest-cell-14" class="cell" autocomplete="off">
+    </div>
+
+    <!-- Virtual Keyboard for Guest -->
+    <div id="guest-virtual-keyboard" class="keyboard-container">
+        <div class="keyboard-row">
+            <button class="guest-key" data-key="q">Q</button>
+            <button class="guest-key" data-key="w">W</button>
+            <button class="guest-key" data-key="e">E</button>
+            <button class="guest-key" data-key="r">R</button>
+            <button class="guest-key" data-key="t">T</button>
+            <button class="guest-key" data-key="y">Y</button>
+            <button class="guest-key" data-key="u">U</button>
+            <button class="guest-key" data-key="i">I</button>
+            <button class="guest-key" data-key="o">O</button>
+            <button class="guest-key" data-key="p">P</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="guest-key" data-key="a">A</button>
+            <button class="guest-key" data-key="s">S</button>
+            <button class="guest-key" data-key="d">D</button>
+            <button class="guest-key" data-key="f">F</button>
+            <button class="guest-key" data-key="g">G</button>
+            <button class="guest-key" data-key="h">H</button>
+            <button class="guest-key" data-key="j">J</button>
+            <button class="guest-key" data-key="k">K</button>
+            <button class="guest-key" data-key="l">L</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="guest-key" data-key="z">Z</button>
+            <button class="guest-key" data-key="x">X</button>
+            <button class="guest-key" data-key="c">C</button>
+            <button class="guest-key" data-key="v">V</button>
+            <button class="guest-key" data-key="b">B</button>
+            <button class="guest-key" data-key="n">N</button>
+            <button class="guest-key" data-key="m">M</button>
+            <button class="guest-key guest-key-del" id="guest-backspace" data-key="backspace">
+                <img src="backspace.svg" alt="Backspace">
+            </button>
+        </div>
+    </div>
+
+    <div id="guestResultTime" style="display: none;"></div>
+    <div id="guestSignUpCTA" style="display: none;">
+      Create an account to track your daily score and add your time to the leaderboard!
+      <button id="guestSignUpBtn" class="form-button">Sign Up Now</button>
+    </div>
+    
+    <button id="guestSubmitBtn">Submit</button>
     <button id="guestBackBtn">Back to Home</button>
   </div>
 

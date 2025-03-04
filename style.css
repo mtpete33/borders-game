@@ -230,21 +230,131 @@ footer {
   margin: 2em auto;
 }
 
-#guestBackBtn {
+#guestCrossword {
+  display: grid;
+  grid-template-columns: repeat(4, 3.75rem);
+  grid-template-rows: repeat(5, 3.75rem);
+  grid-gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2.2rem;
+}
+
+#guestBackBtn, #guestSubmitBtn {
   font-family: "Josefin Sans", sans-serif;
   background-color: white;
   color: black;
-  margin-top: 1.5em;
   padding: 9px 16px;
   font-size: 16px;
   border: 1.5px solid black;
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin: 0.5em auto;
+  display: block;
 }
 
-#guestBackBtn:hover {
+#guestBackBtn {
+  margin-top: 1.5em;
+}
+
+#guestBackBtn:hover, #guestSubmitBtn:hover {
   background-color: #d3d5d3;
+}
+
+#guestResultTime {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+#guestSignUpCTA {
+  font-size: 18px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#guestSignUpBtn {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: white;
+  color: black;
+  padding: 9px 16px;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0.5em auto;
+  display: block;
+}
+
+#guestSignUpBtn:hover {
+  background-color: #d3d5d3;
+}
+
+.guest-key {
+  min-width: 45px;
+  height: 55px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6c757d;
+  color: #f8f9fa;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.guest-key:hover {
+  background-color: #7d8590;
+  transform: translateY(-2px);
+}
+
+.guest-key:active, .guest-key.pressed {
+  background-color: #0d6efd;
+  transform: translateY(1px);
+}
+
+.guest-key-del {
+  min-width: 80px;
+}
+
+.guest-key-del img {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .guest-key {
+    min-width: 32px;
+    height: 45px;
+    font-size: 1rem;
+  }
+
+  .guest-key-del {
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 470px) {
+  #guestSubmitBtn, #guestBackBtn {
+    font-size: 21px;
+  }
+  
+  #guestResultTime {
+    font-size: 20px;
+  }
+  
+  #guestCrossword {
+    grid-template-columns: repeat(4, 2.5rem);
+    grid-template-rows: repeat(5, 2.5rem);
+    grid-gap: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 3em;
+  }
 }
 
 /* Friends or Global Filters*/
