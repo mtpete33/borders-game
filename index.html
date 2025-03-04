@@ -72,17 +72,19 @@
     <a href="#" id="logoutLink" style="display:none;">Logout</a>
     <button id="signUpBtn">Sign Up</button>
     <button id="logInBtn">Email Login</button>
+    <button id="googleLoginBtn" style="display:inline-flex;">
+      <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 18px; height: 18px; margin-right: 8px;">
+      Google Login
+    </button>
     
     <div id="guestPlaySection">
-      <p id="guestPlayInfo">Don't want to sign up? No problem! Click 'Play Now' to play yesterday's puzzle as a guest. Your scores will not be posted to the leaderboard when you play as a guest.</p>
+      
       <button id="guestPlayBtn">Play Now</button>
+      <p id="guestPlayInfo">Click Play Now to play without signing up. Your score will not post to the leaderboard.</p>
     </div>
   </div>
 
-  <button id="googleLoginBtn" style="display:inline-flex;">
-    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 18px; height: 18px; margin-right: 8px;">
-    Google Login
-  </button>
+  
   
 <br>
 
@@ -206,7 +208,7 @@
   
   <!-- Leaderboard Element -->
   <div id="guestGameBoard" style="display:none;">
-    <h1>Borders - Guest Mode</h1>
+    <h1>Borders</h1>
     <p>Guest game board here</p>
     <button id="guestBackBtn">Back to Home</button>
   </div>
