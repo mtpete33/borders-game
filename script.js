@@ -315,6 +315,23 @@ $(document).ready(function() {
         $("#guestGiveUpModal").hide();
     });
     
+    // Handle Guest Help button click
+    $('#guestHelpBtn').click(function() {
+        $("#guestInstructionsModal").show();
+    });
+    
+    // Close the instructions modal when clicking the X
+    $('.close-modal').click(function() {
+        $("#guestInstructionsModal").hide();
+    });
+    
+    // Close the instructions modal when clicking outside of it
+    $("#guestInstructionsModal").click(function(event) {
+        if (event.target === this) {
+            $("#guestInstructionsModal").hide();
+        }
+    });
+    
     // Handle Guest Back button click
     $('#guestBackBtn').click(function() {
         // Hide guest game board

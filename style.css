@@ -458,6 +458,36 @@ footer {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  position: relative;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#guestHelpBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#guestHelpBtn:hover {
+  background-color: #333;
 }
 
 #googleLoginBtn {
