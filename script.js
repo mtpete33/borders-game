@@ -1971,6 +1971,35 @@ async function getLeaderboard(date = new Date()) {
             getLeaderboard(); // Load leaderboard data when displaying
         }
     });
+    
+    // Event listener for the "Back to Home" button
+    $('#backToHomeBtn').click(function() {
+        // Hide all game elements
+        $('#gameBoard').hide();
+        $('#leaderboard').hide();
+        $('#loginForm').hide();
+        $('#signUpForm').hide();
+        
+        // Show landing page
+        $('#landingPage').show();
+        
+        // Show or hide appropriate buttons based on login status
+        const user = auth.currentUser;
+        if (user) {
+            $('#signUpBtn').hide();
+            $('#logInBtn').hide();
+            $('#googleLoginBtn').hide();
+            $('#guestPlaySection').hide();
+            $("#manageFriendsBtn").show();
+            // Check if puzzle is already completed before showing Play button
+            decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
+        } else {
+            $('#signUpBtn').show();
+            $('#logInBtn').show();
+            $('#googleLoginBtn').show();
+            $('#guestPlaySection').show();
+        }
+    });
 
 
     async function getUserDetails(uid) {
