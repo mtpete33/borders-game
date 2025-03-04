@@ -242,7 +242,7 @@ footer {
   margin-top: 2.2rem;
 } */
 
-#guestBackBtn, #guestSubmitBtn {
+#guestBackBtn, #guestSubmitBtn, #guestGiveUpBtn {
   font-family: "Josefin Sans", sans-serif;
   background-color: white;
   color: black;
@@ -254,6 +254,13 @@ footer {
   transition: background-color 0.3s ease;
   margin: 0.5em auto;
   display: block;
+}
+
+#guestGiveUpBtn {
+  width: 6.6em;
+  margin: 1.5em auto 0 auto;
+  background-color: #ffffff;
+  padding: 7px 16px;
 }
 
 #guestBackBtn {

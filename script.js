@@ -63,6 +63,7 @@ $(document).ready(function() {
         // Hide and reset any completion message or related UI elements
         $("#guestResultTime").hide().text('');
         $("#guestSubmitBtn").show(); // Show the submit button if it was previously hidden
+        $("#guestGiveUpBtn").show(); // Show the give up button
         $("#guestSignUpCTA").hide();
     }
 
@@ -249,6 +250,58 @@ $(document).ready(function() {
         guestStartTime = new Date();
         
         console.log("Guest play button clicked - loading yesterday's puzzle");
+    });
+    
+    // Handle Guest Give Up button click
+    $("#guestGiveUpBtn").click(function() {
+        $("#guestGiveUpModal").show(); // Show the confirmation modal
+    });
+    
+    // Event handler for the guest confirmation button inside the modal
+    $("#guestConfirmGiveUpBtn").click(function() {
+        // Display the correct answers on the game board
+        $("#guest-cell-1").val(guestPuzzleAnswers.word1.charAt(0));
+        $("#guest-cell-2").val(guestPuzzleAnswers.word1.charAt(1));
+        $("#guest-cell-3").val(guestPuzzleAnswers.word1.charAt(2));
+        $("#guest-cell-4").val(guestPuzzleAnswers.word1.charAt(3));
+
+        $("#guest-cell-4").val(guestPuzzleAnswers.word2.charAt(0));
+        $("#guest-cell-6").val(guestPuzzleAnswers.word2.charAt(1));
+        $("#guest-cell-8").val(guestPuzzleAnswers.word2.charAt(2));
+        $("#guest-cell-10").val(guestPuzzleAnswers.word2.charAt(3));
+        $("#guest-cell-14").val(guestPuzzleAnswers.word2.charAt(4));
+
+        $("#guest-cell-11").val(guestPuzzleAnswers.word3.charAt(0));
+        $("#guest-cell-12").val(guestPuzzleAnswers.word3.charAt(1));
+        $("#guest-cell-13").val(guestPuzzleAnswers.word3.charAt(2));
+        $("#guest-cell-14").val(guestPuzzleAnswers.word3.charAt(3));
+
+        $("#guest-cell-1").val(guestPuzzleAnswers.word4.charAt(0));
+        $("#guest-cell-5").val(guestPuzzleAnswers.word4.charAt(1));
+        $("#guest-cell-7").val(guestPuzzleAnswers.word4.charAt(2));
+        $("#guest-cell-9").val(guestPuzzleAnswers.word4.charAt(3));
+        $("#guest-cell-11").val(guestPuzzleAnswers.word4.charAt(4));
+
+        // Disable all cells in the game grid
+        $("#guestCrossword .cell").prop('disabled', true);
+
+        // Show the give up message
+        toastr.info("You gave up! Sorry, better luck next time.");
+        
+        // Hide the confirmation modal
+        $("#guestGiveUpModal").hide();
+        
+        // Hide the submit and give up buttons
+        $("#guestSubmitBtn").hide();
+        $("#guestGiveUpBtn").hide();
+
+        // Show the result message
+        $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
+    });
+    
+    // Event handler for cancel button inside the guest modal
+    $("#guestCancelGiveUpBtn").click(function() {
+        $("#guestGiveUpModal").hide();
     });
     
     // Handle Guest Back button click
