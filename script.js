@@ -192,6 +192,8 @@ $(document).ready(function() {
             // Hide both Submit and Give Up buttons
             $("#guestSubmitBtn").css('display', 'none');
             $("#guestGiveUpBtn").css('display', 'none');
+
+            $("#virtual-keyboard").hide();
             
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
             $("#guestSignUpCTA").show();
@@ -332,6 +334,8 @@ $(document).ready(function() {
         // Hide the submit and give up buttons
         $("#guestSubmitBtn").css('display', 'none');
         $("#guestGiveUpBtn").css('display', 'none');
+
+        $("#virtual-keyboard").hide();
 
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
@@ -1590,6 +1594,7 @@ $(document).ready(function() {
         $("#giveUpBtn").hide();
         $("#example").hide();
         $("#viewSolvedPuzzleBtn").hide();
+        $("#virtual-keyboard").hide();
 
 
         getLeaderboard();
@@ -1718,6 +1723,7 @@ $(document).ready(function() {
         $("#viewSolvedPuzzleBtn").hide();
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
+        $("#virtual-keyboard").hide();
 
         // Show the saved correct answers from the puzzle data
         // Assume `puzzleAnswers` contains the correct answers
