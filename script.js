@@ -67,7 +67,6 @@ $(document).ready(function() {
         $("#guestSignUpCTA").hide();
         $("#guestLeaderboardContainer").hide(); // Hide leaderboard if visible
     }
-</old_str>
 
     // Function to fetch yesterday's puzzle
     async function fetchYesterdaysPuzzle() {
