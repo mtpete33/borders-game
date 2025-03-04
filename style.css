@@ -341,6 +341,41 @@ footer {
   height: 24px;
 }
 
+#guestLeaderboardContainer {
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#guestLeaderboardContainer h4 {
+  font-family: "Josefin Sans", sans-serif;
+  margin-bottom: 10px;
+}
+
+#guestLeaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+}
+
+#guestLeaderboardTable th, #guestLeaderboardTable td {
+  border: 1px solid #858585;
+  padding: 6px;
+  text-align: center;
+}
+
+#guestLeaderboardTable th {
+  font-weight: bold;
+  background-color: #c0e0ff;
+}
+
+#guestLeaderboardTable tr:first-child {
+  background-color: #e6ffe6;
+}
+
 @media (max-width: 768px) {
   .guest-key {
     min-width: 28px;
@@ -350,6 +385,10 @@ footer {
 
   .guest-key-del {
     min-width: 60px;
+  }
+  
+  #guestLeaderboardContainer {
+    font-size: 14px;
   }
 }
 

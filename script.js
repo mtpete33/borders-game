@@ -197,13 +197,17 @@ $(document).ready(function() {
             
             // Store the score in localStorage
             try {
+                const yesterdayPuzzleId = getYesterdaysPuzzleId();
                 const guestScore = {
-                    puzzleId: getYesterdaysPuzzleId(),
+                    puzzleId: yesterdayPuzzleId,
                     time: elapsedTime,
                     date: new Date().toISOString(),
                     words: [userWord1, userWord2, userWord3, userWord4]
                 };
                 localStorage.setItem('guestScore', JSON.stringify(guestScore));
+                
+                // Display the leaderboard for this puzzle
+                displayGuestLeaderboard(yesterdayPuzzleId);
             } catch (e) {
                 console.error("Could not save score to localStorage:", e);
             }
@@ -300,6 +304,10 @@ $(document).ready(function() {
 
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
+        
+        // Display the leaderboard for yesterday's puzzle
+        const yesterdayPuzzleId = getYesterdaysPuzzleId();
+        displayGuestLeaderboard(yesterdayPuzzleId);
     });
     
     // Event handler for cancel button inside the guest modal
@@ -332,6 +340,65 @@ $(document).ready(function() {
         $('#signUpForm').hide();
         $('#loginForm').hide();
     });
+    
+    // Function to display the guest leaderboard
+    async function displayGuestLeaderboard(puzzleId) {
+        if (!puzzleId) return;
+        
+        try {
+            const statsRef = collection(window.db, "leaderboard");
+            const q = query(
+                statsRef,
+                where("puzzleId", "==", puzzleId),
+                where("hasCompleted", "==", true),
+                orderBy("time", "asc"),
+                limit(10)
+            );
+            
+            const querySnapshot = await getDocs(q);
+            const leaderboardData = [];
+            
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                if (!data.hasGivenUp) {
+                    leaderboardData.push(data);
+                }
+            });
+            
+            // Display the leaderboard
+            const leaderboardHTML = `
+                <h4>Yesterday's Puzzle Leaderboard</h4>
+                <table id="guestLeaderboardTable" class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${leaderboardData.map((entry, index) => `
+                            <tr>
+                                <td>${index + 1}${getOrdinalSuffix(index + 1)}</td>
+                                <td>${entry.username}</td>
+                                <td>${formatTime(entry.time)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            // Only render if we have data
+            if (leaderboardData.length > 0) {
+                $('#guestLeaderboardContainer').html(leaderboardHTML).show();
+            } else {
+                $('#guestLeaderboardContainer').html('<p>No leaderboard data available for this puzzle yet.</p>').show();
+            }
+        } catch (error) {
+            console.error("Error fetching guest leaderboard:", error);
+            $('#guestLeaderboardContainer').html('<p>Error loading leaderboard data.</p>').show();
+        }
+    }
     
     // Event listener for the guest Submit button
     $("#guestSubmitBtn").click(function() {
