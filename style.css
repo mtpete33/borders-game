@@ -389,7 +389,7 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 28px;
+    min-width: 30px;
     height: 45px;
     padding: 0 3px;
     /* font-size: 1rem; */
