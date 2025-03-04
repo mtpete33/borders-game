@@ -498,6 +498,10 @@ footer {
 #guestHelpBtn, #helpBtn {
   width: 29px;
   height: 29px;
+  min-width: 29px;
+  min-height: 29px;
+  max-width: 29px;
+  max-height: 29px;
   border-radius: 50%;
   background-color: black;
   color: white;
@@ -507,6 +511,10 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 #guestHelpBtn:hover, #helpBtn:hover {
