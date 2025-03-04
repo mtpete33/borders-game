@@ -1056,14 +1056,14 @@ $(document).ready(function() {
         $('#loginForm').hide();   // Hide the login form if it's visible
         // $('#playBtn').hide(); // Hide the play button if it's visible
         $('#username').focus();
-          $('#guestPlaySection').hide();
+          // $('#guestPlaySection').hide();
       });
       // Show the Log-In Form
       $('#logInBtn').click(function() {
         $('#loginForm').show();   // Show the login form
         $('#signUpForm').hide(); // Hide the sign-up form if it's visible
         $("#loginEmail").focus();
-        $('#guestPlaySection').hide();
+        // $('#guestPlaySection').hide();
       });
 
     // Convert all user inputs to uppercase

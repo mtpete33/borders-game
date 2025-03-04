@@ -389,7 +389,7 @@ footer {
 
 @media (max-width: 768px) {
   .guest-key {
-    min-width: 28px;
+    min-width: 26px;
     height: 45px;
     /* font-size: 1rem; */
   }
@@ -547,7 +547,7 @@ footer {
 }
 
 #haveAccountNotice {
-  font-size: 1.3em;
+  font-size: 18px;
 }
 
 #example {

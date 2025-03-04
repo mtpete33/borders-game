@@ -76,28 +76,42 @@
       <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 18px; height: 18px; margin-right: 8px;">
       Google Login
     </button>
+
+      <!-- Sign Up Form -->
+      <div id="signUpForm" style="display: none;" class="form-container">
+          <h2>Sign Up</h2>
+          <input type="text" id="username" placeholder="Username" required class="form-input">
+          <div id="usernameError" style="font-size: 14px; margin-top: -10px; margin-bottom: 10px;"></div>
+          <input type="email" id="email" placeholder="Email" class="form-input">
+          <input type="password" id="password" placeholder="Password" class="form-input">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-input">
+          <button id="signUpSubmitBtn" class="form-button">Sign Up</button>
+        <p id="haveAccountNotice">Already have an account? <a id="haveAccountSignIn" href="#">Sign in here.</a></p>
+      </div>
+
+    <!-- Log In Form -->
+    <div id="loginForm" class="form-container">
+        <h2>Log In</h2>
+        <input type="email" id="loginEmail" placeholder="Email" class="form-input">
+        <input type="password" id="loginPassword" placeholder="Password" class="form-input">
+        <button id="logInSubmitBtn" class="form-button">Log In with Email</button>
+        <p><a href="accountrecovery.html" style="font-size:18px;">Forgot your password?</a></p>
+
+       </div>
     
     <div id="guestPlaySection">
-      
       <button id="guestPlayBtn">Play Now</button>
       <p id="guestPlayInfo">Click Play Now to play yesterday's puzzle without signing up. Your score will not post to the leaderboard. To access today's puzzle and leaderboard functionality, create an account and sign in.</p>
     </div>
   </div>
 
   
-  
 <br>
 
-  <!-- Log In Form -->
-  <div id="loginForm" class="form-container">
-      <h2>Log In</h2>
-      <input type="email" id="loginEmail" placeholder="Email" class="form-input">
-      <input type="password" id="loginPassword" placeholder="Password" class="form-input">
-      <button id="logInSubmitBtn" class="form-button">Log In with Email</button>
-      <p><a href="accountrecovery.html" style="font-size:18px;">Forgot your password?</a></p>
 
 
-  </div>
+
+ 
   
   <div id="signupSuccess" style= "display: none;"></div>
   
@@ -207,18 +221,7 @@
 
   </div>
 
-  <!-- Sign Up Form -->
-  <div id="signUpForm" style="display: none;" class="form-container">
-      <h2>Sign Up</h2>
-      <input type="text" id="username" placeholder="Username" required class="form-input">
-      <div id="usernameError" style="font-size: 14px; margin-top: -10px; margin-bottom: 10px;"></div>
-      <input type="email" id="email" placeholder="Email" class="form-input">
-      <input type="password" id="password" placeholder="Password" class="form-input">
-      <input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-input">
-      <button id="signUpSubmitBtn" class="form-button">Sign Up</button>
-    <p id="haveAccountNotice">Already have an account? <a id="haveAccountSignIn" href="#">Sign in here.</a></p>
-  </div>
-<br>
+
 
   
   <!-- Leaderboard Element -->
