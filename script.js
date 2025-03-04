@@ -319,9 +319,15 @@ $(document).ready(function() {
         // Hide guest game board
         $('#guestGameBoard').hide();
         
-        // Show sign up form
-        $('#signUpForm').show();
-        $('#username').focus();
+        // Show landing page with all sign up/login options
+        $('#landingPage').show();
+        $('#googleLoginBtn').show();
+        $('#signUpBtn').show();
+        $('#logInBtn').show();
+        
+        // Make sure all forms are hidden
+        $('#signUpForm').hide();
+        $('#loginForm').hide();
     });
     
     // Event listener for the guest Submit button
