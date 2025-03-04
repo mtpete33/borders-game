@@ -472,7 +472,7 @@ footer {
   cursor: pointer;
 }
 
-#guestHelpBtn {
+#guestHelpBtn, #helpBtn {
   width: 29px;
   height: 29px;
   border-radius: 50%;
@@ -486,10 +486,10 @@ footer {
   justify-content: center;
 }
 
-#guestHelpBtn:hover {
+#guestHelpBtn:hover, #helpBtn:hover {
   background-color: #333;
 }
-#guestExampleImg {
+#guestExampleImg, #exampleImg {
   max-width:225px;
 }
 

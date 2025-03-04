@@ -102,8 +102,23 @@
   <div id="signupSuccess" style= "display: none;"></div>
   
   <div id="gameBoard" style="display: none;">
-    <!-- <h1><a href="https://bordersgame.replit.app/" style="text-decoration: none; color: inherit;">Borders</a></h1> -->
-    <h1>Borders</h1>
+    <div style="position: relative;">
+      <h1>Borders</h1>
+      <button id="helpBtn" style="position: absolute; top: 0; right: 0;" title="Help"><i class="fa-solid fa-circle-question"></i></button>
+    </div>
+    
+    <!-- Help Instructions Modal -->
+    <div id="instructionsModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>How to Play Borders</h3>
+        <p>Fill in the blank squares with letters to create four valid dictionary words across and down (like a crossword) connecting around the border of the grid.</p>
+        <p>Some letters are already filled in to help you get started.</p>
+        <p>Click Submit when you finish, or use Give Up to see the answers.</p>
+        <img id="exampleImg" src="images/bordersexample.jpg" alt="game example" style="max-width: 240px; margin: 10px auto;">
+      </div>
+    </div>
+    
   <div class="crossword">
       <input type="text" maxlength="1" id="cell-1" class="cell" autocomplete="off">
       <input type="text" maxlength="1" id="cell-2" class="cell" autocomplete="off" disabled>

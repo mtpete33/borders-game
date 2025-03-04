@@ -315,20 +315,24 @@ $(document).ready(function() {
         $("#guestGiveUpModal").hide();
     });
     
-    // Handle Guest Help button click
+    // Handle Help button clicks for both regular and guest modes
     $('#guestHelpBtn').click(function() {
         $("#guestInstructionsModal").show();
     });
     
+    $('#helpBtn').click(function() {
+        $("#instructionsModal").show();
+    });
+    
     // Close the instructions modal when clicking the X
     $('.close-modal').click(function() {
-        $("#guestInstructionsModal").hide();
+        $("#guestInstructionsModal, #instructionsModal").hide();
     });
     
     // Close the instructions modal when clicking outside of it
-    $("#guestInstructionsModal").click(function(event) {
+    $("#guestInstructionsModal, #instructionsModal").click(function(event) {
         if (event.target === this) {
-            $("#guestInstructionsModal").hide();
+            $(this).hide();
         }
     });
     
