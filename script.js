@@ -599,6 +599,8 @@ $(document).ready(function() {
                 const username = await getUserDetails(user.uid);
                 // currentUsername = userDetails.username || 'Unknown User';
                 displayLoggedInMessage(username);
+                $("#guestPlaySection").hide();
+                $("#manageFriendsBtn").show();
 
             } catch (error) {
                 console.error('Error fetching user details:', error.message);
@@ -740,6 +742,7 @@ $(document).ready(function() {
                 $("#signUpBtn").hide();
                 $("#googleLoginBtn").hide();
                 $("#logInBtn").hide();
+                $("#guestPlaySection").hide();
 
                 // Check if puzzle is already completed before showing Play button
                 decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
@@ -1032,12 +1035,14 @@ $(document).ready(function() {
         $('#loginForm').hide();   // Hide the login form if it's visible
         // $('#playBtn').hide(); // Hide the play button if it's visible
         $('#username').focus();
+          $('#guestPlaySection').hide();
       });
       // Show the Log-In Form
       $('#logInBtn').click(function() {
         $('#loginForm').show();   // Show the login form
         $('#signUpForm').hide(); // Hide the sign-up form if it's visible
         $("#loginEmail").focus();
+        $('#guestPlaySection').hide();
       });
 
     // Convert all user inputs to uppercase
@@ -1451,6 +1456,7 @@ $(document).ready(function() {
                     $("#signUpForm").hide();
                     $("#signUpBtn").hide();
                     $("#googleLoginBtn").hide();
+                    $("#guestPlaySection").hide();
                     // Proceed with showing the game or leaderboard
                     // Add additional logic if needed to transition to game/leaderboard
                 } else {
@@ -1848,7 +1854,7 @@ async function displayWinnersList(winnersList) {
         if (user && winner.uid && winner.uid !== user.uid && !friendUids.includes(winner.uid)) {
             const friendBtn = document.createElement('button');
             friendBtn.className = 'friend-btn';
-            friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
+            friendBtn.innerHTML = '<span style="color: #359235; font-size:20px;">+</span>';
             friendBtn.style.color = '#4CAF50';
             friendBtn.onclick = async () => {
                 await addFriend(winner.uid, winner.username);
@@ -2057,7 +2063,7 @@ async function getLeaderboard(date = new Date()) {
                     if (!isFriend) {
                         const friendBtn = document.createElement('button');
                         friendBtn.className = 'friend-btn';
-                        friendBtn.innerHTML = '<span style="color: #359235; font-size:18px;">+</span>';
+                        friendBtn.innerHTML = '<span style="color: #359235; font-size:20px;">+</span>';
                         friendBtn.style.color = '#4CAF50';
                         friendBtn.onclick = async () => {
                             await addFriend(entry.uid, entry.username);
