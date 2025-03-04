@@ -226,6 +226,18 @@ footer {
 #guestH1 {
   margin-top: -33px;
 }
+#guestHelpBtn, #helpBtn {
+  position: absolute;
+  top: 0; 
+  right: 5px;
+  background-color: white;
+  color: black;
+  width:25px;
+  height:25px;
+  border-radius: 50%;
+  border: .25px solid black;
+  padding: 2px;
+}
 
 #guestGameBoard {
   text-align: center;
@@ -522,16 +534,16 @@ footer {
 }
 
 #guestHelpBtn, #helpBtn {
-  width: 29px;
-  height: 29px;
-  min-width: 29px;
-  min-height: 29px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
   max-width: 29px;
   max-height: 29px;
-  border-radius: 50%;
+  border-radius: 15%;
   background-color: black;
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   border: none;
   cursor: pointer;
   display: flex;
