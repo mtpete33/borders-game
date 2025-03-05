@@ -770,7 +770,7 @@ $(document).ready(function() {
     }
 
     // Google Login Functionality
-    $('#googleLoginBtn').click(function() {
+    $('#googleLoginBtn, .google-login-btn').click(function() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then(async (result) => {
