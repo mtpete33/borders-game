@@ -68,87 +68,102 @@ $(document).ready(function() {
         $("#guestLeaderboardContainer").hide(); // Hide leaderboard if visible
     }
 
-    // Function to fetch yesterday's puzzle
+    // Function to fetch yesterday's puzzle - returns a Promise for better async handling
     async function fetchYesterdaysPuzzle() {
-        const yesterdayId = getYesterdaysPuzzleId().toString();
-        try {
-            const docRef = doc(window.db, "puzzles", yesterdayId);
-            const docSnap = await getDoc(docRef);
+        return new Promise(async (resolve, reject) => {
+            const yesterdayId = getYesterdaysPuzzleId().toString();
+            try {
+                const docRef = doc(window.db, "puzzles", yesterdayId);
+                const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                const puzzleData = docSnap.data();
-                guestPuzzleAnswers = {
-                    word1: puzzleData.word1,
-                    word2: puzzleData.word2,
-                    word3: puzzleData.word3,
-                    word4: puzzleData.word4
-                };
-                
-                // Update the game board with the puzzle data
-                // Word1: Top word
-                $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+                if (docSnap.exists()) {
+                    const puzzleData = docSnap.data();
+                    guestPuzzleAnswers = {
+                        word1: puzzleData.word1,
+                        word2: puzzleData.word2,
+                        word3: puzzleData.word3,
+                        word4: puzzleData.word4
+                    };
+                    
+                    // Update the game board with the puzzle data
+                    // Word1: Top word
+                    $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
 
-                // Word2: Right word (down)
-                $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
-                $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
+                    // Word2: Right word (down)
+                    $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+                    $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
 
-                // Word3: Bottom word (across)
-                $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
+                    // Word3: Bottom word (across)
+                    $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
 
-                // Word4: Left word (down)
-                $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
-                $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
-                
-                console.log("Yesterday's puzzle loaded:", yesterdayId);
-            } else {
-                // If yesterday's puzzle doesn't exist, fetch a random puzzle
-                await fetchRandomPuzzleForGuest();
-                console.log("No puzzle found for yesterday. Using random puzzle.");
+                    // Word4: Left word (down)
+                    $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+                    $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+                    
+                    console.log("Yesterday's puzzle loaded:", yesterdayId);
+                    resolve();
+                } else {
+                    // If yesterday's puzzle doesn't exist, fetch a random puzzle
+                    await fetchRandomPuzzleForGuest();
+                    console.log("No puzzle found for yesterday. Using random puzzle.");
+                    resolve();
+                }
+            } catch (error) {
+                console.error("Error retrieving yesterday's puzzle data:", error);
+                try {
+                    await fetchRandomPuzzleForGuest();
+                    toastr.error("Error retrieving puzzle data. Using random puzzle.");
+                    resolve(); // Still resolve even after error if we could fetch a random puzzle
+                } catch (fallbackError) {
+                    console.error("Failed to load fallback puzzle:", fallbackError);
+                    reject(fallbackError);
+                }
             }
-        } catch (error) {
-            console.error("Error retrieving yesterday's puzzle data:", error);
-            await fetchRandomPuzzleForGuest();
-            toastr.error("Error retrieving puzzle data. Using random puzzle.");
-        }
+        });
     }
 
-    // Function to fetch a random puzzle for guest play
+    // Function to fetch a random puzzle for guest play - returns a Promise
     async function fetchRandomPuzzleForGuest() {
-        const randomPuzzleId = Math.floor(Math.random() * 50) + 1; // Random ID between 1 and 50
-        try {
-            const docRef = doc(window.db, "puzzles", randomPuzzleId.toString());
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const puzzleData = docSnap.data();
-                guestPuzzleAnswers = {
-                    word1: puzzleData.word1,
-                    word2: puzzleData.word2,
-                    word3: puzzleData.word3,
-                    word4: puzzleData.word4,
-                };
-                
-                // Update the game board with the random puzzle data
-                // Word1: Top word
-                $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
+        return new Promise(async (resolve, reject) => {
+            const randomPuzzleId = Math.floor(Math.random() * 50) + 1; // Random ID between 1 and 50
+            try {
+                const docRef = doc(window.db, "puzzles", randomPuzzleId.toString());
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const puzzleData = docSnap.data();
+                    guestPuzzleAnswers = {
+                        word1: puzzleData.word1,
+                        word2: puzzleData.word2,
+                        word3: puzzleData.word3,
+                        word4: puzzleData.word4,
+                    };
+                    
+                    // Update the game board with the random puzzle data
+                    // Word1: Top word
+                    $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
 
-                // Word2: Right word (down)
-                $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
-                $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
+                    // Word2: Right word (down)
+                    $("#guest-cell-6").val(puzzleData.word2.charAt(1)).prop('disabled', true); // 2nd letter of word2
+                    $("#guest-cell-10").val(puzzleData.word2.charAt(3)).prop('disabled', true); // 4th letter of word2
 
-                // Word3: Bottom word (across)
-                $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
+                    // Word3: Bottom word (across)
+                    $("#guest-cell-13").val(puzzleData.word3.charAt(2)).prop('disabled', true); // 3rd letter of word3
 
-                // Word4: Left word (down)
-                $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
-                $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
-                
-            } else {
-                toastr.error("Failed to fetch a random puzzle.");
+                    // Word4: Left word (down)
+                    $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
+                    $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
+                    
+                    resolve();
+                } else {
+                    toastr.error("Failed to fetch a random puzzle.");
+                    reject(new Error("No puzzle document found"));
+                }
+            } catch (error) {
+                console.error("Error fetching random puzzle:", error);
+                toastr.error("Error fetching random puzzle.");
+                reject(error);
             }
-        } catch (error) {
-            console.error("Error fetching random puzzle:", error);
-            toastr.error("Error fetching random puzzle.");
-        }
+        });
     }
 
     // Function to validate the guest puzzle
@@ -268,8 +283,29 @@ $(document).ready(function() {
         guestIsProgrammaticChange = false;
     }
 
+    // Variable to track if page and resources are fully loaded
+    let isPageReady = false;
+    
+    // Set page ready flag when document is fully loaded
+    $(window).on('load', function() {
+        isPageReady = true;
+        // Enable the guest play button once page is fully loaded
+        $('#guestPlayBtn').prop('disabled', false).css('opacity', '1');
+    });
+    
+    // Initially disable the guest play button until page is loaded
+    $(document).ready(function() {
+        $('#guestPlayBtn').prop('disabled', true).css('opacity', '0.6');
+    });
+    
     // Handle Guest Play button click
     $('#guestPlayBtn').click(function() {
+        // If page isn't fully loaded, show message and prevent gameplay
+        if (!isPageReady) {
+            toastr.warning("Please wait for the page to fully load before starting the game.");
+            return;
+        }
+        
         // Reset the game board
         resetGuestGameBoard();
         
@@ -283,11 +319,17 @@ $(document).ready(function() {
         $('#guestGameBoard').show();
         
         // Fetch yesterday's puzzle
-        fetchYesterdaysPuzzle();
-        
-        // Initialize focus and start time
-        $("#guest-cell-1").focus();
-        guestStartTime = new Date();
+        fetchYesterdaysPuzzle()
+            .then(() => {
+                // Only initialize focus and start time after puzzle is loaded
+                $("#guest-cell-1").focus();
+                guestStartTime = new Date();
+                console.log("Guest puzzle loaded successfully");
+            })
+            .catch(error => {
+                console.error("Error loading guest puzzle:", error);
+                toastr.error("There was a problem loading the puzzle. Please try again.");
+            });
         
         console.log("Guest play button clicked - loading yesterday's puzzle");
     });
