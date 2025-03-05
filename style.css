@@ -33,7 +33,7 @@ h2 {
   background-color: white;
   color: black;
   padding: 9px 16px;
-  font-size: 16px;
+  font-size: 18px;
   border: 1.5px solid black;
   border-radius: 12px;
   cursor: pointer;
@@ -998,9 +998,9 @@ footer {
     border: 3px solid black;
 }
 
-.search-section {
+/* .search-section {
     margin-bottom: 20px;
-}
+} */
 
 .friend-search-input {
     width: 65%;
@@ -1227,7 +1227,7 @@ h1 {
   font-size: 17px;
 }
   #manageFriendsBtn {
-    font-size: 17px;
+    font-size: 18px;
   }
 
   #instructionsContent.show {
