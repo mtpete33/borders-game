@@ -1134,7 +1134,7 @@ $(document).ready(function() {
 
     // Validation function to check user's input against the dictionary
     function validatePuzzle() {
-        // Get only the focusable/editable cells
+        // Get only the regular puzzle's focusable cells by their specific IDs
         let focusableCellSelectors = focusableCells.map(id => `#${id}`).join(', ');
         let editableCells = $(focusableCellSelectors);
         
