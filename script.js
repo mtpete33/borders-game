@@ -196,12 +196,14 @@ $(document).ready(function() {
             $("#guest-virtual-keyboard").hide();
             
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
-            $("#guestSignUpCTA").show();
             
-            // Create and show Share button
+            // Create and show Share button right after result time
             const yesterdayPuzzleId = getYesterdaysPuzzleId();
             const shareButtonHTML = `<button id="guestShareBtn" class="form-button">Share</button>`;
-            $("#guestSignUpCTA").after(shareButtonHTML);
+            $("#guestResultTime").after(shareButtonHTML);
+            
+            // Show sign up CTA after the share button
+            $("#guestSignUpCTA").show();
             
             // Add click handler for Share button
             $("#guestShareBtn").click(async function() {
