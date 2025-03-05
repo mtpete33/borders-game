@@ -1134,12 +1134,13 @@ $(document).ready(function() {
 
     // Validation function to check user's input against the dictionary
     function validatePuzzle() {
-        // Get all input fields
-        let cells = $(".cell");
-
-        // Check if all input fields are filled
+        // Get only the focusable/editable cells
+        let focusableCellSelectors = focusableCells.map(id => `#${id}`).join(', ');
+        let editableCells = $(focusableCellSelectors);
+        
+        // Check if all editable input fields are filled
         let allFilled = true;
-        cells.each(function() {
+        editableCells.each(function() {
             if ($(this).val().trim() === '') {
                 allFilled = false;
                 return false; // Break loop on finding an empty field
