@@ -339,10 +339,12 @@ footer {
   transition: background-color 0.3s ease;
   margin: 0.5em auto;
   display: block;
+  animation: guestButtonPulse 2s infinite;
 }
 
 #guestSignUpBtn:hover {
   background-color: #d3d5d3;
+  animation: none;
 }
 
 #guestShareBtn {
@@ -944,6 +946,19 @@ footer {
 @keyframes swell {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); } /* Slightly increase size */
+}
+
+/* Pulse animation for guest signup button */
+@keyframes guestButtonPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+        background-color: #e8e8e8;
+    }
 }
 
 /* Friend button styles */
