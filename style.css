@@ -68,6 +68,7 @@ h2 {
   grid-gap: 0.75rem; /* Converted 12px to rem */
   justify-content: center;
   margin-top: 2.2rem; /* Converted 35px to rem */
+  margin-bottom: 15px;
 }
 
 .cell {
@@ -291,7 +292,7 @@ footer {
   background-color: white;
   color: black;
   padding: 9px 16px;
-  font-size: 16px;
+  font-size: 18px;
   border: 1.5px solid black;
   border-radius: 12px;
   cursor: pointer;
@@ -302,9 +303,10 @@ footer {
 
 #guestGiveUpBtn {
   width: 6.6em;
-  margin: 1.5em auto 0 auto;
+  margin: 1em auto 0 auto;
   background-color: #ffffff;
   padding: 7px 16px;
+  font-size: 18px;
 }
 
 #guestBackBtn {
@@ -324,7 +326,7 @@ footer {
 #guestSignUpCTA {
   font-size: 18px;
   margin-top: 1em;
-  margin-bottom: 1em;
+  margin-bottom: .5em;
 }
 
 #guestSignUpBtn {
@@ -410,7 +412,7 @@ footer {
 }
 
 #guestLeaderboardContainer {
-  max-width: 450px;
+  /* max-width: 450px; */
   margin: 20px auto;
   padding: 5px;
   background-color: #f9f9f9;
@@ -427,7 +429,7 @@ footer {
   width: 100%;
   border-collapse: collapse;
   margin-top: 5px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 #guestLeaderboardTable th, #guestLeaderboardTable td {
@@ -508,7 +510,7 @@ footer {
     grid-template-rows: repeat(5, 2.5rem);
     grid-gap: 1.5rem;
     margin-top: 1.5rem;
-    margin-bottom: 3em;
+    margin-bottom: 1em;
   }
 }
 
@@ -1089,6 +1091,7 @@ footer {
     background-color: black;
     color: white;
     margin: 0 auto;
+    font-size: 18px;
 }
 
 .close-btn:hover {
@@ -1116,7 +1119,7 @@ footer {
     grid-template-rows: repeat(5, 2.5rem);    /* Smaller rows for mobile */
     grid-gap: 1.5rem;
     margin-top: 1.5rem; /* Adjust margin for mobile */
-    margin-bottom: 3em;
+    
   }
 
   .cell {

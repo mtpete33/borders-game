@@ -2368,7 +2368,10 @@ $(document).on('click', '#manageFriendsBtn', async function() {
     const modalContent = $('<div>').addClass('modal-content friends-modal');
 
     // Add header
-    modalContent.append($('<h3>').text('Manage Friends'));
+    modalContent.append($('<h2>').css({
+        'font-family': 'Josefin Sans, sans-serif',
+        'margin-bottom': '15px'
+    }).text('Manage Friends'));
 
     // Add search section
     const searchSection = $('<div>').addClass('search-section');
@@ -2386,7 +2389,9 @@ $(document).on('click', '#manageFriendsBtn', async function() {
     // Add current friends section
     const friendsSection = $('<div>').addClass('friends-section');
     const friendsList = $('<div>').addClass('friends-list');
-    const friendsHeader = $('<h4>').text('Your Friends');
+    const friendsHeader = $('<h3>').css({
+        'margin-top': '0'
+    }).text('Your Friends');
     friendsSection.append(friendsHeader, friendsList);
 
     // Add close button
