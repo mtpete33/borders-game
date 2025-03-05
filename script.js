@@ -337,6 +337,8 @@ $(document).ready(function() {
 
         $("#guest-virtual-keyboard").hide();
 
+        $("#guestSignUpCTA").show();
+
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
         
@@ -1227,7 +1229,7 @@ $(document).ready(function() {
                     console.warn('Web Share API is not supported in this browser.');
                 }
             } else {
-                $("#signUpCTA").css('display', 'block');
+                // $("#signUpCTA").css('display', 'block');
                 getLeaderboard();
                 // console.error('User UID is missing. Could not store player stats.');
             }
