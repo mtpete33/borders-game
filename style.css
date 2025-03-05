@@ -207,6 +207,37 @@ footer {
   line-height: 1.4;
 }
 
+#guestConfirmGiveUpBtn, #guestCancelGiveUpBtn {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: white;
+  color: black;
+  padding: 9px 16px;
+  font-size: 16px;
+  border: 1.5px solid black;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0.5em 0.5em;
+  display: inline-block;
+}
+
+#guestConfirmGiveUpBtn:hover, #guestCancelGiveUpBtn:hover {
+  background-color: #d3d5d3;
+  color: black;
+}
+
+#guestConfirmGiveUpBtn {
+  background-color: #ff4444;
+  color: white;
+  border-color: #ff4444;
+}
+
+#guestConfirmGiveUpBtn:hover {
+  background-color: #ff6666;
+  color: white;
+  border-color: #ff6666;
+}
+
 #guestPlayBtn {
   font-family: "Josefin Sans", sans-serif;
   background-color: black;
