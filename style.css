@@ -248,35 +248,11 @@ footer {
   border: 1.5px solid black;
   border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  position: relative;
+  transition: background-color 0.3s ease;
 }
 
-#guestPlayBtn:hover:not(:disabled) {
+#guestPlayBtn:hover {
   background-color: #d3d5d3;
-}
-
-#guestPlayBtn:disabled {
-  cursor: not-allowed;
-}
-
-/* Loading state indicator */
-#guestPlayBtn.loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: calc(50% - 8px);
-  right: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  border-top-color: #ffffff;
-  animation: spin 1s infinite linear;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 #guestH1 {
   margin-top: -33px;
