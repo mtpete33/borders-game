@@ -1134,18 +1134,18 @@ $(document).ready(function() {
 
     // Validation function to check user's input against the dictionary
     function validatePuzzle() {
-        // Get only the regular puzzle's focusable cells by their specific IDs
-        let focusableCellSelectors = focusableCells.map(id => `#${id}`).join(', ');
-        let editableCells = $(focusableCellSelectors);
+        // Explicitly specify the IDs of editable cells
+        let editableCellIds = ["cell-1", "cell-3", "cell-4", "cell-7", "cell-8", "cell-11", "cell-12", "cell-14"];
+        let editableCells = editableCellIds.map(id => $(`#${id}`));
         
         // Check if all editable input fields are filled
         let allFilled = true;
-        editableCells.each(function() {
-            if ($(this).val().trim() === '') {
+        for (let i = 0; i < editableCells.length; i++) {
+            if (editableCells[i].val().trim() === '') {
                 allFilled = false;
-                return false; // Break loop on finding an empty field
+                break; // Break loop on finding an empty field
             }
-        });
+        }
 
         if (!allFilled) {
             toastr.warning("Please fill in all letters before submitting.");
