@@ -596,15 +596,14 @@ $(document).ready(function() {
 
     $('#playBtn').hide();
 
+    // $('#instructionsBtn').click(function() {
+    //     const content = $('#instructionsContent');
+    //     content.toggleClass('show');
+    //     content.slideToggle(300);
+    // });
+
     $('#instructionsBtn').click(function() {
-        // For the landing page instructions, toggle the content div
-        const content = $('#instructionsContent');
-        content.toggleClass('show');
-        
-        // If we're on the game board, show the modal instead
-        if ($('#gameBoard').is(':visible')) {
-            $("#instructionsModal").show();
-        }
+        $("#instructionsModal").show();
     });
     
     // Filter button handlers
