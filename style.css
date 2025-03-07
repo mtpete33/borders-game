@@ -44,9 +44,6 @@ h2 {
 #instructionsBtn:hover {
   background-color: #d3d5d3;
 }
-#instructionsModal {
-  z-index: 1499;
-}
 
 #instructionsContent {
   max-height: 0;
