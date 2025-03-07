@@ -597,6 +597,10 @@ $(document).ready(function() {
     $('#playBtn').hide();
 
     $('#instructionsBtn').click(function() {
+        // Show the modal with instructions
+        $("#instructionsModal").show();
+        
+        // This is kept for backward compatibility
         const content = $('#instructionsContent');
         content.toggleClass('show');
         // content.slideToggle(300);
