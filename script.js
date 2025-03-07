@@ -597,10 +597,12 @@ $(document).ready(function() {
     $('#playBtn').hide();
 
     $('#instructionsBtn').click(function() {
-        const content = $('#instructionsContent');
-        content.toggleClass('show');
-        content.slideToggle(300);
+        $("#instructionsModal").show();
+        // const content = $('#instructionsContent');
+        // content.toggleClass('show');
+        // content.slideToggle(300);
     });
+    
     // Filter button handlers
     $('.filter-btn').click(function() {
         $('.filter-btn').removeClass('active');
