@@ -597,9 +597,8 @@ $(document).ready(function() {
     $('#playBtn').hide();
 
     $('#instructionsBtn').click(function() {
-        $("#instructionsModal").show();
-        // const content = $('#instructionsContent');
-        // content.toggleClass('show');
+        const content = $('#instructionsContent');
+        content.toggleClass('show');
         // content.slideToggle(300);
     });
     
