@@ -204,7 +204,7 @@ footer {
 
 #guestPlayInfo {
   font-size: .7em;
-  margin-bottom: 1em;
+  margin: 10px 0 1em 0;
   line-height: 1.4;
 }
 
@@ -325,8 +325,8 @@ footer {
 
 #guestSignUpCTA {
   font-size: 18px;
-  margin-top: 1em;
-  margin-bottom: .5em;
+  margin-top: .5em;
+  margin-bottom: .7em;
 }
 
 #guestSignUpBtn {
@@ -339,9 +339,9 @@ footer {
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 0.5em auto;
+  margin: 0.8em auto 0 auto;
   display: block;
-  animation: guestButtonPulse 2s infinite;
+  animation: guestButtonPulse 1.6s infinite;
 }
 
 #guestSignUpBtn:hover {
@@ -512,12 +512,15 @@ footer {
     margin-top: 1.5rem;
     margin-bottom: 1em;
   }
+  #guestPlayInfo {
+    max-width: 242px;
+    margin: 10px auto 20px auto;
+  }
 }
+
+
 
 /* Friends or Global Filters*/
-#friendsOrGlobal {
-
-}
 #friendsFilterBtn, #globalFilterBtn {
   font-family: "Josefin Sans", sans-serif;
   background-color: white;
@@ -553,7 +556,8 @@ footer {
   border-radius: 8px;
   text-align: center;
   position: relative;
-  max-width: 83%;
+  width:73%;
+  max-width: 440px;
   margin: 0 auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 1001;

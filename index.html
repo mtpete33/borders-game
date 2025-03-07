@@ -47,7 +47,6 @@
   <div id="normalContent">
   
   <div id="landingPage" style="display: block;">
-    <!-- <h1><a href="https://bordersgame.replit.app" class="title-link">Borders</a></h1> -->
     <h1>Borders</h1>
     <button id="instructionsBtn">Instructions</button>
     <div id="instructionsContent" style="display: none;">
@@ -104,7 +103,7 @@
     
     <div id="guestPlaySection">
       <button id="guestPlayBtn">Play Now</button>
-      <p id="guestPlayInfo">Play yesterday's puzzle without needing to sign up.</p>
+      <p id="guestPlayInfo">Play yesterday's puzzle without needing to sign up. To access today's puzzle along with other features like leaderboards and following friends' scores, create an account above and log in.</p>
     </div>
   </div>
 
@@ -132,6 +131,7 @@
         <p>Fill in the blank squares with letters to create four valid dictionary words across and down (like a crossword) connecting around the border of the grid.</p>
         <p>Some letters are already filled in.</p>
         <p>Click Submit when you finish, or use Give Up to see the answers.</p>
+        <p>There is no clock displayed on the game page, but you are being timed, so solve as quickly as you can!</p>
         <img id="exampleImg" src="images/bordersexample.jpg" alt="game example" style="max-width: 240px; margin: 10px auto;">
       </div>
     </div>
@@ -242,6 +242,7 @@
         <p>Fill in the blank squares with letters to create four valid dictionary words across and down (like a crossword) connecting around the border of the grid.</p>
         <p>Some letters are already filled in.</p>
         <p>Click Submit when you finish, or use Give Up to see the answers.</p>
+        <p>There is no clock displayed on the game page, but you are being timed, so solve as quickly as you can!</p>
         <img id="guestExampleImg" src="images/bordersexample.jpg" alt="game example" style="max-width: 240px; margin: 10px auto;">
       </div>
     </div>
@@ -272,7 +273,7 @@
       <input type="text" maxlength="1" id="guest-cell-13" class="cell guest-filled-cell" autocomplete="off" disabled>
       <input type="text" maxlength="1" id="guest-cell-14" class="cell" autocomplete="off">
     </div>
-    <!-- <h5 style="margin:5px 0;">You are playing yesterday's puzzle as Guest.</h5> -->
+    <h5 style="margin:5px 0;">Playing yesterday's puzzle as guest.</h5>
     <!-- Virtual Keyboard for Guest -->
     <div id="guest-virtual-keyboard" class="keyboard-container">
         <div class="keyboard-row">
@@ -315,7 +316,7 @@
     <div id="guestResultTime" style="display: none;"></div>
     
     <div id="guestSignUpCTA" style="display: none;">
-      Create an account to play today's puzzle, track your daily scores and follow your friends scores, and be eligible to get your time on the leaderboard!
+      Create an account to play today's puzzle, track your daily scores, follow your friends scores, and be eligible to get your time on the leaderboard!
       <button id="guestSignUpBtn" class="form-button">Sign Up Now</button>
     </div>
     
@@ -442,8 +443,11 @@
 
       document.addEventListener('DOMContentLoaded', () => {
         if (isInAppBrowser()) {
-          document.getElementById('inAppWarning').style.display = 'block';
-          document.getElementById('normalContent').style.display = 'none';
+          // document.getElementById('inAppWarning').style.display = 'block';
+          // document.getElementById('normalContent').style.display = 'none';
+          
+          // Show alert message for in-app browser
+          alert("You are using Facebook/Instagram's in-app browser. Google login has issues in this browser. You can still Play Now without signing in. If you have issues logging in, click the 3 dots, and 'Open in external browser'.");
         }
       });
     </script>
