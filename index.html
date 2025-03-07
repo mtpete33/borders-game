@@ -31,6 +31,23 @@
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "q7rg5jr2z0");
   </script>
+  <script>
+    // Prevent text selection/copy-paste popups on mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add event listeners to all cell inputs to prevent context menu
+      document.querySelectorAll('.cell').forEach(function(cell) {
+        cell.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          return false;
+        });
+        
+        // For Android Chrome issue specifically
+        cell.addEventListener('touchstart', function() {
+          this.focus();
+        });
+      });
+    });
+  </script>
   <script src="https://kit.fontawesome.com/b8cfe60a23.js" crossorigin="anonymous"></script>
 
 </head>

@@ -1411,6 +1411,13 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).select();
     });
+    
+    // Handle touch events for mobile to prevent selection UI
+    $('.cell, .guest-cell').on('touchstart touchend', function(e) {
+        e.preventDefault();
+        $(this).focus();
+        return false;
+    });
 
 
 

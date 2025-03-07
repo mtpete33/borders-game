@@ -97,6 +97,12 @@ h2 {
 
 .cell {
   -webkit-text-fill-color: currentcolor;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* Prevents the callout toolbar from appearing */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on some browsers */
 }
 
 .cell::selection {
