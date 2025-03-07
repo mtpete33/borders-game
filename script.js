@@ -597,13 +597,14 @@ $(document).ready(function() {
     $('#playBtn').hide();
 
     $('#instructionsBtn').click(function() {
-        // Show the modal with instructions
-        $("#instructionsModal").show();
-        
-        // This is kept for backward compatibility
+        // For the landing page instructions, toggle the content div
         const content = $('#instructionsContent');
         content.toggleClass('show');
-        // content.slideToggle(300);
+        
+        // If we're on the game board, show the modal instead
+        if ($('#gameBoard').is(':visible')) {
+            $("#instructionsModal").show();
+        }
     });
     
     // Filter button handlers
