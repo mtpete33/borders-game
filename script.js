@@ -603,7 +603,9 @@ $(document).ready(function() {
     // });
 
     $('#instructionsBtn').click(function() {
-        $("#instructionsModal").show();
+        const content = $('#instructionsContent');
+        content.toggleClass('show');
+        content.slideToggle(300);
     });
     
     // Filter button handlers
