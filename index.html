@@ -457,7 +457,7 @@
 
       function isInAppBrowser() {
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
+        return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV") || ua.includes("FB_IAB");
       }
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -465,8 +465,10 @@
           // document.getElementById('inAppWarning').style.display = 'block';
           // document.getElementById('normalContent').style.display = 'none';
           
-          // Show alert message for in-app browser
-          alert("You are using Facebook/Instagram's in-app browser. Google login has issues in this browser. You can still Play Now without signing in. If you have issues logging in, click the 3 dots, and 'Open in external browser'.");
+          // Show alert message for in-app browser with slight delay to ensure it works in Facebook
+          setTimeout(function() {
+            alert("You are using Facebook/Instagram's in-app browser. Google login has issues in this browser. You can still Play Now without signing in. If you have issues logging in, click the 3 dots, and 'Open in external browser'.");
+          }, 500);
         }
       });
     </script>
