@@ -2407,7 +2407,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
     const friendsList = $('<div>').addClass('friends-list');
     const friendsHeader = $('<h3>').css({
         'margin-top': '0'
-    }).text('Your Friends');
+    }).text('Friends You Follow');
     friendsSection.append(friendsHeader, friendsList);
 
     // Add close button
@@ -2424,7 +2424,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
     try {
         const friends = await getFriendsList();
         if (friends.length === 0) {
-            friendsList.append($('<p>').text("You haven't added any friends yet."));
+            friendsList.append($('<p>').text("You haven't followed any friends yet."));
         } else {
             friends.forEach(friend => {
                 const friendElement = $('<div>').addClass('friend-item');
