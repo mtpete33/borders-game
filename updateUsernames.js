@@ -10,13 +10,13 @@ admin.initializeApp({
 const db = admin.firestore();
 
 async function updateHistoricalUsernames() {
-  const oldUsername = 'lharwick';
+  const uid = 'llgOlAN03FMBZfZjqDO57hkSuZV2';
   const newUsername = 'ianharwick';
   
   try {
-    // Get all leaderboard entries with old username
+    // Get all leaderboard entries with this user's UID
     const leaderboardRef = db.collection('leaderboard');
-    const snapshot = await leaderboardRef.where('username', '==', oldUsername).get();
+    const snapshot = await leaderboardRef.where('uid', '==', uid).get();
     
     if (snapshot.empty) {
       console.log('No matching documents.');
