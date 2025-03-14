@@ -10,7 +10,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 async function updateHistoricalUsernames() {
-  const oldUsername = 'Iharwick';
+  const oldUsername = 'lharwick';
   const newUsername = 'ianharwick';
   
   try {
