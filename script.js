@@ -1627,7 +1627,14 @@ $(document).ready(function() {
     })
 
 
-    async function showSolvedPuzzle() {
+    async async function showSolvedPuzzle() {
+        const stats = await getUserStatistics();
+        if (stats) {
+            $('#gamesPlayedStat').text(stats.gamesPlayed);
+            $('#winPercentageStat').text(stats.winPercentage + '%');
+            $('#bestRankStat').text(stats.bestRank);
+            $('#bestTimeStat').text(stats.bestTime);
+        }
         $(".stats-modal").css('display', 'block');
         
         $("#landingPage").hide();
