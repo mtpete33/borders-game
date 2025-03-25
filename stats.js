@@ -1,5 +1,5 @@
 // Import Firebase functions
-import { collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { collection, query, where, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 async function getUserStatistics() {
   const user = auth.currentUser;
@@ -34,20 +34,26 @@ async function getUserStatistics() {
     // Find best rank by looking at smallest time difference from first place
     let bestRank = { rank: Infinity, count: 0 };
     if (entries.length > 0) {
-      const puzzlesWithFirstPlaceQuery = query(
-        statsRef,
-        where("puzzleId", "in", entries.map(e => e.puzzleId)),
-        where("hasCompleted", "==", true),
-        orderBy("time", "asc"),
-        limit(1)
-      );
-      
-      const firstPlaceSnapshot = await getDocs(puzzlesWithFirstPlaceQuery);
-      if (!firstPlaceSnapshot.empty) {
-        const firstPlaceTime = firstPlaceSnapshot.docs[0].data().time;
-        const userTimes = entries.map(e => e.time);
-        const closestTime = Math.min(...userTimes.map(t => Math.abs(t - firstPlaceTime)));
-        bestRank = { rank: Math.ceil(closestTime / 10) + 1, count: 1 };
+      for (const entry of entries) {
+        const puzzlesWithFirstPlaceQuery = query(
+          statsRef,
+          where("puzzleId", "==", entry.puzzleId),
+          where("hasCompleted", "==", true),
+          orderBy("time", "asc"),
+          limit(1)
+        );
+
+        const firstPlaceSnapshot = await getDocs(puzzlesWithFirstPlaceQuery);
+        if (!firstPlaceSnapshot.empty) {
+          const firstPlaceTime = firstPlaceSnapshot.docs[0].data().time;
+          const timeDiff = Math.abs(entry.time - firstPlaceTime);
+          const rank = Math.ceil(timeDiff / 10) + 1;
+          if (rank < bestRank.rank) {
+            bestRank = { rank, count: 1 };
+          } else if (rank === bestRank.rank) {
+            bestRank.count++;
+          }
+        }
       }
     }
 
