@@ -614,7 +614,7 @@ $(document).ready(function() {
         const id = this.id;
         const mainId = id.replace('stats-', '');
         
-        if (mainId === 'todayFilter') {
+        if (mainId === 'stats-todayFilter') {
             $('#leaderboardDate, #stats-leaderboardDate').show();
             getLeaderboard(new Date());
         } else if (mainId === 'bestTimeFilter') {
@@ -625,7 +625,7 @@ $(document).ready(function() {
     });
 
     // Friends/Global filter click handlers for both views
-    $('#friendsFilterBtn, #globalFilterBtn, #stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
+    $('#stats-friendsFilterBtn, #stats-globalFilterBtn, #stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
         const isStatsModal = this.id.startsWith('stats-');
         const prefix = isStatsModal ? 'stats-' : '';
         
@@ -635,9 +635,9 @@ $(document).ready(function() {
         const activeFilter = $(`.${isStatsModal ? 'stats-filter-btn' : 'filter-btn'}.active`).attr('id');
         const mainActiveFilter = activeFilter.replace('stats-', '');
 
-        if (mainActiveFilter === 'bestTimeFilter') {
+        if (mainActiveFilter === 'stats-bestTimeFilter') {
             getBestTimes();
-        } else if (mainActiveFilter === 'mostWinsFilter') {
+        } else if (mainActiveFilter === 'stats-mostWinsFilter') {
             getMostWins();
         } else {
             getLeaderboard(currentLeaderboardDate);
@@ -1851,7 +1851,7 @@ async function getBestTimes() {
 // Function to get users with most wins
 async function getMostWins() {
     const statsRef = collection(window.db, "leaderboard");
-    const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+    const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
     try {
         // Get all completed entries
         const baseQuery = query(statsRef, where("hasCompleted", "==", true));
@@ -2144,7 +2144,7 @@ async function getLeaderboard(date = new Date()) {
 
         const user = auth.currentUser;
         const friendsList = user ? await getFriendsList() : [];
-        const isShowingFriends = $('#friendsFilterBtn').hasClass('active');
+        const isShowingFriends = $('#stats-friendsFilterBtn').hasClass('active');
 
         // Create table if it doesn't exist in target element
         let table = targetElement.querySelector('table');

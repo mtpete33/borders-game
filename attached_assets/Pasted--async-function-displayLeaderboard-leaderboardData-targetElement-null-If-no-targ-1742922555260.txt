@@ -1,0 +1,103 @@
+    async function displayLeaderboard(leaderboardData, targetElement = null) {
+        // If no target specified, update both locations
+        if (!targetElement) {
+            const leaderboardDiv = document.getElementById('leaderboard');
+            leaderboardDiv.style.display = 'block';
+            updateNavigationButtons();
+            // Also update stats modal leaderboard
+            displayLeaderboard(leaderboardData, document.getElementById('stats-leaderboard'));
+            return;
+        }
+
+        const user = auth.currentUser;
+        const friendsList = user ? await getFriendsList() : [];
+        const isShowingFriends = $('#stats-friendsFilterBtn').hasClass('active');
+
+        // Create table if it doesn't exist in target element
+        let table = targetElement.querySelector('table');
+        if (!table) {
+            table = document.createElement('table');
+            table.className = 'leaderboard-table';
+            targetElement.appendChild(table);
+        }
+        const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
+        const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
+
+        // Determine which view is active
+        const activeFilter = $('.filter-btn.active').attr('id');
+
+        // Set appropriate headers based on active filter
+        if (activeFilter === 'mostWinsFilter') {
+            thead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Wins</th>
+                </tr>
+            `;
+        } else {
+            thead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Puzzle #</th>
+                    <th>Answers</th>
+                </tr>
+            `;
+        }
+
+        tbody.innerHTML = '';
+
+        // Filter out entries with undefined username
+        const validEntries = leaderboardData.filter(entry => entry.username !== 'undefined' && entry.username !== undefined);
+
+        validEntries.forEach((entry, index) => {
+            const row = tbody.insertRow();
+            if (activeFilter === 'mostWinsFilter') {
+                const rankCell = row.insertCell(0);
+                const usernameCell = row.insertCell(1);
+                const winsCell = row.insertCell(2);
+
+                rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
+                usernameCell.textContent = entry.username;
+                winsCell.textContent = entry.wins;
+            } else {
+                const rankCell = row.insertCell(0);
+                const usernameCell = row.insertCell(1);
+                const timeCell = row.insertCell(2);
+                const dateCell = row.insertCell(3);
+                const puzzleCell = row.insertCell(4);
+                const wordsCell = row.insertCell(5);
+
+                const formattedTime = formatTime(entry.time);
+
+                rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
+                // Create username cell with add/remove friend button
+                usernameCell.innerHTML = entry.username;
+                if (user && entry.uid !== user.uid) {
+                    const isFriend = friendsList.some(friend => friend.uid === entry.uid);
+                    if (!isFriend) {
+                        const friendBtn = document.createElement('button');
+                        friendBtn.className = 'friend-btn';
+                        friendBtn.innerHTML = '<span style="color: #359235; font-size:20px;">+</span>';
+                        friendBtn.style.color = '#4CAF50';
+                        friendBtn.onclick = async () => {
+                            await addFriend(entry.uid, entry.username);
+                            // Refresh the leaderboard
+                            getLeaderboard(currentLeaderboardDate);
+                        };
+                        usernameCell.appendChild(friendBtn);
+                    }
+                }
+                timeCell.textContent = formattedTime;
+
+                const dateObj = new Date(entry.date);
+                const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+                dateCell.textContent = formattedDate;
+                puzzleCell.textContent = entry.puzzleId;
+                wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
+            }
+        });
+    }
