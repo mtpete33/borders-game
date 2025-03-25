@@ -12,6 +12,7 @@
       border: 2px solid black;
       font-family: "Agdasima", sans-serif;
       overflow-y: auto;
+
     }
 
     .stats-modal-header {
@@ -22,7 +23,7 @@
     .stats-modal-header h2 {
       margin: 0;
       font-size: 24px;
-      text-align: left;
+      text-align: center;
     }
 
     .stats-numbers {
