@@ -670,7 +670,7 @@ $(document).ready(function() {
                 // currentUsername = userDetails.username || 'Unknown User';
                 displayLoggedInMessage(username);
                 $("#guestPlaySection").hide();
-                $("#manageFriendsBtn").show();
+                // $("#manageFriendsBtn").show();
 
             } catch (error) {
                 console.error('Error fetching user details:', error.message);
@@ -733,13 +733,14 @@ $(document).ready(function() {
 
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
-                    $("#manageFriendsBtn").show();
+                    // $("#manageFriendsBtn").show();
                     
                     if (data.hasGivenUp) {
                         await fetchTodaysPuzzle();
                     }
                     return; // Exit early to prevent Play button from showing
                 }
+                
             }
             // Only show Play button if puzzle not completed/given up today
             $("#playBtn").show();
@@ -1488,7 +1489,7 @@ $(document).ready(function() {
           $('#logInBtn').show();
 
           $('#playBtn').show();
-          $("#manageFriendsBtn").show();
+          // $("#manageFriendsBtn").show();
 
 
 
@@ -1543,7 +1544,7 @@ $(document).ready(function() {
                     // Show success and hide login-related UI elements
                     toastr.success("Logged in successfully!");
                     $("#playBtn").show();
-                    $("#manageFriendsBtn").show();
+                    // $("#manageFriendsBtn").show();
                     $("#signupSuccess").hide();
                     $("#loginForm").hide();
                     $("#logInBtn").hide();
@@ -1794,7 +1795,7 @@ $(document).ready(function() {
     // Function to get all-time best times
 async function getBestTimes() {
     const statsRef = collection(window.db, "leaderboard");
-    const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+    const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
     let q;
 
     if (showFriendsOnly && auth.currentUser) {
@@ -1984,7 +1985,7 @@ async function getLeaderboard(date = new Date()) {
         currentLeaderboardDate = date;
         const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+        const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
 
         // Update the displayed date
         const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
@@ -2101,7 +2102,7 @@ async function getLeaderboard(date = new Date()) {
             $('#logInBtn').hide();
             $('#googleLoginBtn').hide();
             $('#guestPlaySection').hide();
-            $("#manageFriendsBtn").show();
+            // $("#manageFriendsBtn").show();
             // Check if puzzle is already completed before showing Play button
             decideButtonDisplay().catch(error => console.error("Error checking puzzle completion:", error));
         } else {
