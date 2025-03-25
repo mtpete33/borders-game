@@ -625,33 +625,29 @@ $(document).ready(function() {
     });
 
     // Friends/Global filter click handlers for both views
-    $('#stats-friendsFilterBtn, #stats-globalFilterBtn, #stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
-        const isStatsModal = this.id.startsWith('stats-');
-        const prefix = isStatsModal ? 'stats-' : '';
-        
-        $(`#${prefix}friendsFilterBtn, #${prefix}globalFilterBtn`).removeClass('active');
+    $('#stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
+        $('#stats-friendsFilterBtn, #stats-globalFilterBtn').removeClass('active');
         $(this).addClass('active');
         
-        const activeFilter = $(`.${isStatsModal ? 'stats-filter-btn' : 'filter-btn'}.active`).attr('id');
-        const mainActiveFilter = activeFilter.replace('stats-', '');
+        const activeFilter = $('.stats-filter-btn.active').attr('id');
 
-        if (mainActiveFilter === 'stats-bestTimeFilter') {
+        if (activeFilter === 'stats-bestTimeFilter') {
             getBestTimes();
-        } else if (mainActiveFilter === 'stats-mostWinsFilter') {
+        } else if (activeFilter === 'stats-mostWinsFilter') {
             getMostWins();
         } else {
             getLeaderboard(currentLeaderboardDate);
         }
     });
 
-    // Navigation button handlers for both views
-    $('#prevDay, #stats-prevDay').click(function() {
+    // Navigation button handlers
+    $('#stats-prevDay').click(function() {
         const prevDay = new Date(currentLeaderboardDate);
         prevDay.setDate(prevDay.getDate() - 1);
         getLeaderboard(prevDay);
     });
 
-    $('#nextDay, #stats-nextDay').click(function() {
+    $('#stats-nextDay').click(function() {
         const nextDay = new Date(currentLeaderboardDate);
         nextDay.setDate(nextDay.getDate() + 1);
         const today = new Date();
