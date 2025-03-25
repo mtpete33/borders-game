@@ -2131,17 +2131,11 @@ async function getLeaderboard(date = new Date()) {
     }
 
 
-    async function displayLeaderboard(leaderboardData, targetElement = null) {
-        // If no target specified, update both locations
-        if (!targetElement) {
-            const leaderboardDiv = document.getElementById('leaderboard');
-            leaderboardDiv.style.display = 'block';
-            updateNavigationButtons();
-            // Also update stats modal leaderboard
-            displayLeaderboard(leaderboardData, document.getElementById('stats-leaderboard'));
-            return;
-        }
-
+    async function displayLeaderboard(leaderboardData) {
+        const targetElement = document.getElementById('stats-leaderboard');
+        if (!targetElement) return;
+        
+        updateNavigationButtons();
         const user = auth.currentUser;
         const friendsList = user ? await getFriendsList() : [];
         const isShowingFriends = $('#stats-friendsFilterBtn').hasClass('active');
