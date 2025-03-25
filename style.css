@@ -42,7 +42,7 @@ h2 {
 }
 
 #instructionsBtn:hover {
-  background-color: #d3d5d3;
+  background-color: #e3e3e3a1;
 }
 
 #instructionsContent {
@@ -189,7 +189,7 @@ footer {
 }
 
 #submitBtn:hover, #logInBtn:hover, #logInSubmitBtn:hover, #playBtn:hover, #signUpBtn:hover, #signUpSubmitBtn:hover, #viewLeaderboardBtn:hover, #shareBtn:hover, #giveUpBtn:hover, #guestGiveUpBtn:hover, #confirmGiveUpBtn:hover, #cancelGiveUpBtn:hover, #viewSolvedBtn:hover, #manageFriendsBtn:hover, #backToHomeBtn:hover  {
-  background-color: #d3d5d3;
+  background-color: #e3e3e3a1;
   color: black;
 }
 
@@ -229,7 +229,7 @@ footer {
 }
 
 #guestConfirmGiveUpBtn:hover, #guestCancelGiveUpBtn:hover {
-  background-color: #d3d5d3;
+  background-color: #e3e3e3a1;
   color: black;
 }
 
@@ -259,7 +259,7 @@ footer {
 }
 
 #guestPlayBtn:hover {
-  background-color: #d3d5d3;
+  background-color: #2d2d2d;
 }
 #guestH1 {
   margin-top: -33px;
@@ -622,7 +622,7 @@ footer {
 }
 
 #googleLoginBtn:hover {
-  background-color: #d3d5d3;
+  background-color: #e3e3e3a1;
 }
 
 #googleLoginBtn img {
@@ -840,6 +840,12 @@ footer {
   margin: 0 auto;
 } */
 
+footer a {
+  color: black;
+}
+footer a:visited {
+  color: black;
+}
 .leaderboard-header {
   display: flex;
   align-items: center;
