@@ -13,11 +13,17 @@ async function getUserStatistics() {
       where("hasCompleted", "==", true)
     );
 
+    // Get all user entries in one query
     const querySnapshot = await getDocs(userEntriesQuery);
     const entries = [];
-    querySnapshot.forEach(doc => entries.push(doc.data()));
+    const puzzleTimeMap = new Map();
+    querySnapshot.forEach(doc => {
+      const data = doc.data();
+      entries.push(data);
+      puzzleTimeMap.set(data.puzzleId, data.time);
+    });
 
-    // Calculate total games including non-completed ones
+    // Get total games count
     const allGamesQuery = query(statsRef, where("uid", "==", user.uid));
     const allGamesSnapshot = await getDocs(allGamesQuery);
     const totalGames = allGamesSnapshot.size;
@@ -31,29 +37,45 @@ async function getUserStatistics() {
       Math.min(...entries.map(entry => entry.time)) : 
       null;
 
-    // Find best rank by looking at smallest time difference from first place
+    // Get all first place times for user's puzzles in one batch query
+    const puzzleIds = Array.from(puzzleTimeMap.keys());
     let bestRank = { rank: Infinity, count: 0 };
-    if (entries.length > 0) {
-      for (const entry of entries) {
-        const puzzlesWithFirstPlaceQuery = query(
+
+    if (puzzleIds.length > 0) {
+      const batchSize = 10;
+      for (let i = 0; i < puzzleIds.length; i += batchSize) {
+        const batch = puzzleIds.slice(i, i + batchSize);
+        const firstPlacesQuery = query(
           statsRef,
-          where("puzzleId", "==", entry.puzzleId),
+          where("puzzleId", "in", batch),
           where("hasCompleted", "==", true),
-          orderBy("time", "asc"),
-          limit(1)
+          orderBy("time", "asc")
         );
 
-        const firstPlaceSnapshot = await getDocs(puzzlesWithFirstPlaceQuery);
-        if (!firstPlaceSnapshot.empty) {
-          const firstPlaceTime = firstPlaceSnapshot.docs[0].data().time;
-          const timeDiff = Math.abs(entry.time - firstPlaceTime);
-          const rank = Math.ceil(timeDiff / 10) + 1;
-          if (rank < bestRank.rank) {
-            bestRank = { rank, count: 1 };
-          } else if (rank === bestRank.rank) {
-            bestRank.count++;
+        const firstPlacesSnapshot = await getDocs(firstPlacesQuery);
+        const firstPlaceTimes = new Map();
+
+        firstPlacesSnapshot.forEach(doc => {
+          const data = doc.data();
+          if (!firstPlaceTimes.has(data.puzzleId)) {
+            firstPlaceTimes.set(data.puzzleId, data.time);
           }
-        }
+        });
+
+        // Calculate ranks for this batch
+        batch.forEach(puzzleId => {
+          const userTime = puzzleTimeMap.get(puzzleId);
+          const firstPlaceTime = firstPlaceTimes.get(puzzleId);
+          if (firstPlaceTime) {
+            const timeDiff = Math.abs(userTime - firstPlaceTime);
+            const rank = Math.ceil(timeDiff / 10) + 1;
+            if (rank < bestRank.rank) {
+              bestRank = { rank, count: 1 };
+            } else if (rank === bestRank.rank) {
+              bestRank.count++;
+            }
+          }
+        });
       }
     }
 
@@ -75,17 +97,6 @@ async function getUserStatistics() {
     console.error("Error fetching user statistics:", error);
     return null;
   }
-}
-
-// Function to update the stats modal with user data
-async function updateStatsModal() {
-  const stats = await getUserStatistics();
-  if (!stats) return;
-
-  document.querySelector('.stats-numbers .stat-item:nth-child(1) .stat-number').textContent = stats.gamesPlayed;
-  document.querySelector('.stats-numbers .stat-item:nth-child(2) .stat-number').textContent = stats.winPercentage;
-  document.querySelector('.stats-numbers .stat-item:nth-child(3) .stat-number').textContent = stats.bestRank;
-  document.querySelector('.stats-numbers .stat-item:nth-child(4) .stat-number').textContent = stats.bestTime;
 }
 
 // Helper function to format time (reused from your existing code)
