@@ -1636,6 +1636,7 @@ $(document).ready(function() {
             $('#bestRankStat').text(stats.bestRank);
             $('#bestTimeStat').text(stats.bestTime);
         }
+        $("#manageFriendsBtn").show();
         $(".stats-modal").css('display', 'block');
         
         $("#landingPage").hide();
