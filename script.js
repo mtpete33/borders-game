@@ -2125,17 +2125,30 @@ async function getLeaderboard(date = new Date()) {
     }
 
 
-    async function displayLeaderboard(leaderboardData) {
-        const leaderboardDiv = document.getElementById('leaderboard');
-        leaderboardDiv.style.display = 'block';
-        updateNavigationButtons();
+    async function displayLeaderboard(leaderboardData, targetElement = null) {
+        // If no target specified, update both locations
+        if (!targetElement) {
+            const leaderboardDiv = document.getElementById('leaderboard');
+            leaderboardDiv.style.display = 'block';
+            updateNavigationButtons();
+            // Also update stats modal leaderboard
+            displayLeaderboard(leaderboardData, document.getElementById('stats-leaderboard'));
+            return;
+        }
 
         const user = auth.currentUser;
         const friendsList = user ? await getFriendsList() : [];
         const isShowingFriends = $('#friendsFilterBtn').hasClass('active');
 
-        const thead = document.getElementById('leaderboardTable').getElementsByTagName('thead')[0];
-        const tbody = document.getElementById('leaderboardTable').getElementsByTagName('tbody')[0];
+        // Create table if it doesn't exist in target element
+        let table = targetElement.querySelector('table');
+        if (!table) {
+            table = document.createElement('table');
+            table.className = 'leaderboard-table';
+            targetElement.appendChild(table);
+        }
+        const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
+        const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
 
         // Determine which view is active
         const activeFilter = $('.filter-btn.active').attr('id');

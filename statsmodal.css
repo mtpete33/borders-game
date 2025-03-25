@@ -72,6 +72,20 @@
       margin-top: 10px;
     }
 
+    #stats-leaderboard table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    #stats-leaderboard th,
+    #stats-leaderboard td {
+        padding: 5px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
     #rankCount {
       font-size: 16px;
       color: #616161;
