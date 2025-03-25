@@ -1,16 +1,24 @@
 // Import Firebase functions
 import { collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+// Cache for user statistics and leaderboard data
+const cache = {
+  userStats: new Map(),
+  leaderboardData: new Map(),
+  // Cache expiry time - 5 minutes
+  CACHE_DURATION: 5 * 60 * 1000
+};
+
 async function getUserStatistics() {
-  
-  // Temporarily hardcode a UID to check -- comment this
-  // const testUid = "NYV5kx0ZyhbQFEOWOjHPHHRSUcl1"; 
-  // const user = { uid: testUid };
-
-
-  
   const user = auth.currentUser;
   if (!user) return null;
+
+  // Check cache first
+  const cacheKey = `${user.uid}`;
+  const cachedStats = cache.userStats.get(cacheKey);
+  if (cachedStats && (Date.now() - cachedStats.timestamp) < cache.CACHE_DURATION) {
+    return cachedStats.data;
+  }
 
   try {
     const statsRef = collection(window.db, "leaderboard");
@@ -20,7 +28,7 @@ async function getUserStatistics() {
       where("hasCompleted", "==", true)
     );
 
-    // Get all user entries in one query
+    // Single query for user entries
     const querySnapshot = await getDocs(userEntriesQuery);
     const entries = [];
     const puzzleTimeMap = new Map();
@@ -30,26 +38,22 @@ async function getUserStatistics() {
       puzzleTimeMap.set(data.puzzleId, data.time);
     });
 
-    // Get total games count
+    // Single query for total games
     const allGamesQuery = query(statsRef, where("uid", "==", user.uid));
     const allGamesSnapshot = await getDocs(allGamesQuery);
     const totalGames = allGamesSnapshot.size;
 
-    // Calculate win percentage
     const completedGames = entries.length;
     const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
+    const bestTime = entries.length > 0 ? Math.min(...entries.map(entry => entry.time)) : null;
 
-    // Find best time
-    const bestTime = entries.length > 0 ? 
-      Math.min(...entries.map(entry => entry.time)) : 
-      null;
-
-    // Get all first place times for user's puzzles in one batch query
+    // Batch process first place times
     const puzzleIds = Array.from(puzzleTimeMap.keys());
     let bestRank = { rank: Infinity, count: 0 };
 
     if (puzzleIds.length > 0) {
-      const batchSize = 10;
+      // Increase batch size to reduce number of queries
+      const batchSize = 30;
       for (let i = 0; i < puzzleIds.length; i += batchSize) {
         const batch = puzzleIds.slice(i, i + batchSize);
         const firstPlacesQuery = query(
@@ -69,7 +73,6 @@ async function getUserStatistics() {
           }
         });
 
-        // Calculate ranks for this batch
         batch.forEach(puzzleId => {
           const userTime = puzzleTimeMap.get(puzzleId);
           const firstPlaceTime = firstPlaceTimes.get(puzzleId);
@@ -86,20 +89,25 @@ async function getUserStatistics() {
       }
     }
 
-    // Format best time
     const formattedBestTime = bestTime ? formatTime(bestTime) : "--:--";
-
-    // Format best rank
     const formattedBestRank = bestRank.rank === Infinity ? 
       "--" : 
       `${bestRank.rank}${getOrdinalSuffix(bestRank.rank)} (${bestRank.count})`;
 
-    return {
+    const stats = {
       gamesPlayed: totalGames,
       winPercentage: winPercentage,
       bestRank: formattedBestRank,
       bestTime: formattedBestTime
     };
+
+    // Cache the results
+    cache.userStats.set(cacheKey, {
+      timestamp: Date.now(),
+      data: stats
+    });
+
+    return stats;
   } catch (error) {
     console.error("Error fetching user statistics:", error);
     return null;
