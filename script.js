@@ -733,6 +733,8 @@ $(document).ready(function() {
 
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
+
+                    
                     // $("#manageFriendsBtn").show();
                     
                     if (data.hasGivenUp) {
@@ -1627,6 +1629,10 @@ $(document).ready(function() {
         closeStatsModal();
     })
 
+    $("#viewStatsBtn").click(function() {
+        $('.stats-modal').css('display', 'block');
+    })
+
 
     async function showSolvedPuzzle() {
         const stats = await getUserStatistics();
@@ -1638,6 +1644,7 @@ $(document).ready(function() {
         }
         $("#manageFriendsBtn").show();
         $(".stats-modal").css('display', 'block');
+        $("#viewStatsBtn").show();
         
         $("#landingPage").hide();
         $("#submitBtn").hide();
