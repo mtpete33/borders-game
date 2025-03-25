@@ -1627,7 +1627,7 @@ $(document).ready(function() {
     })
 
 
-    async async function showSolvedPuzzle() {
+    async function showSolvedPuzzle() {
         const stats = await getUserStatistics();
         if (stats) {
             $('#gamesPlayedStat').text(stats.gamesPlayed);
