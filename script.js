@@ -604,48 +604,54 @@ $(document).ready(function() {
         content.slideToggle(300);
     });
     
-    // Filter button handlers
-    $('.filter-btn').click(function() {
-        $('.filter-btn').removeClass('active');
+    // Filter button handlers for both main and stats modal
+    $('.filter-btn, .stats-filter-btn').click(function() {
+        const isStatsModal = $(this).hasClass('stats-filter-btn');
+        const buttonClass = isStatsModal ? 'stats-filter-btn' : 'filter-btn';
+        $(`.${buttonClass}`).removeClass('active');
         $(this).addClass('active');
+        
+        const id = this.id;
+        const mainId = id.replace('stats-', '');
+        
+        if (mainId === 'todayFilter') {
+            $('#leaderboardDate, #stats-leaderboardDate').show();
+            getLeaderboard(new Date());
+        } else if (mainId === 'bestTimeFilter') {
+            getBestTimes();
+        } else if (mainId === 'mostWinsFilter') {
+            getMostWins();
+        }
     });
 
-    // Friends/Global filter click handlers
-    $('#friendsFilterBtn, #globalFilterBtn').click(function() {
-        $('#friendsFilterBtn, #globalFilterBtn').removeClass('active');
+    // Friends/Global filter click handlers for both views
+    $('#friendsFilterBtn, #globalFilterBtn, #stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
+        const isStatsModal = this.id.startsWith('stats-');
+        const prefix = isStatsModal ? 'stats-' : '';
+        
+        $(`#${prefix}friendsFilterBtn, #${prefix}globalFilterBtn`).removeClass('active');
         $(this).addClass('active');
-        const activeFilter = $('.filter-btn.active').attr('id');
+        
+        const activeFilter = $(`.${isStatsModal ? 'stats-filter-btn' : 'filter-btn'}.active`).attr('id');
+        const mainActiveFilter = activeFilter.replace('stats-', '');
 
-        if (activeFilter === 'bestTimeFilter') {
+        if (mainActiveFilter === 'bestTimeFilter') {
             getBestTimes();
-        } else if (activeFilter === 'mostWinsFilter') {
+        } else if (mainActiveFilter === 'mostWinsFilter') {
             getMostWins();
         } else {
             getLeaderboard(currentLeaderboardDate);
         }
     });
 
-    $('#todayFilter').click(function() {
-        $('#leaderboardDate').show();
-        getLeaderboard(new Date());
-    });
-
-    $('#bestTimeFilter').click(function() {
-        getBestTimes();
-    });
-
-    $('#mostWinsFilter').click(function() {
-        getMostWins();
-    });
-
-    // Navigation button handlers
-    $('#prevDay').click(function() {
+    // Navigation button handlers for both views
+    $('#prevDay, #stats-prevDay').click(function() {
         const prevDay = new Date(currentLeaderboardDate);
         prevDay.setDate(prevDay.getDate() - 1);
         getLeaderboard(prevDay);
     });
 
-    $('#nextDay').click(function() {
+    $('#nextDay, #stats-nextDay').click(function() {
         const nextDay = new Date(currentLeaderboardDate);
         nextDay.setDate(nextDay.getDate() + 1);
         const today = new Date();
