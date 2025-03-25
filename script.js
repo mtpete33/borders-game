@@ -30,7 +30,7 @@ let isProgrammaticChange = false;
 
 
 $(document).ready(function() {
-    
+
     // function isInstagramBrowser() {
     //     let ua = navigator.userAgent || navigator.vendor || window.opera;
     //     return (ua.indexOf("Instagram") > -1);
@@ -596,11 +596,6 @@ $(document).ready(function() {
 
     $('#playBtn').hide();
 
-    // $('#instructionsBtn').click(function() {
-    //     const content = $('#instructionsContent');
-    //     content.toggleClass('show');
-    //     content.slideToggle(300);
-    // });
 
     $('#instructionsBtn').click(function() {
         const content = $('#instructionsContent');
@@ -739,6 +734,7 @@ $(document).ready(function() {
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
                     $("#manageFriendsBtn").show();
+                    
                     if (data.hasGivenUp) {
                         await fetchTodaysPuzzle();
                     }
@@ -1621,8 +1617,19 @@ $(document).ready(function() {
                 }
             }
 
+    //Function to close the stats modal
+    function closeStatsModal() {
+        $('.stats-modal').css('display', 'none');
+    }
+
+    $(".close-modal-btn").click(function() {
+        closeStatsModal();
+    })
+
 
     async function showSolvedPuzzle() {
+        $(".stats-modal").css('display', 'block');
+        
         $("#landingPage").hide();
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
@@ -1688,20 +1695,7 @@ $(document).ready(function() {
                 // Show share button if Web Share API is supported
                 if (navigator.share) {
                     $("#shareButtonContainer").show();
-                    // $("#shareBtn").off('click').on('click', async function() {
-                    //     const today = new Date();
-                    //     const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
-                    //     const shareData = {
-                    //         title: 'Borders',
-                    //         text: `Borders Puzzle #${currentPuzzleId} - ${formattedDate} - Time: ${formattedTime}`,
-                    //         url: window.location.href
-                    //     };
-                    //     try {
-                    //         await navigator.share(shareData);
-                    //     } catch (error) {
-                    //         console.error('Error sharing:', error);
-                    //     }
-                    // });
+
                     $('#shareBtn').on('click', async function () {
                     try {
                         // Get the leaderboard data as text first
@@ -1779,6 +1773,7 @@ $(document).ready(function() {
         $("#resultTime").text("You gave up. Better luck tomorrow!").show();
 
         $("#leaderboard").show();
+
         getLeaderboard();
 
 

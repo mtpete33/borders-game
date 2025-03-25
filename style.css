@@ -21,6 +21,9 @@ h2 {
   margin:.25em 0 .14em 0;
   font-size: 30px;
 }
+#instructionsBtn, #manageFriendsBtn, #backToHomeBtn, #viewSolvedBtn, #signUpBtn, #logInBtn, #googleLoginBtn, #guestPlayBtn {
+  min-width: 10em;
+}
 
 #landingPage {
   font-size: 1.5em;
@@ -519,7 +522,7 @@ footer {
     margin-bottom: 1em;
   }
   #guestPlayInfo {
-    max-width: 242px;
+    max-width: 310px;
     margin: 10px auto 20px auto;
   }
 }

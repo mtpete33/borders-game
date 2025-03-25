@@ -50,6 +50,8 @@
   </script>
   <script src="https://kit.fontawesome.com/b8cfe60a23.js" crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href="statsmodal.css">
+
 </head>
 
 <body>
@@ -76,7 +78,7 @@
       <img id="example" src="images/bordersexample.jpg" alt="game example">
     </div>
     <div>
-      <button id="manageFriendsBtn" style="display:none;">Manage Friends</button>
+      <!-- <button id="manageFriendsBtn" style="display:none;">Manage Friends</button> -->
       <button id="playBtn" style="display:none;">Play</button>
       <button id="viewSolvedBtn" style="display:none;">View Solved Puzzle</button>
       
@@ -88,7 +90,7 @@
     </div>
     <a href="#" id="logoutLink" style="display:none;">Logout</a>
     <button id="signUpBtn">Sign Up</button>
-    <button id="logInBtn">Email Login</button>
+    <button id="logInBtn">Login</button>
     <button id="googleLoginBtn" style="display:inline-flex;">
       <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" style="width: 18px; height: 18px; margin-right: 8px;">
       Google Login
@@ -402,13 +404,50 @@
     <button id="shareBtn" class="form-button">Share</button>
     <p id="newFriendsAlert">Use the Friends leaderboard filter to view only your friend group rankings. Follow friends by clicking their <span style="color: #359235;font-size:20px;border: 1px solid #7d7d7d;border-radius: 4px;padding: 0px 4px; font-family: 'Arial';">+</span> button or 'Manage Friends' below.</p>
     <button id="manageFriendsBtn" style="font-size:18px;">Manage Friends</button>
+    <button id="backToHomeBtn">Back to Home</button>
      </div>
     
-    <button id="backToHomeBtn">Back to Home</button>
+    
     
     <br>
  
 
+    <div class="stats-modal" style="display:none;">
+      <button class="close-modal-btn">&times;</button>
+
+      <div class="stats-modal-header">
+        <h2>Stats</h2>
+      </div>
+
+      <div class="stats-numbers">
+        <div class="stat-item">
+          <div class="stat-number">42</div>
+          <div class="stat-label">Played</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">87</div>
+          <div class="stat-label">Win %</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">1st <span id="rankCount">(12)</span></div>
+          <div class="stat-label">Best Rank</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">1:24</div>
+          <div class="stat-label">Best Time</div>
+        </div>
+      </div>
+
+      <div class="stats-divider"></div>
+
+      <div class="leaderboard-section">
+        <div class="stats-modal-header">
+          <h2>Leaderboard</h2>
+        </div>
+        <!-- Your existing leaderboard element will be displayed here -->
+        <div id="leaderboard"></div>
+      </div>
+    </div>
   
   
   <footer>
