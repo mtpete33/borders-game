@@ -605,7 +605,7 @@ $(document).ready(function() {
     });
     
     // Filter button handlers for both main and stats modal
-    $('.filter-btn, .stats-filter-btn').click(function() {
+    $('.stats-filter-btn').click(function() {
         const isStatsModal = $(this).hasClass('stats-filter-btn');
         const buttonClass = isStatsModal ? 'stats-filter-btn' : 'filter-btn';
         $(`.${buttonClass}`).removeClass('active');
@@ -615,7 +615,7 @@ $(document).ready(function() {
         const mainId = id.replace('stats-', '');
         
         if (mainId === 'stats-todayFilter') {
-            $('#leaderboardDate, #stats-leaderboardDate').show();
+            $('#stats-leaderboardDate').show();
             getLeaderboard(new Date());
         } else if (mainId === 'bestTimeFilter') {
             getBestTimes();
