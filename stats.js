@@ -9,50 +9,45 @@ async function getUserStatistics() {
     const statsRef = collection(window.db, "leaderboard");
     const userEntriesQuery = query(
       statsRef,
-      where("uid", "==", user.uid)
+      where("uid", "==", user.uid),
+      where("hasCompleted", "==", true)
     );
 
     const querySnapshot = await getDocs(userEntriesQuery);
     const entries = [];
     querySnapshot.forEach(doc => entries.push(doc.data()));
 
-    // Calculate total games played
-    const totalGames = entries.length;
+    // Calculate total games including non-completed ones
+    const allGamesQuery = query(statsRef, where("uid", "==", user.uid));
+    const allGamesSnapshot = await getDocs(allGamesQuery);
+    const totalGames = allGamesSnapshot.size;
 
     // Calculate win percentage
-    const completedGames = entries.filter(entry => entry.hasCompleted).length;
+    const completedGames = entries.length;
     const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
 
     // Find best time
-    const completedEntries = entries.filter(entry => entry.hasCompleted);
-    const bestTime = completedEntries.length > 0 ? 
-      Math.min(...completedEntries.map(entry => entry.time)) : 
+    const bestTime = entries.length > 0 ? 
+      Math.min(...entries.map(entry => entry.time)) : 
       null;
 
-    // Find best rank (need to query global leaderboard per day)
+    // Find best rank by looking at smallest time difference from first place
     let bestRank = { rank: Infinity, count: 0 };
-    const uniquePuzzleIds = [...new Set(completedEntries.map(entry => entry.puzzleId))];
-
-    for (const puzzleId of uniquePuzzleIds) {
-      const dailyLeaderboardQuery = query(
+    if (entries.length > 0) {
+      const puzzlesWithFirstPlaceQuery = query(
         statsRef,
-        where("puzzleId", "==", puzzleId),
+        where("puzzleId", "in", entries.map(e => e.puzzleId)),
         where("hasCompleted", "==", true),
-        orderBy("time", "asc")
+        orderBy("time", "asc"),
+        limit(1)
       );
-
-      const dailySnapshot = await getDocs(dailyLeaderboardQuery);
-      const dailyEntries = [];
-      dailySnapshot.forEach(doc => dailyEntries.push(doc.data()));
-
-      const userRank = dailyEntries.findIndex(entry => entry.uid === user.uid) + 1;
-
-      if (userRank > 0) { // If user found in leaderboard
-        if (userRank < bestRank.rank) {
-          bestRank = { rank: userRank, count: 1 };
-        } else if (userRank === bestRank.rank) {
-          bestRank.count++;
-        }
+      
+      const firstPlaceSnapshot = await getDocs(puzzlesWithFirstPlaceQuery);
+      if (!firstPlaceSnapshot.empty) {
+        const firstPlaceTime = firstPlaceSnapshot.docs[0].data().time;
+        const userTimes = entries.map(e => e.time);
+        const closestTime = Math.min(...userTimes.map(t => Math.abs(t - firstPlaceTime)));
+        bestRank = { rank: Math.ceil(closestTime / 10) + 1, count: 1 };
       }
     }
 
