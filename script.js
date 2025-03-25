@@ -1923,9 +1923,18 @@ async function getMostWins() {
 
 // Function to display winners list
 async function displayWinnersList(winnersList) {
-    const leaderboardTable = document.getElementById('leaderboardTable');
-    const thead = leaderboardTable.getElementsByTagName('thead')[0];
-    const tbody = leaderboardTable.getElementsByTagName('tbody')[0];
+    const targetElement = document.getElementById('stats-leaderboard');
+    if (!targetElement) return;
+
+    let table = targetElement.querySelector('table');
+    if (!table) {
+        table = document.createElement('table');
+        table.className = 'leaderboard-table';
+        targetElement.appendChild(table);
+    }
+    const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
+    const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
+    
     const user = auth.currentUser;
     const friendsList = user ? await getFriendsList() : [];
 
