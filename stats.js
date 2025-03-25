@@ -1,15 +1,15 @@
 // Import Firebase functions
-import { collection, query, where, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 async function getUserStatistics() {
   
   // Temporarily hardcode a UID to check -- comment this
-  const testUid = "NYV5kx0ZyhbQFEOWOjHPHHRSUcl1"; 
-  const user = { uid: testUid };
+  // const testUid = "NYV5kx0ZyhbQFEOWOjHPHHRSUcl1"; 
+  // const user = { uid: testUid };
 
 
   
-  // const user = auth.currentUser;
+  const user = auth.currentUser;
   if (!user) return null;
 
   try {

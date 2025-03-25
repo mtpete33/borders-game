@@ -1,0 +1,89 @@
+async function getLeaderboard(date = new Date()) {
+        const statsRef = collection(window.db, "leaderboard");
+        currentLeaderboardDate = date;
+        const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        const showFriendsOnly = $('#friendsFilterBtn').hasClass('active');
+
+        // Update the displayed date
+        const formattedDisplayDate = startOfDay.toLocaleDateString('en-US', { 
+            weekday: 'long',
+            month: 'long', 
+            day: 'numeric',
+            year: 'numeric'
+        });
+        $('#leaderboardDate').text(formattedDisplayDate);
+
+        // Calculate puzzle ID for the selected date
+        const startDateMs = new Date(Date.UTC(2024, 9, 15)).getTime();
+        const selectedDateMs = startOfDay.getTime();
+        const daysDiff = Math.floor((selectedDateMs - startDateMs) / (1000 * 60 * 60 * 24));
+        const puzzleId = daysDiff + 1;
+        
+        let q;
+        if (showFriendsOnly) {
+            const friendsList = await getFriendsList();
+            if (friendsList.length > 0) {
+                const friendUids = friendsList.map(friend => friend.uid);
+                friendUids.push(auth.currentUser.uid); // Include current user
+                q = query(
+                    statsRef,
+                    where("uid", "in", friendUids),
+                    where("puzzleId", "==", puzzleId),
+                    orderBy("date"),
+                    orderBy("time", "asc"),
+                    limit(20)
+                );
+            } else {
+                // If no friends, only show current user's results
+                q = query(
+                    statsRef,
+                    where("uid", "==", auth.currentUser.uid),
+                    where("puzzleId", "==", puzzleId),
+                    orderBy("date"),
+                    orderBy("time", "asc"),
+                    limit(10)
+                );
+            }
+        } else {
+            q = query(
+                statsRef,
+                where("puzzleId", "==", puzzleId),
+                orderBy("date"),
+                orderBy("time", "asc"),
+                limit(20)
+            );
+        }
+
+        try {
+            const querySnapshot = await getDocs(q);
+            let leaderboardData = [];
+
+            for (const doc of querySnapshot.docs) {
+                const data = doc.data();
+                if (data.hasGivenUp) {
+                    continue;
+                }
+
+                // Get username from users collection if not present
+                if (!data.username && data.uid) {
+                    try {
+                        const userDoc = await getDoc(doc(window.db, "users", data.uid));
+                        if (userDoc.exists()) {
+                            data.username = userDoc.data().username;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching username:', error);
+                        data.username = 'Unknown User';
+                    }
+                }
+
+                leaderboardData.push(data);
+            }
+            // Sort by time in ascending order (fastest first)
+            leaderboardData.sort((a, b) => a.time - b.time);
+            displayLeaderboard(leaderboardData);
+        } catch (error) {
+            console.error('Error fetching leaderboard:', error);
+        }
+    }
