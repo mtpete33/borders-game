@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .stats-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 315px;
+      margin: 0 auto;
+      border: 3px solid black;
+      font-family: "Josefin Sans", sans-serif;
+    }
+
+    .stats-modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .stats-modal-header h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .stats-numbers {
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .stats-divider {
+      border-bottom: 1px solid #ddd;
+      margin: 20px 0;
+    }
+
+    .leaderboard-section {
+      margin-top: 20px;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    /* Inherit existing leaderboard styles */
+    #leaderboard {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stats-modal">
+    <button class="close-modal-btn">&times;</button>
+    
+    <div class="stats-modal-header">
+      <h2>Statistics</h2>
+    </div>
+
+    <div class="stats-numbers">
+      <div class="stat-item">
+        <div class="stat-number">42</div>
+        <div class="stat-label">Played</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">87</div>
+        <div class="stat-label">Win %</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Best Rank</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1:24</div>
+        <div class="stat-label">Best Time</div>
+      </div>
+    </div>
+
+    <div class="stats-divider"></div>
+
+    <div class="leaderboard-section">
+      <!-- Your existing leaderboard element will be displayed here -->
+      <div id="leaderboard"></div>
+    </div>
+  </div>
+</body>
+</html>
