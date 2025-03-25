@@ -7,10 +7,11 @@
       padding: 20px;
       border-radius: 12px;
       width: 321px;
+      height: 80vh;
       margin: 0 auto;
       border: 2px solid black;
       font-family: "Agdasima", sans-serif;
-      /* font-family: serif; */
+      overflow-y: auto;
     }
 
     .stats-modal-header {
@@ -79,7 +80,13 @@
         font-size: 14px;
     }
 
-    #stats-leaderboard th,
+    #stats-leaderboard th {
+        padding: 5px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        background-color: #f0f8ff;
+    }
+    
     #stats-leaderboard td {
         padding: 5px;
         text-align: left;
