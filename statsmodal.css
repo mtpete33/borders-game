@@ -58,14 +58,16 @@
     }
 
     .close-modal-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
+      position: fixed;
+      top: 50%;
+      right: calc(50% - 160px);
+      transform: translateY(-40vh);
       font-size: 30px;
       cursor: pointer;
       border: none;
       background: none;
       padding: 0;
+      z-index: 1002;
     }
 
     /* Inherit existing leaderboard styles */
