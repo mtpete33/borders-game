@@ -116,4 +116,4 @@ function getOrdinalSuffix(rank) {
 }
 
 // Export functions
-export { getUserStatistics, updateStatsModal };
+export { getUserStatistics };
