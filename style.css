@@ -1259,10 +1259,7 @@ h1 {
     font-size: 21px;
     margin: 2em 0 0 0;
   }
-  #viewSolvedBtn {
-    font-size: 21px;
-  }
-  #manageFriendsBtn {
+  #viewSolvedBtn, #viewStatsBtn,#manageFriendsBtn {
     font-size: 21px;
   }
   .close-btn {
