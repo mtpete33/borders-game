@@ -604,22 +604,19 @@ $(document).ready(function() {
         content.slideToggle(300);
     });
     
-    // Filter button handlers for both main and stats modal
+    // Filter button handler for stats modal
     $('.stats-filter-btn').click(function() {
-        const isStatsModal = $(this).hasClass('stats-filter-btn');
-        const buttonClass = isStatsModal ? 'stats-filter-btn' : 'filter-btn';
-        $(`.${buttonClass}`).removeClass('active');
+        $('.stats-filter-btn').removeClass('active');
         $(this).addClass('active');
         
         const id = this.id;
-        const mainId = id.replace('stats-', '');
         
-        if (mainId === 'stats-todayFilter') {
+        if (id === 'stats-todayFilter') {
             $('#stats-leaderboardDate').show();
             getLeaderboard(new Date());
-        } else if (mainId === 'bestTimeFilter') {
+        } else if (id === 'stats-bestTimeFilter') {
             getBestTimes();
-        } else if (mainId === 'mostWinsFilter') {
+        } else if (id === 'stats-mostWinsFilter') {
             getMostWins();
         }
     });
