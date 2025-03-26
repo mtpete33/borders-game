@@ -5,11 +5,11 @@
       transform: translate(-50%, -50%);
       background: white;
       padding: 20px;
-      border-radius: 12px;
+      /* border-radius: 12px; */
       width: 321px;
       height: 80vh;
       margin: 0 auto;
-      border: 2px solid black;
+      border: 1px solid black;
       font-family: "Agdasima", sans-serif;
       overflow-y: auto;
 
@@ -59,10 +59,12 @@
 
     .close-modal-btn {
       position: fixed;
-      top: 50%;
-      right: calc(50% - 160px);
-      transform: translateY(-40vh);
-      font-size: 30px;
+      top:10px;
+      right: 10px;
+      /* top: 50%; */
+      /* right: calc(50% - 160px); */
+      /* transform: translateY(-40vh); */
+      font-size: 35px;
       cursor: pointer;
       border: none;
       background: none;
@@ -199,4 +201,15 @@
     #stats-leaderboardDate {
       font-family: "Josefin Sans", sans-serif;
       font-size: 16px;
+    }
+
+    @media (min-width: 600px) {
+      .stats-modal {
+        width: 70%;
+        height: auto;
+      }
+      .close-modal-btn {
+        top: 10px;
+        right: 20px;
+      }
     }

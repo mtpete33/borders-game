@@ -1,0 +1,71 @@
+async function getMostWins() {
+    const statsRef = collection(window.db, "leaderboard");
+    const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
+    try {
+        // Get all completed entries
+        const baseQuery = query(statsRef, where("hasCompleted", "==", true));
+        let querySnapshot;
+        
+        if (showFriendsOnly && auth.currentUser) {
+            const friendsList = await getFriendsList();
+            const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
+            if (friendUids.length > 0) {
+                querySnapshot = await getDocs(query(statsRef, 
+                    where("hasCompleted", "==", true),
+                    where("uid", "in", friendUids)
+                ));
+            } else {
+                querySnapshot = { docs: [] };
+            }
+        } else {
+            querySnapshot = await getDocs(baseQuery);
+        }
+
+        // Group entries by puzzle ID
+        const puzzleGroups = {};
+        querySnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            const puzzleId = data.puzzleId;
+            if (!puzzleGroups[puzzleId]) {
+                puzzleGroups[puzzleId] = [];
+            }
+            puzzleGroups[puzzleId].push(data);
+        });
+
+        // Count wins per user
+        const userWins = {};
+        Object.values(puzzleGroups).forEach(puzzleEntries => {
+            // Sort by completion time
+            puzzleEntries.sort((a, b) => a.time - b.time);
+            
+            // First place gets a win
+            if (puzzleEntries.length > 0) {
+                const winner = puzzleEntries[0];
+                if (!userWins[winner.username]) {
+                    userWins[winner.username] = {
+                        wins: 1,
+                        uid: winner.uid
+                    };
+                } else {
+                    userWins[winner.username].wins++;
+                }
+            }
+        });
+
+        // Convert to array and sort
+        const sortedWins = Object.entries(userWins)
+            .map(([username, data]) => ({
+                username,
+                wins: data.wins,
+                uid: data.uid
+            }))
+            .sort((a, b) => b.wins - a.wins)
+            .slice(0, 10);
+
+        // $('#leaderboardDate').hide();
+        $('#leaderboardDate').text('All Time');
+        displayWinnersList(sortedWins);
+    } catch (error) {
+        console.error('Error fetching most wins:', error);
+    }
+}
