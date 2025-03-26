@@ -613,6 +613,7 @@ $(document).ready(function() {
         
         if (id === 'stats-todayFilter') {
             $('#stats-leaderboardDate').show();
+            $('#stats-prevDay, #stats-nextDay').prop('disabled', false);
             getLeaderboard(new Date());
         } else if (id === 'stats-bestTimeFilter') {
             getBestTimes();
