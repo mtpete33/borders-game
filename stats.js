@@ -74,16 +74,23 @@ async function getUserStatistics() {
         });
 
         batch.forEach(puzzleId => {
-          const userTime = puzzleTimeMap.get(puzzleId);
-          const firstPlaceTime = firstPlaceTimes.get(puzzleId);
-          if (firstPlaceTime) {
-            const timeDiff = Math.abs(userTime - firstPlaceTime);
-            const rank = Math.ceil(timeDiff / 10) + 1;
-            if (rank < bestRank.rank) {
-              bestRank = { rank, count: 1 };
-            } else if (rank === bestRank.rank) {
-              bestRank.count++;
+          // Get all times for this puzzle and sort them
+          const puzzleTimes = [];
+          firstPlacesSnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data.puzzleId === puzzleId) {
+              puzzleTimes.push(data.time);
             }
+          });
+          puzzleTimes.sort((a, b) => a - b);
+          
+          const userTime = puzzleTimeMap.get(puzzleId);
+          const userRank = puzzleTimes.indexOf(userTime) + 1;
+          
+          if (userRank > 0 && (userRank < bestRank.rank || bestRank.rank === Infinity)) {
+            bestRank = { rank: userRank, count: 1 };
+          } else if (userRank === bestRank.rank) {
+            bestRank.count++;
           }
         });
       }
