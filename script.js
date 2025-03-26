@@ -1812,6 +1812,7 @@ $(document).ready(function() {
 
         $("#manageFriendsBtn").show();
         $("#viewStatsBtn").show();
+        $(".stats-modal").css('display', 'block');
 
         // Show the saved correct answers from the puzzle data
         // Assume `puzzleAnswers` contains the correct answers
