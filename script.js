@@ -1235,6 +1235,19 @@ $(document).ready(function() {
                     user.uid, 
                     elapsedTime, 
                     userWordsArray);
+                
+                // Get and display user statistics
+                getUserStatistics().then(stats => {
+                    if (stats) {
+                        $('#gamesPlayedStat').text(stats.gamesPlayed);
+                        $('#winPercentageStat').text(stats.winPercentage + '%');
+                        $('#bestRankStat').text(stats.bestRank);
+                        $('#bestTimeStat').text(stats.bestTime);
+                    }
+                });
+                
+                // Show stats modal and populate leaderboard
+                $('.stats-modal').css('display', 'block');
                 getLeaderboard();
                 $("#shareBtn").focus();
                 // Show the share button for logged-in users if Web Share API is supported
