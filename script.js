@@ -1789,8 +1789,10 @@ $(document).ready(function() {
     }
 
 
-    function showGivenUpPuzzle() {
-
+    async function showGivenUpPuzzle() {
+        // Fetch today's puzzle first
+        await fetchTodaysPuzzle();
+        
         getUserStatistics().then(stats => {
             if (stats) {
                 $('#gamesPlayedStat').text(stats.gamesPlayed);
