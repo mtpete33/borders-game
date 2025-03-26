@@ -43,7 +43,7 @@ async function getUserStatistics() {
     const allGamesSnapshot = await getDocs(allGamesQuery);
     const totalGames = allGamesSnapshot.size;
 
-    const completedGames = entries.length;
+    const completedGames = querySnapshot.docs.filter(doc => doc.data().hasCompleted).length;
     const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
     const bestTime = entries.length > 0 ? Math.min(...entries.map(entry => entry.time)) : null;
 
