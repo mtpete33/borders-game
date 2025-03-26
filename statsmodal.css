@@ -206,7 +206,7 @@
     @media (min-width: 600px) {
       .stats-modal {
         width: 70%;
-        height: auto;
+        height: 70vh;
       }
       .close-modal-btn {
         top: 10px;

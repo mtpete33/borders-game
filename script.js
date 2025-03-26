@@ -1018,6 +1018,14 @@ $(document).ready(function() {
             }
         }
 
+        const stats = await getUserStatistics();
+        if (stats) {
+            $('#gamesPlayedStat').text(stats.gamesPlayed);
+            $('#winPercentageStat').text(stats.winPercentage + '%');
+            $('#bestRankStat').text(stats.bestRank);
+            $('#bestTimeStat').text(stats.bestTime);
+        }
+
         // Clear all user inputs and display correct answers
         $(".cell").each(function() {
             $(this).val('');
@@ -1149,6 +1157,7 @@ $(document).ready(function() {
     // Validation function to check user's input against the dictionary
     function validatePuzzle() {
         console.log("Starting puzzle validation");
+
         
         // Explicitly specify the IDs of editable cells
         let editableCellIds = ["cell-1", "cell-3", "cell-4", "cell-7", "cell-8", "cell-11", "cell-12", "cell-14"];
@@ -1250,6 +1259,8 @@ $(document).ready(function() {
                 $('.stats-modal').css('display', 'block');
                 getLeaderboard();
                 $("#shareBtn").focus();
+                $("#viewStatsBtn").show();
+                $("#manageFriendsBtn").show();
                 // Show the share button for logged-in users if Web Share API is supported
                 if (navigator.share) {
                     $("#shareButtonContainer").show();
@@ -1780,6 +1791,15 @@ $(document).ready(function() {
 
     function showGivenUpPuzzle() {
 
+        getUserStatistics().then(stats => {
+            if (stats) {
+                $('#gamesPlayedStat').text(stats.gamesPlayed);
+                $('#winPercentageStat').text(stats.winPercentage + '%');
+                $('#bestRankStat').text(stats.bestRank);
+                $('#bestTimeStat').text(stats.bestTime);
+            }
+        });
+
         $("#gameBoard").css('display', 'block');
         $("#landingPage").hide();
         $("#example").hide();
@@ -1787,6 +1807,9 @@ $(document).ready(function() {
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
         $("#virtual-keyboard").hide();
+
+        $("#manageFriendsBtn").show();
+        $("#viewStatsBtn").show();
 
         // Show the saved correct answers from the puzzle data
         // Assume `puzzleAnswers` contains the correct answers

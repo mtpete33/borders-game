@@ -21,7 +21,7 @@ h2 {
   margin:.25em 0 .14em 0;
   font-size: 30px;
 }
-#instructionsBtn, #manageFriendsBtn, #backToHomeBtn, #viewSolvedBtn, #signUpBtn, #logInBtn, #googleLoginBtn, #guestPlayBtn, #viewStatsBtn {
+#instructionsBtn, #manageFriendsBtn, #backToHomeBtn, #viewSolvedBtn, #signUpBtn, #logInBtn, #googleLoginBtn, #guestPlayBtn, #viewStatsBtn, #playBtn {
   min-width: 10em;
 }
 
