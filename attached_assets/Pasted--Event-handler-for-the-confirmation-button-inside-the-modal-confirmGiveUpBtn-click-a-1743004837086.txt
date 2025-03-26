@@ -1,0 +1,82 @@
+    // Event handler for the confirmation button inside the modal
+    $("#confirmGiveUpBtn").click(async function () {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                // Store the give up state in leaderboard
+                const statsRef = collection(window.db, "leaderboard");
+                const userDoc = await getDoc(doc(window.db, "users", user.uid));
+                const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
+                
+                await addDoc(statsRef, {
+                    puzzleId: currentPuzzleId,
+                    date: new Date().toISOString(),
+                    uid: user.uid,
+                    username: username,
+                    hasGivenUp: true,
+                    hasCompleted: false
+                });
+            } catch (error) {
+                console.error("Error storing give up state:", error);
+            }
+        }
+
+        // Clear all user inputs and display correct answers
+        $(".cell").each(function() {
+            $(this).val('');
+        });
+        // Display the correct answers
+        $("#cell-1").val(puzzleAnswers.word1.charAt(0));
+        $("#cell-2").val(puzzleAnswers.word1.charAt(1));
+        $("#cell-3").val(puzzleAnswers.word1.charAt(2));
+        $("#cell-4").val(puzzleAnswers.word1.charAt(3));
+
+        $("#cell-6").val(puzzleAnswers.word2.charAt(1));
+        $("#cell-7").val(puzzleAnswers.word4.charAt(2));
+        $("#cell-8").val(puzzleAnswers.word2.charAt(2));
+        $("#cell-10").val(puzzleAnswers.word2.charAt(3));
+        $("#cell-11").val(puzzleAnswers.word3.charAt(0));
+        $("#cell-12").val(puzzleAnswers.word3.charAt(1));
+        $("#cell-13").val(puzzleAnswers.word3.charAt(2));
+        $("#cell-14").val(puzzleAnswers.word3.charAt(3));
+
+        $("#cell-5").val(puzzleAnswers.word4.charAt(1));
+        $("#cell-9").val(puzzleAnswers.word4.charAt(3));
+
+        // Disable all cells in the game grid
+        $(".cell").prop('disabled', true);
+
+        // $("#cell-1").css('padding-top', '5px');
+        // $("#cell-3").css('padding-top', '6px');
+        // $("#cell-4").css('padding-top', '6px');
+        // $("#cell-7").css('padding-top', '5px');
+        // $("#cell-8").css('padding-top', '5px');
+        // $("#cell-11").css('padding-top', '2px');
+        // $("#cell-12").css('padding-top', '5px');
+        // $("#cell-14").css('padding-top', '5px');
+        // Show the give up message
+        toastr.info("You gave up! Sorry, better luck tomorrow.");
+        // Hide the confirmation modal
+        $("#giveUpModal").hide();
+        //hide the submit and give up buttons
+        $("#submitBtn").hide();
+        $("#giveUpBtn").hide();
+
+        $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
+
+        $("#virtual-keyboard").hide();
+        $(".stats-modal").css('display', 'block');
+
+        $("#viewStatsBtn").show();
+
+        $("#gameBoard").css('display', 'block');
+        // Show default words and message
+
+        getLeaderboard();
+
+        // Hide modal and submit button
+        $("#giveUpModal").hide();
+        $("#submitBtn").hide();
+        $("#giveUpBtn").hide();
+        $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
+    });
