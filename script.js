@@ -1061,6 +1061,11 @@ $(document).ready(function() {
 
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
 
+        $("#virtual-keyboard").hide();
+        $(".stats-modal").css('display', 'block');
+
+        $("#viewStatsBtn").show();
+
         $("#gameBoard").css('display', 'block');
         // Show default words and message
 

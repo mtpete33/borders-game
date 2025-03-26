@@ -1,0 +1,121 @@
+    // Validation function to check user's input against the dictionary
+    function validatePuzzle() {
+        console.log("Starting puzzle validation");
+        
+        // Explicitly specify the IDs of editable cells
+        let editableCellIds = ["cell-1", "cell-3", "cell-4", "cell-7", "cell-8", "cell-11", "cell-12", "cell-14"];
+        let editableCells = editableCellIds.map(id => $(`#${id}`));
+        
+        console.log("Editable cells to check:", editableCellIds);
+        
+        // Log each cell's content
+        editableCellIds.forEach(id => {
+            console.log(`Cell ${id} content: "${$(`#${id}`).val()}" - Empty: ${$(`#${id}`).val().trim() === ''}`);
+        });
+        
+        // Check if all editable input fields are filled
+        let allFilled = true;
+        let emptyCell = null;
+        for (let i = 0; i < editableCells.length; i++) {
+            if (editableCells[i].val().trim() === '') {
+                allFilled = false;
+                emptyCell = editableCellIds[i];
+                console.log(`Empty cell found: ${emptyCell}`);
+                break; // Break loop on finding an empty field
+            }
+        }
+
+        console.log("All cells filled:", allFilled);
+
+        if (!allFilled) {
+            console.log("Validation failed: Not all cells are filled");
+            toastr.warning("Please fill in all letters before submitting.");
+            return; // Exit validation function early
+        }
+
+        // Construct words from the user's input
+        let userWord1 = $("#cell-1").val() + $("#cell-2").val() + $("#cell-3").val() + $("#cell-4").val();
+        let userWord2 = $("#cell-4").val() + $("#cell-6").val() + $("#cell-8").val() + $("#cell-10").val() + $("#cell-14").val();
+        let userWord3 = $("#cell-11").val() + $("#cell-12").val() + $("#cell-13").val() + $("#cell-14").val();
+        let userWord4 = $("#cell-1").val() + $("#cell-5").val() + $("#cell-7").val() + $("#cell-9").val() + $("#cell-11").val();
+
+        console.log("User's input words:", userWord1, userWord2, userWord3, userWord4);
+
+        // Validate each word using the isValidWord function
+        const allValid = [userWord1, userWord2, userWord3, userWord4].every(isValidWord);
+
+        if (allValid) {
+            toastr.success("Puzzle Complete!");
+            $('#giveUpBtn').hide();
+            let endTime = new Date();
+            let elapsedTime = (endTime - startTime) / 1000;
+
+            // Formatting the elapsed time
+            const formattedTime = formatTime(elapsedTime);
+
+            $("#submitBtn").css('display', 'none');
+            $("#resultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
+            const user = getAuth().currentUser;
+
+            // Check for Web Share API support and show the share button
+            if (navigator.share) {
+                $("#shareButtonContainer").show();
+                const today = new Date();
+                const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+                $("#shareBtn").click(async function() {
+                    const puzzleNumber = currentPuzzleId; // Ensure this is defined appropriately in your game logic
+                    const shareData = {
+                        title: 'Borders',
+                        text: `Borders Puzzle #${puzzleNumber} - ${formattedDate} - Time: ${formattedTime}`,
+                        url: window.location.href
+                    };
+                    try {
+                        await navigator.share(shareData);
+                    } catch (error) {
+                        console.error('Error sharing:', error);
+                    }
+                });
+            } else {
+                console.warn('Web Share API is not supported in this browser.');
+            }
+
+            if (user) {
+                let userWordsArray = [userWord1, userWord2, userWord3, userWord4];
+                storePlayerStats(
+                    currentPuzzleId, 
+                    new Date().toISOString(), 
+                    user.uid, 
+                    elapsedTime, 
+                    userWordsArray);
+                getLeaderboard();
+                $("#shareBtn").focus();
+                // Show the share button for logged-in users if Web Share API is supported
+                if (navigator.share) {
+                    $("#shareButtonContainer").show();
+                    const today = new Date();
+                    const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getDate().toString().padStart(2, '0')}`;
+                    $("#shareBtn").click(async function() {
+                        const puzzleNumber = currentPuzzleId;
+                        const shareData = {
+                            title: 'Borders Puzzle Game',
+                            text: `Borders Puzzle #${puzzleNumber} - ${formattedDate} - Time: ${formattedTime}`,
+                            url: window.location.href
+                        };
+                        try {
+                            await navigator.share(shareData);
+                        } catch (error) {
+                            console.error('Error sharing:', error);
+                        }
+                    });
+                } else {
+                    console.warn('Web Share API is not supported in this browser.');
+                }
+            } else {
+                // $("#signUpCTA").css('display', 'block');
+                getLeaderboard();
+                // console.error('User UID is missing. Could not store player stats.');
+            }
+        } else {
+            toastr.error("Some of your words are not valid. Try again.");
+        }
+    }
