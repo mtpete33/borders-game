@@ -1806,6 +1806,9 @@ async function getBestTimes() {
     const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
     let q;
 
+    // Disable navigation arrows since this is an all-time view
+    $('#stats-prevDay, #stats-nextDay').prop('disabled', true);
+
     if (showFriendsOnly && auth.currentUser) {
         const friendsList = await getFriendsList();
         const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
@@ -1842,7 +1845,6 @@ async function getBestTimes() {
                 leaderboardData.push(data);
             }
         }
-        // $('#leaderboardDate').hide();
         $('#leaderboardDate').text('All Time');
         displayLeaderboard(leaderboardData);
     } catch (error) {
@@ -1854,6 +1856,10 @@ async function getBestTimes() {
 async function getMostWins() {
     const statsRef = collection(window.db, "leaderboard");
     const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
+    
+    // Disable navigation arrows since this is an all-time view
+    $('#stats-prevDay, #stats-nextDay').prop('disabled', true);
+    
     try {
         // Get all completed entries
         const baseQuery = query(statsRef, where("hasCompleted", "==", true));
