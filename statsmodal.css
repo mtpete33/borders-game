@@ -4,7 +4,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      padding: 20px;
+      padding: 15px;
       /* border-radius: 12px; */
       width: 321px;
       height: 80vh;
@@ -83,7 +83,7 @@
     }
 
     #stats-leaderboard table {
-        width: 98%;
+        width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
         font-size: 16px;
@@ -92,14 +92,14 @@
 
     #stats-leaderboard th {
         padding: 5px;
-        text-align: left;
+        text-align: center;
         border-bottom: 1px solid #ddd;
         background-color: #f0f8ff;
     }
     
     #stats-leaderboard td {
-        padding: 5px;
-        text-align: left;
+        padding: 0px;
+        text-align: center;
         border-bottom: 1px solid #ddd;
     }
 
