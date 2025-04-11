@@ -924,7 +924,9 @@ footer a:visited {
   margin-top: 0.5em;
 }
 
-
+#congrats {
+  margin: 0 0 12px 0;
+}
 .form-container {
   max-width: 400px;
   margin: 20px auto;

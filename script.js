@@ -1213,6 +1213,7 @@ $(document).ready(function() {
 
             $("#submitBtn").css('display', 'none');
             $("#resultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
+            $('#congrats').text("Congratulations!");
             const user = getAuth().currentUser;
 
             // Check for Web Share API support and show the share button
@@ -1738,6 +1739,7 @@ $(document).ready(function() {
                 // Show completion time and any success messages
                 $("#gameBoard").css('display', 'block');
                 $("#resultTime").text(`Completed in: ${formattedTime}`).show();
+                $('#congrats').text("Congratulations!");
 
                 // Show share button if Web Share API is supported
                 if (navigator.share) {
