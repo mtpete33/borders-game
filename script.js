@@ -205,6 +205,8 @@ $(document).ready(function() {
             
             // Show sign up CTA after the share button
             $("#guestSignUpCTA").show();
+
+            
             
             // Add click handler for Share button
             $("#guestShareBtn").click(async function() {
