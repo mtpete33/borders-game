@@ -2253,24 +2253,20 @@ async function getLeaderboard(date = new Date()) {
 
         console.log("Raw leaderboard data:", leaderboardData);
 
-        // First get completed entries
-        const completedEntries = leaderboardData.filter(entry => 
+        // Filter out undefined usernames
+        const validEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
-            entry.username !== undefined && 
-            entry.hasCompleted && 
-            !entry.hasGivenUp);
-        console.log("Completed entries:", completedEntries);
+            entry.username !== undefined);
 
-        // Then get gave up entries 
-        const gaveUpEntries = leaderboardData.filter(entry => 
-            entry.username !== 'undefined' && 
-            entry.username !== undefined && 
-            entry.hasGivenUp === true);
-        console.log("Gave up entries:", gaveUpEntries);
-
-        // Combine the arrays with gave up entries at the end
-        const validEntries = [...completedEntries, ...gaveUpEntries];
-        console.log("Combined valid entries:", validEntries);
+        // Sort entries - completed first, then gave up
+        validEntries.sort((a, b) => {
+            if (a.hasCompleted && !b.hasCompleted) return -1;
+            if (!a.hasCompleted && b.hasCompleted) return 1;
+            if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
+            return 0;
+        });
+        
+        console.log("Valid sorted entries:", validEntries);
 
         validEntries.forEach((entry, index) => {
             const row = tbody.insertRow();
