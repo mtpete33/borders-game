@@ -871,7 +871,7 @@ $(document).ready(function() {
         const key = $(this).data("key");
         isProgrammaticChange = true; // Mark change as programmatic before any way this happens
         if (key === "backspace") {
-            // console.log("Delete button clicked");
+            // console.log("Delete buttonclicked");
             handleDelete();
         } else {
             $(`#${focusableCells[currentCellIndex]}`).val(key.toUpperCase());
@@ -1738,7 +1738,7 @@ $(document).ready(function() {
                 // Apply padding to specific cells
                 $("#cell-1, #cell-3, #cell-4, #cell-7, #cell-8, #cell-11, #cell-12, #cell-14").addClass("padded-cell");
 
-                // Show completion time and any success messages
+                                // Show completion time and any success messages
                 $("#gameBoard").css('display', 'block');
                 $("#resultTime").text(`Completed in: ${formattedTime}`).show();
                 $('#congrats').text("Congratulations!");
@@ -2134,7 +2134,7 @@ async function getLeaderboard(date = new Date()) {
             gaveUpData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             // Combine the arrays with gave up entries at the end
-            const leaderboardData = [...completedData, ...gaveUpData];
+            const leaderboardData = [...completedEntries, ...gaveUpEntries];
             displayLeaderboard(leaderboardData);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
@@ -2255,15 +2255,15 @@ async function getLeaderboard(date = new Date()) {
         const completedEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
-            entry.hasCompleted);
+            entry.hasCompleted && !entry.hasGivenUp);
 
         // Then display given up entries
         const gaveUpEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
-            entry.hasGivenUp);
+            entry.hasGivenUp === true);
 
-        // Combine the arrays
+        // Combine the arrays with completed entries first, then gave up entries
         const validEntries = [...completedEntries, ...gaveUpEntries];
 
         validEntries.forEach((entry, index) => {
