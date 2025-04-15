@@ -2267,8 +2267,16 @@ async function getLeaderboard(date = new Date()) {
             entry.hasGivenUp);
         console.log("Gave up entries:", gaveUpEntries);
 
-        // Combine the arrays
-        const validEntries = [...completedEntries, ...gaveUpEntries];
+        // Filter out any duplicate entries (in case a user both completed and gave up)
+        const uniqueGaveUpEntries = gaveUpEntries.filter(gaveUpEntry => 
+            !completedEntries.some(completedEntry => 
+                completedEntry.uid === gaveUpEntry.uid && 
+                completedEntry.puzzleId === gaveUpEntry.puzzleId
+            )
+        );
+
+        // Combine the arrays, with gave up entries at the end
+        const validEntries = [...completedEntries, ...uniqueGaveUpEntries];
         console.log("Combined valid entries:", validEntries);
 
         validEntries.forEach((entry, index) => {
