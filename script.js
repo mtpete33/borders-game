@@ -2250,16 +2250,20 @@ async function getLeaderboard(date = new Date()) {
 
         console.log("Raw leaderboard data:", leaderboardData);
 
-        // Filter out undefined usernames
+        // Filter out undefined usernames but keep hasGivenUp entries
         const validEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
-            entry.username !== undefined);
+            entry.username !== undefined &&
+            (entry.hasCompleted || entry.hasGivenUp));
 
-        // Sort entries - completed first, then gave up
+        // Sort entries - completed first by time, then gave up entries by date
         validEntries.sort((a, b) => {
             if (a.hasCompleted && !b.hasCompleted) return -1;
             if (!a.hasCompleted && b.hasCompleted) return 1;
             if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
+            if (!a.hasCompleted && !b.hasCompleted) {
+                return new Date(b.date) - new Date(a.date);
+            }
             return 0;
         });
 
