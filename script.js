@@ -2103,14 +2103,12 @@ async function getLeaderboard(date = new Date()) {
 
         try {
             const querySnapshot = await getDocs(q);
-            let leaderboardData = [];
+            let completedData = [];
+            let gaveUpData = [];
 
             for (const doc of querySnapshot.docs) {
                 const data = doc.data();
-                if (data.hasGivenUp) {
-                    continue;
-                }
-
+                
                 // Get username from users collection if not present
                 if (!data.username && data.uid) {
                     try {
@@ -2124,10 +2122,19 @@ async function getLeaderboard(date = new Date()) {
                     }
                 }
 
-                leaderboardData.push(data);
+                if (data.hasGivenUp) {
+                    gaveUpData.push(data);
+                } else {
+                    completedData.push(data);
+                }
             }
-            // Sort by time in ascending order (fastest first)
-            leaderboardData.sort((a, b) => a.time - b.time);
+            // Sort completed entries by time
+            completedData.sort((a, b) => a.time - b.time);
+            // Sort gave up entries by date
+            gaveUpData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Combine the arrays with gave up entries at the end
+            const leaderboardData = [...completedData, ...gaveUpData];
             displayLeaderboard(leaderboardData);
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
@@ -2285,13 +2292,18 @@ async function getLeaderboard(date = new Date()) {
                         usernameCell.appendChild(friendBtn);
                     }
                 }
-                timeCell.textContent = formattedTime;
+                timeCell.textContent = entry.hasGivenUp ? '-' : formattedTime;
 
                 const dateObj = new Date(entry.date);
                 const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
                 dateCell.textContent = formattedDate;
                 puzzleCell.textContent = entry.puzzleId;
-                wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
+                wordsCell.textContent = entry.hasGivenUp ? 'Gave Up' : (entry.words ? entry.words.join(', ') : 'No words submitted');
+                
+                if (entry.hasGivenUp) {
+                    rankCell.textContent = '-';
+                    row.style.backgroundColor = '#fff0f0';
+                }
             }
         });
     }
