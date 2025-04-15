@@ -2253,8 +2253,7 @@ async function getLeaderboard(date = new Date()) {
         // Filter out undefined usernames but keep hasGivenUp entries
         const validEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
-            entry.username !== undefined &&
-            (entry.hasCompleted || entry.hasGivenUp));
+            entry.username !== undefined);
 
         console.log("Before sorting, entries including give ups:", validEntries);
 
