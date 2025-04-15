@@ -2253,30 +2253,23 @@ async function getLeaderboard(date = new Date()) {
 
         console.log("Raw leaderboard data:", leaderboardData);
 
-        // First display completed entries
+        // First get completed entries
         const completedEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
-            entry.hasCompleted);
+            entry.hasCompleted && 
+            !entry.hasGivenUp);
         console.log("Completed entries:", completedEntries);
 
-        // Then display given up entries
+        // Then get gave up entries 
         const gaveUpEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
-            entry.hasGivenUp);
+            entry.hasGivenUp === true);
         console.log("Gave up entries:", gaveUpEntries);
 
-        // Filter out any duplicate entries (in case a user both completed and gave up)
-        const uniqueGaveUpEntries = gaveUpEntries.filter(gaveUpEntry => 
-            !completedEntries.some(completedEntry => 
-                completedEntry.uid === gaveUpEntry.uid && 
-                completedEntry.puzzleId === gaveUpEntry.puzzleId
-            )
-        );
-
-        // Combine the arrays, with gave up entries at the end
-        const validEntries = [...completedEntries, ...uniqueGaveUpEntries];
+        // Combine the arrays with gave up entries at the end
+        const validEntries = [...completedEntries, ...gaveUpEntries];
         console.log("Combined valid entries:", validEntries);
 
         validEntries.forEach((entry, index) => {
