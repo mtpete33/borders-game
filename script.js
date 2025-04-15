@@ -2345,25 +2345,27 @@ async function getLeaderboard(date = new Date()) {
             targetElement.appendChild(givenUpTable);
 
             givenUpEntries.forEach((entry, index) => {
-                const row = givenUpTbody.insertRow();
-                const rankCell = row.insertCell(0);
-                const usernameCell = row.insertCell(1);
-                const timeCell = row.insertCell(2);
-                const dateCell = row.insertCell(3);
-                const puzzleCell = row.insertCell(4);
-                const wordsCell = row.insertCell(5);
+                if (entry.hasGivenUp) {
+                    const row = givenUpTbody.insertRow();
+                    const rankCell = row.insertCell(0);
+                    const usernameCell = row.insertCell(1);
+                    const timeCell = row.insertCell(2);
+                    const dateCell = row.insertCell(3);
+                    const puzzleCell = row.insertCell(4);
+                    const wordsCell = row.insertCell(5);
 
-                rankCell.textContent = '-';
-                usernameCell.textContent = entry.username;
-                timeCell.textContent = '-';
+                    rankCell.textContent = '-';
+                    usernameCell.textContent = entry.username || 'Unknown User';
+                    timeCell.textContent = '-';
 
-                const dateObj = new Date(entry.date);
-                const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
-                dateCell.textContent = formattedDate;
-                puzzleCell.textContent = entry.puzzleId;
-                wordsCell.textContent = 'Gave Up';
+                    const dateObj = new Date(entry.date);
+                    const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+                    dateCell.textContent = formattedDate;
+                    puzzleCell.textContent = entry.puzzleId;
+                    wordsCell.textContent = 'Gave Up';
 
-                row.style.backgroundColor = '#fff0f0';
+                    row.style.backgroundColor = '#fff0f0';
+                }
             });
         }
     }
