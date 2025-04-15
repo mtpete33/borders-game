@@ -2251,20 +2251,25 @@ async function getLeaderboard(date = new Date()) {
 
         tbody.innerHTML = '';
 
+        console.log("Raw leaderboard data:", leaderboardData);
+
         // First display completed entries
         const completedEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
             entry.hasCompleted);
+        console.log("Completed entries:", completedEntries);
 
         // Then display given up entries
         const gaveUpEntries = leaderboardData.filter(entry => 
             entry.username !== 'undefined' && 
             entry.username !== undefined && 
             entry.hasGivenUp);
+        console.log("Gave up entries:", gaveUpEntries);
 
         // Combine the arrays
         const validEntries = [...completedEntries, ...gaveUpEntries];
+        console.log("Combined valid entries:", validEntries);
 
         validEntries.forEach((entry, index) => {
             const row = tbody.insertRow();
