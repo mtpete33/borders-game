@@ -1,0 +1,132 @@
+script.js:2192 User data found: {"email":"mtpete33@gmail.com","uid":"HVzGFf7yzIgp7DLbM9T4A1M4jqI2","username":"mtpete33"}
+script.js:723 Checking for document with user ID and puzzle ID: HVzGFf7yzIgp7DLbM9T4A1M4jqI2 183
+script.js:732 Leaderboard data retrieved: 
+{hasGivenUp: true, puzzleId: 183, date: '2025-04-15T14:21:53.733Z', hasCompleted: false, uid: 'HVzGFf7yzIgp7DLbM9T4A1M4jqI2', …}
+script.js:2251 Raw leaderboard data: 
+(8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+0
+: 
+{puzzleId: 183, date: '2025-04-15T13:49:11.258Z', time: 13.706, hasGivenUp: false, words: Array(4), …}
+1
+: 
+{time: 16.998, username: 'Svanderpool31', puzzleId: 183, hasCompleted: true, date: '2025-04-15T14:40:46.738Z', …}
+2
+: 
+{time: 22.534, date: '2025-04-15T14:34:46.796Z', username: 'Amanda McKay', hasCompleted: true, words: Array(4), …}
+3
+: 
+{puzzleId: 183, date: '2025-04-15T12:41:20.725Z', words: Array(4), hasCompleted: true, hasGivenUp: false, …}
+4
+: 
+{time: 35.434, puzzleId: 183, date: '2025-04-15T12:54:36.253Z', uid: 'ANtOfxGWPSbLbxpo7w75qFZcpzs2', username: 'Cindy Pete', …}
+5
+: 
+{date: '2025-04-15T12:06:41.221Z', uid: '4Oo7z6ZYOvhChjcnfWIofqSxFqX2', puzzleId: 183, time: 48.424, username: 'justinedavis09', …}
+6
+: 
+{username: 'coachpetegolden', date: '2025-04-15T12:56:13.312Z', puzzleId: 183, hasGivenUp: false, hasCompleted: true, …}
+7
+: 
+{words: Array(4), username: 'Vward30', hasCompleted: true, hasGivenUp: false, uid: 'axahw6XUUrSA2r8Bhk60bdRZz5K2', …}
+length
+: 
+8
+[[Prototype]]
+: 
+Array(0)
+script.js:2259 Before sorting, entries including give ups: 
+(8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+0
+: 
+{puzzleId: 183, date: '2025-04-15T13:49:11.258Z', time: 13.706, hasGivenUp: false, words: Array(4), …}
+1
+: 
+{time: 16.998, username: 'Svanderpool31', puzzleId: 183, hasCompleted: true, date: '2025-04-15T14:40:46.738Z', …}
+2
+: 
+{time: 22.534, date: '2025-04-15T14:34:46.796Z', username: 'Amanda McKay', hasCompleted: true, words: Array(4), …}
+3
+: 
+{puzzleId: 183, date: '2025-04-15T12:41:20.725Z', words: Array(4), hasCompleted: true, hasGivenUp: false, …}
+4
+: 
+{time: 35.434, puzzleId: 183, date: '2025-04-15T12:54:36.253Z', uid: 'ANtOfxGWPSbLbxpo7w75qFZcpzs2', username: 'Cindy Pete', …}
+5
+: 
+{date: '2025-04-15T12:06:41.221Z', uid: '4Oo7z6ZYOvhChjcnfWIofqSxFqX2', puzzleId: 183, time: 48.424, username: 'justinedavis09', …}
+6
+: 
+{username: 'coachpetegolden', date: '2025-04-15T12:56:13.312Z', puzzleId: 183, hasGivenUp: false, hasCompleted: true, …}
+7
+: 
+{words: Array(4), username: 'Vward30', hasCompleted: true, hasGivenUp: false, uid: 'axahw6XUUrSA2r8Bhk60bdRZz5K2', …}
+length
+: 
+8
+[[Prototype]]
+: 
+Array(0)
+script.js:2274 After sorting, entries including give ups: 
+(8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+0
+: 
+{puzzleId: 183, date: '2025-04-15T13:49:11.258Z', time: 13.706, hasGivenUp: false, words: Array(4), …}
+1
+: 
+{time: 16.998, username: 'Svanderpool31', puzzleId: 183, hasCompleted: true, date: '2025-04-15T14:40:46.738Z', …}
+2
+: 
+{time: 22.534, date: '2025-04-15T14:34:46.796Z', username: 'Amanda McKay', hasCompleted: true, words: Array(4), …}
+3
+: 
+{puzzleId: 183, date: '2025-04-15T12:41:20.725Z', words: Array(4), hasCompleted: true, hasGivenUp: false, …}
+4
+: 
+{time: 35.434, puzzleId: 183, date: '2025-04-15T12:54:36.253Z', uid: 'ANtOfxGWPSbLbxpo7w75qFZcpzs2', username: 'Cindy Pete', …}
+5
+: 
+{date: '2025-04-15T12:06:41.221Z', uid: '4Oo7z6ZYOvhChjcnfWIofqSxFqX2', puzzleId: 183, time: 48.424, username: 'justinedavis09', …}
+6
+: 
+{username: 'coachpetegolden', date: '2025-04-15T12:56:13.312Z', puzzleId: 183, hasGivenUp: false, hasCompleted: true, …}
+7
+: 
+{words: Array(4), username: 'Vward30', hasCompleted: true, hasGivenUp: false, uid: 'axahw6XUUrSA2r8Bhk60bdRZz5K2', …}
+length
+: 
+8
+[[Prototype]]
+: 
+Array(0)
+script.js:2276 Valid sorted entries: 
+(8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+0
+: 
+{puzzleId: 183, date: '2025-04-15T13:49:11.258Z', time: 13.706, hasGivenUp: false, words: Array(4), …}
+1
+: 
+{time: 16.998, username: 'Svanderpool31', puzzleId: 183, hasCompleted: true, date: '2025-04-15T14:40:46.738Z', …}
+2
+: 
+{time: 22.534, date: '2025-04-15T14:34:46.796Z', username: 'Amanda McKay', hasCompleted: true, words: Array(4), …}
+3
+: 
+{puzzleId: 183, date: '2025-04-15T12:41:20.725Z', words: Array(4), hasCompleted: true, hasGivenUp: false, …}
+4
+: 
+{time: 35.434, puzzleId: 183, date: '2025-04-15T12:54:36.253Z', uid: 'ANtOfxGWPSbLbxpo7w75qFZcpzs2', username: 'Cindy Pete', …}
+5
+: 
+{date: '2025-04-15T12:06:41.221Z', uid: '4Oo7z6ZYOvhChjcnfWIofqSxFqX2', puzzleId: 183, time: 48.424, username: 'justinedavis09', …}
+6
+: 
+{username: 'coachpetegolden', date: '2025-04-15T12:56:13.312Z', puzzleId: 183, hasGivenUp: false, hasCompleted: true, …}
+7
+: 
+{words: Array(4), username: 'Vward30', hasCompleted: true, hasGivenUp: false, uid: 'axahw6XUUrSA2r8Bhk60bdRZz5K2', …}
+length
+: 
+8
+[[Prototype]]
+: 
+Array(0)
