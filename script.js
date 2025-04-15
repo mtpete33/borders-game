@@ -1660,8 +1660,26 @@ $(document).ready(function() {
         closeStatsModal();
     })
 
-    $("#viewStatsBtn").click(function() {
+    $("#viewStatsBtn").click(async function() {
+        console.log("Stats modal opened");
         $('.stats-modal').css('display', 'block');
+
+        // Log stats retrieval
+        console.log("Fetching user statistics...");
+        const stats = await getUserStatistics();
+        console.log("Retrieved stats:", stats);
+
+        if (stats) {
+            console.log("Updating stats display");
+            $('#gamesPlayedStat').text(stats.gamesPlayed);
+            $('#winPercentageStat').text(stats.winPercentage + '%');
+            $('#bestRankStat').text(stats.bestRank);
+            $('#bestTimeStat').text(stats.bestTime);
+        }
+
+        // Log leaderboard retrieval
+        console.log("Fetching leaderboard data...");
+        getLeaderboard(new Date());
     })
 
 
@@ -2343,11 +2361,11 @@ async function getLeaderboard(date = new Date()) {
         if (givenUpEntries.length > 0) {
             console.log("Raw leaderboard data:", leaderboardData);
             console.log("Before sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
-            
+
             // Sort entries again just before display
             completedEntries.sort((a, b) => a.time - b.time);
             givenUpEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
+
             console.log("After sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
             console.log("Valid sorted entries:", completedEntries);
             console.log("Given up entries to display:", givenUpEntries);
