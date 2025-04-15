@@ -22,30 +22,32 @@ async function getUserStatistics() {
 
   try {
     const statsRef = collection(window.db, "leaderboard");
-    const userEntriesQuery = query(
+    // Modified query to include all entries regardless of hasCompleted
+    const allUserEntriesQuery = query(
       statsRef,
-      where("uid", "==", user.uid),
-      where("hasCompleted", "==", true)
+      where("uid", "==", user.uid)
     );
 
-    // Single query for user entries
-    const querySnapshot = await getDocs(userEntriesQuery);
+    // Single query for all user entries
+    const querySnapshot = await getDocs(allUserEntriesQuery);
     const entries = [];
     const puzzleTimeMap = new Map();
+    let totalGames = 0;
+    let completedGames = 0;
     querySnapshot.forEach(doc => {
       const data = doc.data();
       entries.push(data);
       puzzleTimeMap.set(data.puzzleId, data.time);
+      totalGames++;
+      if (data.hasCompleted) {
+        completedGames++;
+      }
     });
 
-    // Single query for total games
-    const allGamesQuery = query(statsRef, where("uid", "==", user.uid));
-    const allGamesSnapshot = await getDocs(allGamesQuery);
-    const totalGames = allGamesSnapshot.size;
-
-    const completedGames = querySnapshot.docs.filter(doc => doc.data().hasCompleted).length;
     const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
-    const bestTime = entries.length > 0 ? Math.min(...entries.map(entry => entry.time)) : null;
+    const completedEntries = entries.filter(entry => entry.hasCompleted);
+    const bestTime = completedEntries.length > 0 ? Math.min(...completedEntries.map(entry => entry.time)) : null;
+
 
     // Batch process first place times
     const puzzleIds = Array.from(puzzleTimeMap.keys());
@@ -59,7 +61,7 @@ async function getUserStatistics() {
         const firstPlacesQuery = query(
           statsRef,
           where("puzzleId", "in", batch),
-          where("hasCompleted", "==", true),
+          where("hasCompleted", "==", true), // Only consider completed games for ranking
           orderBy("time", "asc")
         );
 
@@ -83,10 +85,10 @@ async function getUserStatistics() {
             }
           });
           puzzleTimes.sort((a, b) => a - b);
-          
+
           const userTime = puzzleTimeMap.get(puzzleId);
           const userRank = puzzleTimes.indexOf(userTime) + 1;
-          
+
           if (userRank > 0 && (userRank < bestRank.rank || bestRank.rank === Infinity)) {
             bestRank = { rank: userRank, count: 1 };
           } else if (userRank === bestRank.rank) {
