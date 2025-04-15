@@ -871,7 +871,7 @@ $(document).ready(function() {
             // console.log("Delete button clicked");
             handleDelete();
         } else {
-            $(`#${focusableCells[currentCellIndex]`}`).val(key.toUpperCase());
+            $(`#${focusableCells[currentCellIndex]}`).val(key.toUpperCase());
             if (currentCellIndex < focusableCells.length - 1) {
                 currentCellIndex++;
                 // console.log("Moved to next cell due to key input. Current cell index:", currentCellIndex);
