@@ -139,5 +139,39 @@ function getOrdinalSuffix(rank) {
   return "th";
 }
 
-// Export functions
+// Placeholder for leaderboard display function.  This needs to be adapted to your actual code.
+function displayLeaderboard(leaderboardEntries) {
+    // Assume leaderboardEntries is an array of objects with at least 'hasCompleted', 'time', and 'date' properties.
+    const validEntries = [...leaderboardEntries]; // Create a copy to avoid modifying the original array
+
+    // Sort entries - completed first by time, then show gave up entries by date
+    validEntries.sort((a, b) => {
+        if (a.hasCompleted && !b.hasCompleted) return -1;
+        if (!a.hasCompleted && b.hasCompleted) return 1;
+        if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
+        if (!a.hasCompleted && !b.hasCompleted) {
+            return new Date(b.date) - new Date(a.date);
+        }
+        return 0;
+    });
+
+    // ... (rest of your leaderboard display logic) ...
+    console.log("Leaderboard:", validEntries);
+}
+
+
+// Example usage (replace with your actual leaderboard data retrieval)
+async function getLeaderboardData(){
+  // ... (Your code to fetch leaderboard data) ...
+  const leaderboardEntries = [
+      { puzzleId: '1', uid: 'user1', time: 120, hasCompleted: true, date: '2024-10-27T10:00:00' },
+      { puzzleId: '1', uid: 'user2', time: 150, hasCompleted: true, date: '2024-10-27T11:00:00' },
+      { puzzleId: '1', uid: 'user3', hasCompleted: false, date: '2024-10-27T12:00:00' },
+      { puzzleId: '1', uid: 'user4', hasCompleted: false, date: '2024-10-27T09:00:00' }
+  ];
+  displayLeaderboard(leaderboardEntries);
+}
+
+getLeaderboardData();
+
 export { getUserStatistics };
