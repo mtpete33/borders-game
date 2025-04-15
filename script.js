@@ -2341,11 +2341,24 @@ async function getLeaderboard(date = new Date()) {
 
         // Display given up entries if any exist
         if (givenUpEntries.length > 0) {
+            console.log("Raw leaderboard data:", leaderboardData);
+            console.log("Before sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
+            
+            // Sort entries again just before display
+            completedEntries.sort((a, b) => a.time - b.time);
+            givenUpEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            console.log("After sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
+            console.log("Valid sorted entries:", completedEntries);
+            console.log("Given up entries to display:", givenUpEntries);
+
             targetElement.appendChild(givenUpTitle);
             targetElement.appendChild(givenUpTable);
 
             givenUpEntries.forEach((entry, index) => {
+                console.log("Processing given up entry:", entry);
                 if (entry.hasGivenUp) {
+                    console.log("Creating row for given up entry:", entry);
                     const row = givenUpTbody.insertRow();
                     const rankCell = row.insertCell(0);
                     const usernameCell = row.insertCell(1);
@@ -2365,6 +2378,9 @@ async function getLeaderboard(date = new Date()) {
                     wordsCell.textContent = 'Gave Up';
 
                     row.style.backgroundColor = '#fff0f0';
+                    console.log("Successfully created row for given up entry");
+                } else {
+                    console.log("Skipping entry - not marked as given up:", entry);
                 }
             });
         }
