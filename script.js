@@ -2341,10 +2341,8 @@ async function getLeaderboard(date = new Date()) {
 
         // Display given up entries if any exist
         if (givenUpEntries.length > 0) {
-            const givenUpTitle = document.createElement('h3');
-            givenUpTitle.textContent = 'Given Up Attempts';
-            givenUpTitle.style.marginTop = '20px';
             targetElement.appendChild(givenUpTitle);
+            targetElement.appendChild(givenUpTable);
 
             givenUpEntries.forEach((entry, index) => {
                 const row = givenUpTbody.insertRow();
