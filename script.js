@@ -2211,22 +2211,45 @@ async function getLeaderboard(date = new Date()) {
         const friendsList = user ? await getFriendsList() : [];
         const isShowingFriends = $('#stats-friendsFilterBtn').hasClass('active');
 
-        // Create table if it doesn't exist in target element
-        let table = targetElement.querySelector('table');
-        if (!table) {
-            table = document.createElement('table');
-            table.className = 'leaderboard-table';
-            targetElement.appendChild(table);
-        }
-        const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
-        const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
+        // Clear existing content
+        targetElement.innerHTML = '';
+
+        // Create completed table
+        const completedTitle = document.createElement('h3');
+        completedTitle.textContent = 'Completed Puzzles';
+        targetElement.appendChild(completedTitle);
+
+        const completedTable = document.createElement('table');
+        completedTable.className = 'leaderboard-table';
+        const completedThead = completedTable.createTHead();
+        const completedTbody = completedTable.createTBody();
+        targetElement.appendChild(completedTable);
+
+        // Create given up table
+        const givenUpTitle = document.createElement('h3');
+        givenUpTitle.textContent = 'Given Up Attempts';
+        givenUpTitle.style.marginTop = '20px';
+        targetElement.appendChild(givenUpTitle);
+
+        const givenUpTable = document.createElement('table');
+        givenUpTable.className = 'leaderboard-table';
+        const givenUpThead = givenUpTable.createTHead();
+        const givenUpTbody = givenUpTable.createTBody();
+        targetElement.appendChild(givenUpTable);
 
         // Determine which view is active
         const activeFilter = $('.filter-btn.active').attr('id');
 
         // Set appropriate headers based on active filter
         if (activeFilter === 'mostWinsFilter') {
-            thead.innerHTML = `
+            completedThead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Wins</th>
+                </tr>
+            `;
+            givenUpThead.innerHTML = `
                 <tr>
                     <th>Rank</th>
                     <th>User</th>
@@ -2234,7 +2257,17 @@ async function getLeaderboard(date = new Date()) {
                 </tr>
             `;
         } else {
-            thead.innerHTML = `
+            completedThead.innerHTML = `
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Puzzle #</th>
+                    <th>Answers</th>
+                </tr>
+            `;
+            givenUpThead.innerHTML = `
                 <tr>
                     <th>Rank</th>
                     <th>User</th>
@@ -2246,44 +2279,20 @@ async function getLeaderboard(date = new Date()) {
             `;
         }
 
-        tbody.innerHTML = '';
-
-        console.log("Raw leaderboard data:", leaderboardData);
-
-        // Filter out undefined usernames but keep hasGivenUp entries
-        const validEntries = leaderboardData.filter(entry => 
-            entry.username !== 'undefined' && 
-            entry.username !== undefined);
-
-        console.log("Before sorting, entries including give ups:", validEntries);
-
-        // Sort entries - completed first by time, then show gave up entries by date
-        validEntries.sort((a, b) => {
-            // Put given up entries at the bottom
-            if (a.hasGivenUp && !b.hasGivenUp) return 1;
-            if (!a.hasGivenUp && b.hasGivenUp) return -1;
-            
-            // For non-given up entries, sort by time
-            if (!a.hasGivenUp && !b.hasGivenUp) {
-                if (a.hasCompleted && !b.hasCompleted) return -1;
-                if (!a.hasCompleted && b.hasCompleted) return 1;
-                return a.time - b.time;
+        // Filter data into completed and given up arrays
+        let completedEntries = [];
+        let givenUpEntries = [];
+        leaderboardData.forEach(entry => {
+            if (entry.hasGivenUp) {
+                givenUpEntries.push(entry);
+            } else {
+                completedEntries.push(entry);
             }
-            
-            // For given up entries, sort by date
-            if (a.hasGivenUp && b.hasGivenUp) {
-                return new Date(b.date) - new Date(a.date);
-            }
-            
-            return 0;
         });
 
-        console.log("After sorting, entries including give ups:", validEntries);
-
-        console.log("Valid sorted entries:", validEntries);
-
-        validEntries.forEach((entry, index) => {
-            const row = tbody.insertRow();
+        // Display completed entries
+        completedEntries.forEach((entry, index) => {
+            const row = completedTbody.insertRow();
             if (activeFilter === 'mostWinsFilter') {
                 const rankCell = row.insertCell(0);
                 const usernameCell = row.insertCell(1);
@@ -2320,19 +2329,38 @@ async function getLeaderboard(date = new Date()) {
                         usernameCell.appendChild(friendBtn);
                     }
                 }
-                timeCell.textContent = entry.hasGivenUp ? '-' : formattedTime;
+                timeCell.textContent = formattedTime;
 
                 const dateObj = new Date(entry.date);
                 const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
                 dateCell.textContent = formattedDate;
                 puzzleCell.textContent = entry.puzzleId;
-                wordsCell.textContent = entry.hasGivenUp ? 'Gave Up' : (entry.words ? entry.words.join(', ') : 'No words submitted');
-
-                if (entry.hasGivenUp) {
-                    rankCell.textContent = '-';
-                    row.style.backgroundColor = '#fff0f0';
-                }
+                wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
             }
+        });
+
+        // Display given up entries
+        givenUpEntries.forEach((entry, index) => {
+            const row = givenUpTbody.insertRow();
+            const rankCell = row.insertCell(0);
+            const usernameCell = row.insertCell(1);
+            const timeCell = row.insertCell(2);
+            const dateCell = row.insertCell(3);
+            const puzzleCell = row.insertCell(4);
+            const wordsCell = row.insertCell(5);
+
+            rankCell.textContent = '-';
+            usernameCell.textContent = entry.username;
+            timeCell.textContent = '-';
+
+            const dateObj = new Date(entry.date);
+            const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+            dateCell.textContent = formattedDate;
+
+            puzzleCell.textContent = entry.puzzleId;
+            wordsCell.textContent = 'Gave Up';
+
+            row.style.backgroundColor = '#fff0f0';
         });
     }
 
