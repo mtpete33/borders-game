@@ -2256,7 +2256,9 @@ async function getLeaderboard(date = new Date()) {
             entry.username !== undefined &&
             (entry.hasCompleted || entry.hasGivenUp));
 
-        // Sort entries - completed first by time, then gave up entries by date
+        console.log("Before sorting, entries including give ups:", validEntries);
+
+        // Sort entries - completed first by time, then show gave up entries by date
         validEntries.sort((a, b) => {
             if (a.hasCompleted && !b.hasCompleted) return -1;
             if (!a.hasCompleted && b.hasCompleted) return 1;
@@ -2266,6 +2268,8 @@ async function getLeaderboard(date = new Date()) {
             }
             return 0;
         });
+
+        console.log("After sorting, entries including give ups:", validEntries);
 
         console.log("Valid sorted entries:", validEntries);
 
