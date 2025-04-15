@@ -413,7 +413,6 @@ $(document).ready(function() {
             const q = query(
                 statsRef,
                 where("puzzleId", "==", puzzleId),
-                where("hasCompleted", "==", true),
                 orderBy("time", "asc"),
                 limit(10)
             );
@@ -423,9 +422,7 @@ $(document).ready(function() {
 
             querySnapshot.forEach(doc => {
                 const data = doc.data();
-                if (!data.hasGivenUp) {
-                    leaderboardData.push(data);
-                }
+                leaderboardData.push(data);
             });
 
             // Display the leaderboard
@@ -874,7 +871,7 @@ $(document).ready(function() {
             // console.log("Delete button clicked");
             handleDelete();
         } else {
-            $(`#${focusableCells[currentCellIndex]}`).val(key.toUpperCase());
+            $(`#${focusableCells[currentCellIndex]`}`).val(key.toUpperCase());
             if (currentCellIndex < focusableCells.length - 1) {
                 currentCellIndex++;
                 // console.log("Moved to next cell due to key input. Current cell index:", currentCellIndex);
@@ -2265,7 +2262,7 @@ async function getLeaderboard(date = new Date()) {
             if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
             return 0;
         });
-        
+
         console.log("Valid sorted entries:", validEntries);
 
         validEntries.forEach((entry, index) => {
