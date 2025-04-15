@@ -2260,15 +2260,23 @@ async function getLeaderboard(date = new Date()) {
 
         // Sort entries - completed first by time, then show gave up entries by date
         validEntries.sort((a, b) => {
+            // First prioritize completed entries
             if (a.hasCompleted && !b.hasCompleted) return -1;
             if (!a.hasCompleted && b.hasCompleted) return 1;
+
+            // Among completed entries, sort by time
             if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
+
+            // Handle give up entries
             if (a.hasGivenUp && !b.hasGivenUp) return 1;
             if (!a.hasGivenUp && b.hasGivenUp) return -1;
+
+            // Among give up entries, sort by date
             if (a.hasGivenUp && b.hasGivenUp) {
                 return new Date(b.date) - new Date(a.date);
             }
-            return 0;
+
+            return new Date(b.date) - new Date(a.date);
         });
 
         console.log("After sorting, entries including give ups:", validEntries);
