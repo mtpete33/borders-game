@@ -2263,7 +2263,9 @@ async function getLeaderboard(date = new Date()) {
             if (a.hasCompleted && !b.hasCompleted) return -1;
             if (!a.hasCompleted && b.hasCompleted) return 1;
             if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
-            if (!a.hasCompleted && !b.hasCompleted) {
+            if (a.hasGivenUp && !b.hasGivenUp) return 1;
+            if (!a.hasGivenUp && b.hasGivenUp) return -1;
+            if (a.hasGivenUp && b.hasGivenUp) {
                 return new Date(b.date) - new Date(a.date);
             }
             return 0;
