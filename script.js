@@ -2339,29 +2339,35 @@ async function getLeaderboard(date = new Date()) {
             }
         });
 
-        // Display given up entries
-        givenUpEntries.forEach((entry, index) => {
-            const row = givenUpTbody.insertRow();
-            const rankCell = row.insertCell(0);
-            const usernameCell = row.insertCell(1);
-            const timeCell = row.insertCell(2);
-            const dateCell = row.insertCell(3);
-            const puzzleCell = row.insertCell(4);
-            const wordsCell = row.insertCell(5);
+        // Display given up entries if any exist
+        if (givenUpEntries.length > 0) {
+            const givenUpTitle = document.createElement('h3');
+            givenUpTitle.textContent = 'Given Up Attempts';
+            givenUpTitle.style.marginTop = '20px';
+            targetElement.appendChild(givenUpTitle);
 
-            rankCell.textContent = '-';
-            usernameCell.textContent = entry.username;
-            timeCell.textContent = '-';
+            givenUpEntries.forEach((entry, index) => {
+                const row = givenUpTbody.insertRow();
+                const rankCell = row.insertCell(0);
+                const usernameCell = row.insertCell(1);
+                const timeCell = row.insertCell(2);
+                const dateCell = row.insertCell(3);
+                const puzzleCell = row.insertCell(4);
+                const wordsCell = row.insertCell(5);
 
-            const dateObj = new Date(entry.date);
-            const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
-            dateCell.textContent = formattedDate;
+                rankCell.textContent = '-';
+                usernameCell.textContent = entry.username;
+                timeCell.textContent = '-';
 
-            puzzleCell.textContent = entry.puzzleId;
-            wordsCell.textContent = 'Gave Up';
+                const dateObj = new Date(entry.date);
+                const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
+                dateCell.textContent = formattedDate;
+                puzzleCell.textContent = entry.puzzleId;
+                wordsCell.textContent = 'Gave Up';
 
-            row.style.backgroundColor = '#fff0f0';
-        });
+                row.style.backgroundColor = '#fff0f0';
+            });
+        }
     }
 
 
@@ -2663,7 +2669,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         }, 500);
     });
 
-    // Handle adding/removing friends
+    //    // Handle adding/removing friends
     searchResults.on('click', '.add-friend-btn', async function() {
         const uid = $(this).data('uid');
         const username = $(this).data('username');
