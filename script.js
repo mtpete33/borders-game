@@ -2149,22 +2149,47 @@ async function displayWinnersList(winnersList) {
     
 
     function displayAttempted(attemptedData) {
+        console.log("Displaying attempted data:", attemptedData);
+        
         const attemptedTable = document.getElementById('attemptedTable');
+        if (!attemptedTable) {
+            console.error("Attempted table element not found");
+            return;
+        }
+        
         // Clear existing rows
         attemptedTable.innerHTML = '';
 
+        // Add table header with section title
+        const titleRow = document.createElement('tr');
+        const titleCell = document.createElement('th');
+        titleCell.colSpan = 6;
+        titleCell.textContent = `Players Who Gave Up (${attemptedData.length})`;
+        titleCell.style.backgroundColor = '#ffebee';
+        titleRow.appendChild(titleCell);
+        attemptedTable.appendChild(titleRow);
+
         // Build the header row
         const headerRow = document.createElement('tr');
-        ['Rank', 'User', 'Time', 'Date', 'Puzzle #', 'Answers'].forEach((headerText) => {
+        ['Rank', 'User', 'Time', 'Date', 'Puzzle #', 'Status'].forEach((headerText) => {
             const th = document.createElement('th');
             th.innerText = headerText;
             headerRow.appendChild(th);
         });
         attemptedTable.appendChild(headerRow);
 
+        // Sort attempted data by date (most recent first)
+        attemptedData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         // Fill table rows
-        // "Rank" and "Time" will just be '-', and "Answers" will be "Gave Up"
         attemptedData.forEach((playerData) => {
+            console.log("Processing player data:", playerData);
+            
+            if (!playerData.hasGivenUp) {
+                console.log("Skipping non-give-up entry:", playerData);
+                return;
+            }
+
             const row = document.createElement('tr');
 
             // Rank
@@ -2179,16 +2204,17 @@ async function displayWinnersList(winnersList) {
 
             // Time
             const timeTd = document.createElement('td');
-            timeTd.innerText = '-'; // since they gave up
+            timeTd.innerText = '-';
             row.appendChild(timeTd);
 
             // Date
             const dateTd = document.createElement('td');
-            // If your 'data.date' is a Firestore Timestamp, convert accordingly
-            // e.g.: playerData.date.toDate().toLocaleString()  
-            // Otherwise, if it's stored as a string or a standard JS Date, format it similarly
             const dateValue = playerData.date 
-                ? new Date(playerData.date).toLocaleDateString() 
+                ? new Date(playerData.date).toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: '2-digit'
+                }) 
                 : 'Unknown Date';
             dateTd.innerText = dateValue;
             row.appendChild(dateTd);
@@ -2198,13 +2224,26 @@ async function displayWinnersList(winnersList) {
             puzzleTd.innerText = playerData.puzzleId;
             row.appendChild(puzzleTd);
 
-            // Answers
-            const answersTd = document.createElement('td');
-            answersTd.innerText = 'Gave Up';
-            row.appendChild(answersTd);
+            // Status
+            const statusTd = document.createElement('td');
+            statusTd.innerText = 'Gave Up';
+            statusTd.style.color = '#d32f2f';
+            row.appendChild(statusTd);
 
             attemptedTable.appendChild(row);
         });
+
+        // Add message if no data
+        if (attemptedData.length === 0) {
+            const noDataRow = document.createElement('tr');
+            const noDataCell = document.createElement('td');
+            noDataCell.colSpan = 6;
+            noDataCell.textContent = 'No players have given up on this puzzle yet';
+            noDataCell.style.textAlign = 'center';
+            noDataCell.style.padding = '20px';
+            noDataRow.appendChild(noDataCell);
+            attemptedTable.appendChild(noDataRow);
+        }
     }
 
 
