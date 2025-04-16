@@ -2134,10 +2134,10 @@ async function displayWinnersList(winnersList) {
                 }
 
                 // Push to appropriate array based on hasGivenUp status
-                if (data.hasGivenUp) {
+                if (data.hasGivenUp && !data.hasCompleted) {
                     console.log("Found player who gave up:", data.username);
                     attemptedData.push(data);
-                } else {
+                } else if (!data.hasGivenUp) {
                     leaderboardData.push(data);
                 }
             }
