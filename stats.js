@@ -83,10 +83,10 @@ async function getUserStatistics() {
             }
           });
           puzzleTimes.sort((a, b) => a - b);
-          
+
           const userTime = puzzleTimeMap.get(puzzleId);
           const userRank = puzzleTimes.indexOf(userTime) + 1;
-          
+
           if (userRank > 0 && (userRank < bestRank.rank || bestRank.rank === Infinity)) {
             bestRank = { rank: userRank, count: 1 };
           } else if (userRank === bestRank.rank) {
@@ -137,5 +137,73 @@ function getOrdinalSuffix(rank) {
   return "th";
 }
 
+function displayAttempted(attemptedData) {
+    console.log("Displaying attempted data:", attemptedData);
+
+    const attemptedTable = document.getElementById('attemptedTable');
+    if (!attemptedTable) {
+        console.error("Attempted table element not found");
+        return;
+    }
+
+    // Filter for only given up entries
+    const givenUpEntries = attemptedData.filter(entry => entry.hasGivenUp === true);
+
+    // Clear existing rows
+    attemptedTable.innerHTML = '';
+
+    // Add table header with section title
+    const titleRow = document.createElement('tr');
+    const titleCell = document.createElement('th');
+    titleCell.colSpan = 6;
+    titleCell.textContent = `Players Who Gave Up (${givenUpEntries.length})`;
+    titleCell.style.backgroundColor = '#ffebee';
+    titleRow.appendChild(titleCell);
+    attemptedTable.appendChild(titleRow);
+
+    // Build the header row
+    const headerRow = document.createElement('tr');
+    ['Rank', 'User', 'Time', 'Date', 'Puzzle #', 'Status'].forEach((headerText) => {
+        const th = document.createElement('th');
+        th.innerText = headerText;
+        headerRow.appendChild(th);
+    });
+    attemptedTable.appendChild(headerRow);
+
+    // Sort attempted data by date (most recent first)
+    givenUpEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Fill table rows
+    givenUpEntries.forEach((playerData, index) => {
+        console.log("Processing document:", playerData);
+        const row = document.createElement('tr');
+        const rankCell = document.createElement('td');
+        rankCell.textContent = index + 1;
+        row.appendChild(rankCell);
+
+        const userCell = document.createElement('td');
+        userCell.textContent = playerData.user;
+        row.appendChild(userCell);
+
+        const timeCell = document.createElement('td');
+        timeCell.textContent = formatTime(playerData.time);
+        row.appendChild(timeCell);
+
+        const dateCell = document.createElement('td');
+        dateCell.textContent = playerData.date;
+        row.appendChild(dateCell);
+
+        const puzzleCell = document.createElement('td');
+        puzzleCell.textContent = playerData.puzzleId;
+        row.appendChild(puzzleCell);
+
+        const statusCell = document.createElement('td');
+        statusCell.textContent = "Gave Up";
+        row.appendChild(statusCell);
+
+        attemptedTable.appendChild(row);
+    });
+}
+
 // Export functions
-export { getUserStatistics };
+export { getUserStatistics, displayAttempted };
