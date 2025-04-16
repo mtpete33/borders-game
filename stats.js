@@ -147,14 +147,12 @@ function displayAttempted(attemptedData) {
     }
 
     // Find all entries where hasGivenUp is true
-    const givenUpEntries = [];
-    attemptedData.forEach(entry => {
-        if (entry.hasGivenUp === true) {
-            console.log("Found give up entry:", entry);
-            givenUpEntries.push(entry);
-        }
+    const givenUpEntries = attemptedData.filter(entry => {
+        console.log("Checking entry:", entry);
+        return entry && entry.hasGivenUp === true;
     });
-    console.log("Given up entries:", givenUpEntries);
+    
+    console.log("Given up entries after filter:", givenUpEntries);
 
     // Clear existing rows
     attemptedTable.innerHTML = '';
@@ -184,24 +182,26 @@ function displayAttempted(attemptedData) {
     givenUpEntries.forEach((playerData, index) => {
         console.log("Processing given up entry:", playerData);
         const row = document.createElement('tr');
+        
         const rankCell = document.createElement('td');
         rankCell.textContent = index + 1;
         row.appendChild(rankCell);
 
         const userCell = document.createElement('td');
-        userCell.textContent = playerData.user;
+        userCell.textContent = playerData.username || playerData.user || 'Unknown';
         row.appendChild(userCell);
 
         const timeCell = document.createElement('td');
-        timeCell.textContent = formatTime(playerData.time);
+        timeCell.textContent = playerData.time ? formatTime(playerData.time) : '--:--';
         row.appendChild(timeCell);
 
         const dateCell = document.createElement('td');
-        dateCell.textContent = playerData.date;
+        const dateStr = playerData.date ? new Date(playerData.date).toLocaleDateString() : '--';
+        dateCell.textContent = dateStr;
         row.appendChild(dateCell);
 
         const puzzleCell = document.createElement('td');
-        puzzleCell.textContent = playerData.puzzleId;
+        puzzleCell.textContent = playerData.puzzleId || '--';
         row.appendChild(puzzleCell);
 
         const statusCell = document.createElement('td');
