@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, getDocs, collection, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getUserStatistics } from './stats.js';
+import { getUserStatistics, displayAttempted } from './stats.js';
 
 let currentLeaderboardDate = new Date();
 
