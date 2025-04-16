@@ -40,7 +40,7 @@ $(document).ready(function() {
     // if (isInstagramBrowser()) {
     //     alert("Please open this page in an external browser to use Google Login. Click the three dots at the top right corner and select 'Open in external browser'. If you're logging in with regular email you may continue in this browser.");
     // }
-
+    
     // Variables for guest gameplay
     let guestStartTime;
     let guestPuzzleAnswers;
@@ -84,7 +84,7 @@ $(document).ready(function() {
                     word3: puzzleData.word3,
                     word4: puzzleData.word4
                 };
-
+                
                 // Update the game board with the puzzle data
                 // Word1: Top word
                 $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
@@ -99,7 +99,7 @@ $(document).ready(function() {
                 // Word4: Left word (down)
                 $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
                 $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
-
+                
                 console.log("Yesterday's puzzle loaded:", yesterdayId);
             } else {
                 // If yesterday's puzzle doesn't exist, fetch a random puzzle
@@ -127,7 +127,7 @@ $(document).ready(function() {
                     word3: puzzleData.word3,
                     word4: puzzleData.word4,
                 };
-
+                
                 // Update the game board with the random puzzle data
                 // Word1: Top word
                 $("#guest-cell-2").val(puzzleData.word1.charAt(1)).prop('disabled', true); // 2nd letter of word1
@@ -142,7 +142,7 @@ $(document).ready(function() {
                 // Word4: Left word (down)
                 $("#guest-cell-5").val(puzzleData.word4.charAt(1)).prop('disabled', true); // 2nd letter of word4
                 $("#guest-cell-9").val(puzzleData.word4.charAt(3)).prop('disabled', true); // 4th letter of word4
-
+                
             } else {
                 toastr.error("Failed to fetch a random puzzle.");
             }
@@ -195,19 +195,19 @@ $(document).ready(function() {
             $("#guestGiveUpBtn").css('display', 'none');
 
             $("#guest-virtual-keyboard").hide();
-
+            
             $("#guestResultTime").css('display', 'block').text(`Completed in: ${formattedTime}`);
-
+            
             // Create and show Share button right after result time
             const yesterdayPuzzleId = getYesterdaysPuzzleId();
             const shareButtonHTML = `<button id="guestShareBtn" class="form-button">Share</button>`;
             $("#guestResultTime").after(shareButtonHTML);
-
+            
             // Show sign up CTA after the share button
             $("#guestSignUpCTA").show();
 
-
-
+            
+            
             // Add click handler for Share button
             $("#guestShareBtn").click(async function() {
                 try {
@@ -233,7 +233,7 @@ $(document).ready(function() {
                     console.error('Error sharing:', error);
                 }
             });
-
+            
             // Store the score in localStorage
             try {
                 const guestScore = {
@@ -243,13 +243,13 @@ $(document).ready(function() {
                     words: [userWord1, userWord2, userWord3, userWord4]
                 };
                 localStorage.setItem('guestScore', JSON.stringify(guestScore));
-
+                
                 // Display the leaderboard for this puzzle
                 displayGuestLeaderboard(yesterdayPuzzleId);
             } catch (e) {
                 console.error("Could not save score to localStorage:", e);
             }
-
+            
             // Disable all cells in the game grid
             $("#guestCrossword .cell").prop('disabled', true);
         } else {
@@ -277,31 +277,31 @@ $(document).ready(function() {
     $('#guestPlayBtn').click(function() {
         // Reset the game board
         resetGuestGameBoard();
-
+        
         // Hide landing page and login elements
         $('#landingPage').hide();
         $('#loginForm').hide();
         $('#signUpForm').hide();
         $('#googleLoginBtn').hide();
-
+        
         // Show guest game board
         $('#guestGameBoard').show();
-
+        
         // Fetch yesterday's puzzle
         fetchYesterdaysPuzzle();
-
+        
         // Initialize focus and start time
         $("#guest-cell-1").focus();
         guestStartTime = new Date();
-
+        
         console.log("Guest play button clicked - loading yesterday's puzzle");
     });
-
+    
     // Handle Guest Give Up button click
     $("#guestGiveUpBtn").click(function() {
         $("#guestGiveUpModal").show(); // Show the confirmation modal
     });
-
+    
     // Event handler for the guest confirmation button inside the modal
     $("#guestConfirmGiveUpBtn").click(function() {
         // Display the correct answers on the game board
@@ -332,10 +332,10 @@ $(document).ready(function() {
 
         // Show the give up message
         toastr.info("You gave up! Sorry, better luck next time.");
-
+        
         // Hide the confirmation modal
         $("#guestGiveUpModal").hide();
-
+        
         // Hide the submit and give up buttons
         $("#guestSubmitBtn").css('display', 'none');
         $("#guestGiveUpBtn").css('display', 'none');
@@ -346,85 +346,88 @@ $(document).ready(function() {
 
         // Show the result message
         $("#guestResultTime").css('display', 'block').text(`You gave up. Better luck next time!`);
-
+        
         // Display the leaderboard for yesterday's puzzle
         const yesterdayPuzzleId = getYesterdaysPuzzleId();
         displayGuestLeaderboard(yesterdayPuzzleId);
     });
-
+    
     // Event handler for cancel button inside the guest modal
     $("#guestCancelGiveUpBtn").click(function() {
         $("#guestGiveUpModal").hide();
     });
-
+    
     // Handle Help button clicks for both regular and guest modes
     $('#guestHelpBtn').click(function() {
         $("#guestInstructionsModal").show();
     });
-
+    
     $('#helpBtn').click(function() {
         $("#instructionsModal").show();
     });
-
+    
     // Close the instructions modal when clicking the X
     $('.close-modal').click(function() {
         $("#guestInstructionsModal, #instructionsModal").hide();
     });
-
+    
     // Close the instructions modal when clicking outside of it
     $("#guestInstructionsModal, #instructionsModal").click(function(event) {
         if (event.target === this) {
             $(this).hide();
         }
     });
-
+    
     // Handle Guest Back button click
     $('#guestBackBtn').click(function() {
         // Hide guest game board
         $('#guestGameBoard').hide();
-
+        
         // Show landing page
         $('#landingPage').show();
         $('#googleLoginBtn').show();
     });
-
+    
     // Handle Guest Sign Up button click
     $(document).on('click', '#guestSignUpBtn', function() {
         // Hide guest game board
         $('#guestGameBoard').hide();
-
+        
         // Show landing page with all sign up/login options
         $('#landingPage').show();
         $('#googleLoginBtn').show();
         $('#signUpBtn').show();
         $('#logInBtn').show();
-
+        
         // Make sure all forms are hidden
         $('#signUpForm').hide();
         $('#loginForm').hide();
     });
-
+    
     // Function to display the guest leaderboard
     async function displayGuestLeaderboard(puzzleId) {
         if (!puzzleId) return;
-
+        
         try {
             const statsRef = collection(window.db, "leaderboard");
             const q = query(
                 statsRef,
                 where("puzzleId", "==", puzzleId),
+                where("hasCompleted", "==", true),
                 orderBy("time", "asc"),
                 limit(10)
             );
-
+            
             const querySnapshot = await getDocs(q);
             const leaderboardData = [];
-
+            
             querySnapshot.forEach(doc => {
                 const data = doc.data();
-                leaderboardData.push(data);
+                if (!data.hasGivenUp) {
+                    leaderboardData.push(data);
+                }
             });
-
+            
             // Display the leaderboard
             const leaderboardHTML = `
                 <h2>Leaderboard</h2>
@@ -444,10 +447,10 @@ $(document).ready(function() {
                             // Format the date
                             const dateObj = entry.date ? new Date(entry.date) : new Date();
                             const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
-
+                            
                             // Get answers or placeholder
                             const answers = entry.words ? entry.words.join(', ') : 'No words submitted';
-
+                            
                             return `
                             <tr ${index === 0 ? 'style="background-color: #e6ffe6;"' : ''}>
                                 <td>${index + 1}${getOrdinalSuffix(index + 1)}</td>
@@ -462,7 +465,7 @@ $(document).ready(function() {
                     </tbody>
                 </table>
             `;
-
+            
             // Only render if we have data
             if (leaderboardData.length > 0) {
                 $('#guestLeaderboardContainer').html(leaderboardHTML).show();
@@ -474,12 +477,12 @@ $(document).ready(function() {
             $('#guestLeaderboardContainer').html('<p>Error loading leaderboard data.</p>').show();
         }
     }
-
+    
     // Event listener for the guest Submit button
     $("#guestSubmitBtn").click(function() {
         validateGuestPuzzle(); // Run the validation for the guest puzzle
     });
-
+    
     // Key event logic for clicks on guest keyboard keys
     $(".guest-key").click(function() {
         const key = $(this).data("key");
@@ -495,17 +498,17 @@ $(document).ready(function() {
         }
         guestIsProgrammaticChange = false; // Reset after handling input
     });
-
+    
     // Convert all guest user inputs to uppercase
     $("#guestCrossword .cell").on('input', function() {
         this.value = this.value.toUpperCase();
     });
-
+    
     // Initialize focus on the first cell when the guest game starts
     $("#guest-cell-1").on('focus', function() {
         guestCurrentCellIndex = 0;
     });
-
+    
     // Attach event listeners to each guest cell to update currentCellIndex on focus
     guestFocusableCells.forEach((cellId, index) => {
         $(`#${cellId}`).on('focus click', function(e) {
@@ -522,7 +525,7 @@ $(document).ready(function() {
             $(this).select();
         });
     });
-
+    
     // Input event to move focus for guest cells
     guestFocusableCells.forEach((cellId, index) => {
         $(`#${cellId}`).on('input', function(event) {
@@ -531,7 +534,7 @@ $(document).ready(function() {
                 $(`#${guestFocusableCells[guestCurrentCellIndex]}`).focus().select();
             }
         });
-
+        
         // Add Enter key handler for each cell
         $(`#${cellId}`).on('keydown', function(event) {
             if (event.key === 'Enter') {
@@ -540,12 +543,12 @@ $(document).ready(function() {
             }
         });
     });
-
+    
     // Handle keyboard events for navigation and deletion in guest mode
     $(document).keydown(function(event) {
         const focusedElement = document.activeElement;
         const isGuestGameCell = $(focusedElement).hasClass('cell') && focusedElement.id.startsWith('guest-');
-
+        
         if (isGuestGameCell) {
             let nextCell;
 
@@ -602,14 +605,14 @@ $(document).ready(function() {
         content.toggleClass('show');
         content.slideToggle(300);
     });
-
+    
     // Filter button handler for stats modal
     $('.stats-filter-btn').click(function() {
         $('.stats-filter-btn').removeClass('active');
         $(this).addClass('active');
-
+        
         const id = this.id;
-
+        
         if (id === 'stats-todayFilter') {
             $('#stats-leaderboardDate').show();
             $('#stats-prevDay, #stats-nextDay').prop('disabled', false);
@@ -625,7 +628,7 @@ $(document).ready(function() {
     $('#stats-friendsFilterBtn, #stats-globalFilterBtn').click(function() {
         $('#stats-friendsFilterBtn, #stats-globalFilterBtn').removeClass('active');
         $(this).addClass('active');
-
+        
         const activeFilter = $('.stats-filter-btn.active').attr('id');
 
         if (activeFilter === 'stats-bestTimeFilter') {
@@ -711,7 +714,7 @@ $(document).ready(function() {
             today.setHours(0, 0, 0, 0);
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-
+            
             const q = query(
                 statsRef, 
                 where("uid", "==", user.uid), 
@@ -734,15 +737,15 @@ $(document).ready(function() {
                 if (data.hasCompleted || data.hasGivenUp) {
                     $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
 
-
+                    
                     // $("#manageFriendsBtn").show();
-
+                    
                     if (data.hasGivenUp) {
                         await fetchTodaysPuzzle();
                     }
                     return; // Exit early to prevent Play button from showing
                 }
-
+                
             }
             // Only show Play button if puzzle not completed/given up today
             $("#playBtn").show();
@@ -1003,7 +1006,7 @@ $(document).ready(function() {
                 const statsRef = collection(window.db, "leaderboard");
                 const userDoc = await getDoc(doc(window.db, "users", user.uid));
                 const username = userDoc.exists() ? userDoc.data().username : 'Unknown User';
-
+                
                 await addDoc(statsRef, {
                     puzzleId: currentPuzzleId,
                     date: new Date().toISOString(),
@@ -1085,7 +1088,7 @@ $(document).ready(function() {
         $("#giveUpBtn").hide();
         $("#resultTime").css('display', 'block').text(`You gave up. Better luck tomorrow!`);
     });
-
+    
     // Event handler for cancel button inside the modal
     $("#cancelGiveUpBtn").click(function() {
         $("#giveUpModal").hide();
@@ -1158,18 +1161,18 @@ $(document).ready(function() {
     function validatePuzzle() {
         console.log("Starting puzzle validation");
 
-
+        
         // Explicitly specify the IDs of editable cells
         let editableCellIds = ["cell-1", "cell-3", "cell-4", "cell-7", "cell-8", "cell-11", "cell-12", "cell-14"];
         let editableCells = editableCellIds.map(id => $(`#${id}`));
-
+        
         console.log("Editable cells to check:", editableCellIds);
-
+        
         // Log each cell's content
         editableCellIds.forEach(id => {
             console.log(`Cell ${id} content: "${$(`#${id}`).val()}" - Empty: ${$(`#${id}`).val().trim() === ''}`);
         });
-
+        
         // Check if all editable input fields are filled
         let allFilled = true;
         let emptyCell = null;
@@ -1245,7 +1248,7 @@ $(document).ready(function() {
                     user.uid, 
                     elapsedTime, 
                     userWordsArray);
-
+                
                 // Get and display user statistics
                 getUserStatistics().then(stats => {
                     if (stats) {
@@ -1255,7 +1258,7 @@ $(document).ready(function() {
                         $('#bestTimeStat').text(stats.bestTime);
                     }
                 });
-
+                
                 // Show stats modal and populate leaderboard
                 $('.stats-modal').css('display', 'block');
                 getLeaderboard();
@@ -1448,7 +1451,7 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).select();
     });
-
+    
     // Handle touch events for mobile to prevent selection UI
     $('.cell, .guest-cell').on('touchstart touchend', function(e) {
         e.preventDefault();
@@ -1660,26 +1663,8 @@ $(document).ready(function() {
         closeStatsModal();
     })
 
-    $("#viewStatsBtn").click(async function() {
-        console.log("Stats modal opened");
+    $("#viewStatsBtn").click(function() {
         $('.stats-modal').css('display', 'block');
-
-        // Log stats retrieval
-        console.log("Fetching user statistics...");
-        const stats = await getUserStatistics();
-        console.log("Retrieved stats:", stats);
-
-        if (stats) {
-            console.log("Updating stats display");
-            $('#gamesPlayedStat').text(stats.gamesPlayed);
-            $('#winPercentageStat').text(stats.winPercentage + '%');
-            $('#bestRankStat').text(stats.bestRank);
-            $('#bestTimeStat').text(stats.bestTime);
-        }
-
-        // Log leaderboard retrieval
-        console.log("Fetching leaderboard data...");
-        getLeaderboard(new Date());
     })
 
 
@@ -1694,7 +1679,7 @@ $(document).ready(function() {
         $("#manageFriendsBtn").show();
         $(".stats-modal").css('display', 'block');
         $("#viewStatsBtn").show();
-
+        
         $("#landingPage").hide();
         $("#submitBtn").hide();
         $("#giveUpBtn").hide();
@@ -1812,7 +1797,7 @@ $(document).ready(function() {
     async function showGivenUpPuzzle() {
         // Fetch today's puzzle first
         await fetchTodaysPuzzle();
-
+        
         getUserStatistics().then(stats => {
             if (stats) {
                 $('#gamesPlayedStat').text(stats.gamesPlayed);
@@ -1921,15 +1906,15 @@ async function getBestTimes() {
 async function getMostWins() {
     const statsRef = collection(window.db, "leaderboard");
     const showFriendsOnly = $('#stats-friendsFilterBtn').hasClass('active');
-
+    
     // Disable navigation arrows since this is an all-time view
     $('#stats-prevDay, #stats-nextDay').prop('disabled', true);
-
+    
     try {
         // Get all completed entries
         const baseQuery = query(statsRef, where("hasCompleted", "==", true));
         let querySnapshot;
-
+        
         if (showFriendsOnly && auth.currentUser) {
             const friendsList = await getFriendsList();
             const friendUids = [...friendsList.map(friend => friend.uid), auth.currentUser.uid];
@@ -1961,7 +1946,7 @@ async function getMostWins() {
         Object.values(puzzleGroups).forEach(puzzleEntries => {
             // Sort by completion time
             puzzleEntries.sort((a, b) => a.time - b.time);
-
+            
             // First place gets a win
             if (puzzleEntries.length > 0) {
                 const winner = puzzleEntries[0];
@@ -2007,7 +1992,7 @@ async function displayWinnersList(winnersList) {
     }
     const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
     const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
-
+    
     const user = auth.currentUser;
     const friendsList = user ? await getFriendsList() : [];
 
@@ -2039,7 +2024,7 @@ async function displayWinnersList(winnersList) {
         const winsCell = row.insertCell(2);
 
         rankCell.textContent = `${index + 1}${getOrdinalSuffix(index + 1)}`;
-
+        
         // Create username cell with add friend button
         usernameCell.innerHTML = winner.username;
         if (user && winner.uid && winner.uid !== user.uid && !friendUids.includes(winner.uid)) {
@@ -2054,12 +2039,12 @@ async function displayWinnersList(winnersList) {
             };
             usernameCell.appendChild(friendBtn);
         }
-
+        
         winsCell.textContent = winner.wins;
     });
 }
 
-async function getLeaderboard(date = new Date()) {
+    async function getLeaderboard(date = new Date()) {
         const statsRef = collection(window.db, "leaderboard");
         currentLeaderboardDate = date;
         const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -2118,18 +2103,23 @@ async function getLeaderboard(date = new Date()) {
 
         try {
             const querySnapshot = await getDocs(q);
-            let completedData = [];
-            let gaveUpData = [];
 
-            for (const doc of querySnapshot.docs) {
-                const data = doc.data();
+            // Arrays for two different sets of results
+            let leaderboardData = [];
+            let attemptedData = [];
+
+            for (const snapshotDoc of querySnapshot.docs) {
+                const data = snapshotDoc.data();
 
                 // Get username from users collection if not present
                 if (!data.username && data.uid) {
                     try {
-                        const userDoc = await getDoc(doc(window.db, "users", data.uid));
-                        if (userDoc.exists()) {
-                            data.username = userDoc.data().username;
+                        const userDocRef = doc(window.db, "users", data.uid);
+                        const userDocSnap = await getDoc(userDocRef);
+                        if (userDocSnap.exists()) {
+                            data.username = userDocSnap.data().username;
+                        } else {
+                            data.username = 'Unknown User';
                         }
                     } catch (error) {
                         console.error('Error fetching username:', error);
@@ -2137,23 +2127,84 @@ async function getLeaderboard(date = new Date()) {
                     }
                 }
 
+                // Separate documents based on hasGivenUp
                 if (data.hasGivenUp) {
-                    gaveUpData.push(data);
+                    attemptedData.push(data);
                 } else {
-                    completedData.push(data);
+                    leaderboardData.push(data);
                 }
             }
-            // Sort completed entries by time
-            completedData.sort((a, b) => a.time - b.time);
-            // Sort gave up entries by date
-            gaveUpData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            // Combine the arrays with gave up entries at the end
-            const leaderboardData = [...completedData, ...gaveUpData];
+            // Sort the successful completions by time (ascending)
+            leaderboardData.sort((a, b) => a.time - b.time);
+
+            // Render the two tables
             displayLeaderboard(leaderboardData);
+            displayAttempted(attemptedData);
+
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
         }
+    }
+    
+
+    function displayAttempted(attemptedData) {
+        const attemptedTable = document.getElementById('attemptedTable');
+        // Clear existing rows
+        attemptedTable.innerHTML = '';
+
+        // Build the header row
+        const headerRow = document.createElement('tr');
+        ['Rank', 'User', 'Time', 'Date', 'Puzzle #', 'Answers'].forEach((headerText) => {
+            const th = document.createElement('th');
+            th.innerText = headerText;
+            headerRow.appendChild(th);
+        });
+        attemptedTable.appendChild(headerRow);
+
+        // Fill table rows
+        // "Rank" and "Time" will just be '-', and "Answers" will be "Gave Up"
+        attemptedData.forEach((playerData) => {
+            const row = document.createElement('tr');
+
+            // Rank
+            const rankTd = document.createElement('td');
+            rankTd.innerText = '-';
+            row.appendChild(rankTd);
+
+            // User
+            const userTd = document.createElement('td');
+            userTd.innerText = playerData.username ? playerData.username : 'Unknown User';
+            row.appendChild(userTd);
+
+            // Time
+            const timeTd = document.createElement('td');
+            timeTd.innerText = '-'; // since they gave up
+            row.appendChild(timeTd);
+
+            // Date
+            const dateTd = document.createElement('td');
+            // If your 'data.date' is a Firestore Timestamp, convert accordingly
+            // e.g.: playerData.date.toDate().toLocaleString()  
+            // Otherwise, if it's stored as a string or a standard JS Date, format it similarly
+            const dateValue = playerData.date 
+                ? new Date(playerData.date).toLocaleDateString() 
+                : 'Unknown Date';
+            dateTd.innerText = dateValue;
+            row.appendChild(dateTd);
+
+            // Puzzle #
+            const puzzleTd = document.createElement('td');
+            puzzleTd.innerText = playerData.puzzleId;
+            row.appendChild(puzzleTd);
+
+            // Answers
+            const answersTd = document.createElement('td');
+            answersTd.innerText = 'Gave Up';
+            row.appendChild(answersTd);
+
+            attemptedTable.appendChild(row);
+        });
     }
 
 
@@ -2169,7 +2220,7 @@ async function getLeaderboard(date = new Date()) {
             getLeaderboard(); // Load leaderboard data when displaying
         }
     });
-
+    
     // Event listener for the "Back to Home" button
     $('#backToHomeBtn').click(function() {
         // Hide all game elements
@@ -2177,10 +2228,10 @@ async function getLeaderboard(date = new Date()) {
         $('#leaderboard').hide();
         $('#loginForm').hide();
         $('#signUpForm').hide();
-
+        
         // Show landing page
         $('#landingPage').show();
-
+        
         // Show or hide appropriate buttons based on login status
         const user = auth.currentUser;
         if (user) {
@@ -2223,51 +2274,28 @@ async function getLeaderboard(date = new Date()) {
     async function displayLeaderboard(leaderboardData) {
         const targetElement = document.getElementById('stats-leaderboard');
         if (!targetElement) return;
-
+        
         updateNavigationButtons();
         const user = auth.currentUser;
         const friendsList = user ? await getFriendsList() : [];
         const isShowingFriends = $('#stats-friendsFilterBtn').hasClass('active');
 
-        // Clear existing content
-        targetElement.innerHTML = '';
-
-        // Create completed table
-        const completedTitle = document.createElement('h3');
-        completedTitle.textContent = 'Completed Puzzles';
-        targetElement.appendChild(completedTitle);
-
-        const completedTable = document.createElement('table');
-        completedTable.className = 'leaderboard-table';
-        const completedThead = completedTable.createTHead();
-        const completedTbody = completedTable.createTBody();
-        targetElement.appendChild(completedTable);
-
-        // Create given up table
-        const givenUpTitle = document.createElement('h3');
-        givenUpTitle.textContent = 'Given Up Attempts';
-        givenUpTitle.style.marginTop = '20px';
-        targetElement.appendChild(givenUpTitle);
-
-        const givenUpTable = document.createElement('table');
-        givenUpTable.className = 'leaderboard-table';
-        const givenUpThead = givenUpTable.createTHead();
-        const givenUpTbody = givenUpTable.createTBody();
-        targetElement.appendChild(givenUpTable);
+        // Create table if it doesn't exist in target element
+        let table = targetElement.querySelector('table');
+        if (!table) {
+            table = document.createElement('table');
+            table.className = 'leaderboard-table';
+            targetElement.appendChild(table);
+        }
+        const thead = table.getElementsByTagName('thead')[0] || table.createTHead();
+        const tbody = table.getElementsByTagName('tbody')[0] || table.createTBody();
 
         // Determine which view is active
         const activeFilter = $('.filter-btn.active').attr('id');
 
         // Set appropriate headers based on active filter
         if (activeFilter === 'mostWinsFilter') {
-            completedThead.innerHTML = `
-                <tr>
-                    <th>Rank</th>
-                    <th>User</th>
-                    <th>Wins</th>
-                </tr>
-            `;
-            givenUpThead.innerHTML = `
+            thead.innerHTML = `
                 <tr>
                     <th>Rank</th>
                     <th>User</th>
@@ -2275,17 +2303,7 @@ async function getLeaderboard(date = new Date()) {
                 </tr>
             `;
         } else {
-            completedThead.innerHTML = `
-                <tr>
-                    <th>Rank</th>
-                    <th>User</th>
-                    <th>Time</th>
-                    <th>Date</th>
-                    <th>Puzzle #</th>
-                    <th>Answers</th>
-                </tr>
-            `;
-            givenUpThead.innerHTML = `
+            thead.innerHTML = `
                 <tr>
                     <th>Rank</th>
                     <th>User</th>
@@ -2297,20 +2315,13 @@ async function getLeaderboard(date = new Date()) {
             `;
         }
 
-        // Filter data into completed and given up arrays
-        let completedEntries = [];
-        let givenUpEntries = [];
-        leaderboardData.forEach(entry => {
-            if (entry.hasGivenUp) {
-                givenUpEntries.push(entry);
-            } else {
-                completedEntries.push(entry);
-            }
-        });
+        tbody.innerHTML = '';
 
-        // Display completed entries
-        completedEntries.forEach((entry, index) => {
-            const row = completedTbody.insertRow();
+        // Filter out entries with undefined username
+        const validEntries = leaderboardData.filter(entry => entry.username !== 'undefined' && entry.username !== undefined);
+
+        validEntries.forEach((entry, index) => {
+            const row = tbody.insertRow();
             if (activeFilter === 'mostWinsFilter') {
                 const rankCell = row.insertCell(0);
                 const usernameCell = row.insertCell(1);
@@ -2356,52 +2367,6 @@ async function getLeaderboard(date = new Date()) {
                 wordsCell.textContent = entry.words ? entry.words.join(', ') : 'No words submitted';
             }
         });
-
-        // Display given up entries if any exist
-        if (givenUpEntries.length > 0) {
-            console.log("Raw leaderboard data:", leaderboardData);
-            console.log("Before sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
-
-            // Sort entries again just before display
-            completedEntries.sort((a, b) => a.time - b.time);
-            givenUpEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            console.log("After sorting, entries including give ups:", completedEntries.concat(givenUpEntries));
-            console.log("Valid sorted entries:", completedEntries);
-            console.log("Given up entries to display:", givenUpEntries);
-
-            targetElement.appendChild(givenUpTitle);
-            targetElement.appendChild(givenUpTable);
-
-            givenUpEntries.forEach((entry, index) => {
-                console.log("Processing given up entry:", entry);
-                if (entry.hasGivenUp) {
-                    console.log("Creating row for given up entry:", entry);
-                    const row = givenUpTbody.insertRow();
-                    const rankCell = row.insertCell(0);
-                    const usernameCell = row.insertCell(1);
-                    const timeCell = row.insertCell(2);
-                    const dateCell = row.insertCell(3);
-                    const puzzleCell = row.insertCell(4);
-                    const wordsCell = row.insertCell(5);
-
-                    rankCell.textContent = '-';
-                    usernameCell.textContent = entry.username || 'Unknown User';
-                    timeCell.textContent = '-';
-
-                    const dateObj = new Date(entry.date);
-                    const formattedDate = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')}/${dateObj.getFullYear().toString().slice(-2)}`;
-                    dateCell.textContent = formattedDate;
-                    puzzleCell.textContent = entry.puzzleId;
-                    wordsCell.textContent = 'Gave Up';
-
-                    row.style.backgroundColor = '#fff0f0';
-                    console.log("Successfully created row for given up entry");
-                } else {
-                    console.log("Skipping entry - not marked as given up:", entry);
-                }
-            });
-        }
     }
 
 
@@ -2505,7 +2470,7 @@ async function addFriend(friendUid, friendUsername) {
         if (friendsDoc.exists()) {
             const currentFriends = friendsDoc.data().friendsList || [];
             const existingFriendIndex = currentFriends.findIndex(friend => friend.uid === friendUid);
-
+            
             if (existingFriendIndex !== -1) {
                 // Update username if it's different
                 if (currentFriends[existingFriendIndex].username !== friendUsername) {
@@ -2517,7 +2482,7 @@ async function addFriend(friendUid, friendUsername) {
                 }
                 return;
             }
-
+            
             await setDoc(friendsRef, {
                 friendsList: [...currentFriends, { uid: friendUid, username: friendUsername }]
             });
@@ -2703,7 +2668,7 @@ $(document).on('click', '#manageFriendsBtn', async function() {
         }, 500);
     });
 
-    //    // Handle adding/removing friends
+    // Handle adding/removing friends
     searchResults.on('click', '.add-friend-btn', async function() {
         const uid = $(this).data('uid');
         const username = $(this).data('username');

@@ -22,32 +22,30 @@ async function getUserStatistics() {
 
   try {
     const statsRef = collection(window.db, "leaderboard");
-    // Modified query to include all entries regardless of hasCompleted
-    const allUserEntriesQuery = query(
+    const userEntriesQuery = query(
       statsRef,
-      where("uid", "==", user.uid)
+      where("uid", "==", user.uid),
+      where("hasCompleted", "==", true)
     );
 
-    // Single query for all user entries
-    const querySnapshot = await getDocs(allUserEntriesQuery);
+    // Single query for user entries
+    const querySnapshot = await getDocs(userEntriesQuery);
     const entries = [];
     const puzzleTimeMap = new Map();
-    let totalGames = 0;
-    let completedGames = 0;
     querySnapshot.forEach(doc => {
       const data = doc.data();
       entries.push(data);
       puzzleTimeMap.set(data.puzzleId, data.time);
-      totalGames++;
-      if (data.hasCompleted) {
-        completedGames++;
-      }
     });
 
-    const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
-    const completedEntries = entries.filter(entry => entry.hasCompleted);
-    const bestTime = completedEntries.length > 0 ? Math.min(...completedEntries.map(entry => entry.time)) : null;
+    // Single query for total games
+    const allGamesQuery = query(statsRef, where("uid", "==", user.uid));
+    const allGamesSnapshot = await getDocs(allGamesQuery);
+    const totalGames = allGamesSnapshot.size;
 
+    const completedGames = querySnapshot.docs.filter(doc => doc.data().hasCompleted).length;
+    const winPercentage = totalGames > 0 ? Math.round((completedGames / totalGames) * 100) : 0;
+    const bestTime = entries.length > 0 ? Math.min(...entries.map(entry => entry.time)) : null;
 
     // Batch process first place times
     const puzzleIds = Array.from(puzzleTimeMap.keys());
@@ -61,7 +59,7 @@ async function getUserStatistics() {
         const firstPlacesQuery = query(
           statsRef,
           where("puzzleId", "in", batch),
-          where("hasCompleted", "==", true), // Only consider completed games for ranking
+          where("hasCompleted", "==", true),
           orderBy("time", "asc")
         );
 
@@ -85,10 +83,10 @@ async function getUserStatistics() {
             }
           });
           puzzleTimes.sort((a, b) => a - b);
-
+          
           const userTime = puzzleTimeMap.get(puzzleId);
           const userRank = puzzleTimes.indexOf(userTime) + 1;
-
+          
           if (userRank > 0 && (userRank < bestRank.rank || bestRank.rank === Infinity)) {
             bestRank = { rank: userRank, count: 1 };
           } else if (userRank === bestRank.rank) {
@@ -139,39 +137,5 @@ function getOrdinalSuffix(rank) {
   return "th";
 }
 
-// Placeholder for leaderboard display function.  This needs to be adapted to your actual code.
-function displayLeaderboard(leaderboardEntries) {
-    // Assume leaderboardEntries is an array of objects with at least 'hasCompleted', 'time', and 'date' properties.
-    const validEntries = [...leaderboardEntries]; // Create a copy to avoid modifying the original array
-
-    // Sort entries - completed first by time, then show gave up entries by date
-    validEntries.sort((a, b) => {
-        if (a.hasCompleted && !b.hasCompleted) return -1;
-        if (!a.hasCompleted && b.hasCompleted) return 1;
-        if (a.hasCompleted && b.hasCompleted) return a.time - b.time;
-        if (!a.hasCompleted && !b.hasCompleted) {
-            return new Date(b.date) - new Date(a.date);
-        }
-        return 0;
-    });
-
-    // ... (rest of your leaderboard display logic) ...
-    console.log("Leaderboard:", validEntries);
-}
-
-
-// Example usage (replace with your actual leaderboard data retrieval)
-async function getLeaderboardData(){
-  // ... (Your code to fetch leaderboard data) ...
-  const leaderboardEntries = [
-      { puzzleId: '1', uid: 'user1', time: 120, hasCompleted: true, date: '2024-10-27T10:00:00' },
-      { puzzleId: '1', uid: 'user2', time: 150, hasCompleted: true, date: '2024-10-27T11:00:00' },
-      { puzzleId: '1', uid: 'user3', hasCompleted: false, date: '2024-10-27T12:00:00' },
-      { puzzleId: '1', uid: 'user4', hasCompleted: false, date: '2024-10-27T09:00:00' }
-  ];
-  displayLeaderboard(leaderboardEntries);
-}
-
-getLeaderboardData();
-
+// Export functions
 export { getUserStatistics };
