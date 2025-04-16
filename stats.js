@@ -146,10 +146,10 @@ function displayAttempted(attemptedData) {
         return;
     }
 
-    // Find all entries where hasGivenUp is true
+    // Find all entries where hasGivenUp is true and hasCompleted is false
     const givenUpEntries = attemptedData.filter(entry => {
         console.log("Checking entry:", entry);
-        return entry && entry.hasGivenUp === true;
+        return entry && entry.hasGivenUp === true && entry.hasCompleted === false;
     });
     
     console.log("Given up entries after filter:", givenUpEntries);
