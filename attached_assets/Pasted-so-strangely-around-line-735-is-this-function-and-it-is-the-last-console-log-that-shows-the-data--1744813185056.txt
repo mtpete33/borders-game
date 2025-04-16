@@ -1,0 +1,45 @@
+so, strangely, around line 735 is this function, and it is the last console log that shows the data we have for the user that has hasGivenUp=true ... after that, we are not seeing the entries for users who have given up in the console logs... is this where we need to pull the leaderboard data from? or why are we not seeing the players who have given up on a given days puzzle and having them displayed onto the leaderboard in the stats modal ???        async function decideButtonDisplay() {
+        const user = auth.currentUser;
+        if (user) {
+            const statsRef = collection(window.db, "leaderboard");
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            const q = query(
+                statsRef, 
+                where("uid", "==", user.uid), 
+                where("puzzleId", "==", currentPuzzleId),
+                where("date", ">=", today.toISOString()),
+                where("date", "<", tomorrow.toISOString())
+            );
+
+            console.log("Checking for document with user ID and puzzle ID:", user.uid, currentPuzzleId);
+
+            const querySnapshot = await getDocs(q);
+            // Reset button visibility
+            $("#playBtn, #viewSolvedBtn").hide();
+
+            if (!querySnapshot.empty) {
+                const docSnap = querySnapshot.docs[0];
+                const data = docSnap.data();
+                console.log("Leaderboard data retrieved:", data);
+
+                if (data.hasCompleted || data.hasGivenUp) {
+                    $("#viewSolvedBtn").show().off("click").click(data.hasCompleted ? showSolvedPuzzle : showGivenUpPuzzle);
+
+
+                    // $("#manageFriendsBtn").show();
+
+                    if (data.hasGivenUp) {
+                        await fetchTodaysPuzzle();
+                    }
+                    return; // Exit early to prevent Play button from showing
+                }
+
+            }
+            // Only show Play button if puzzle not completed/given up today
+            $("#playBtn").show();
+        }
+    }
