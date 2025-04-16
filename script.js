@@ -2110,6 +2110,7 @@ async function displayWinnersList(winnersList) {
 
             for (const snapshotDoc of querySnapshot.docs) {
                 const data = snapshotDoc.data();
+                console.log("Processing document:", data);
 
                 // Get username from users collection if not present
                 if (!data.username && data.uid) {
@@ -2127,10 +2128,10 @@ async function displayWinnersList(winnersList) {
                     }
                 }
 
-                // Separate documents based on hasGivenUp
-                if (data.hasGivenUp) {
+                // Separate documents based on hasGivenUp and ensure puzzleId matches
+                if (data.hasGivenUp && data.puzzleId === puzzleId) {
                     attemptedData.push(data);
-                } else {
+                } else if (!data.hasGivenUp && data.puzzleId === puzzleId) {
                     leaderboardData.push(data);
                 }
             }
