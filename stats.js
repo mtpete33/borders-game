@@ -146,8 +146,14 @@ function displayAttempted(attemptedData) {
         return;
     }
 
-    // Filter for only given up entries
-    const givenUpEntries = attemptedData.filter(entry => entry.hasGivenUp === true);
+    // Find all entries where hasGivenUp is true
+    const givenUpEntries = [];
+    attemptedData.forEach(entry => {
+        if (entry.hasGivenUp === true) {
+            console.log("Found give up entry:", entry);
+            givenUpEntries.push(entry);
+        }
+    });
     console.log("Given up entries:", givenUpEntries);
 
     // Clear existing rows
