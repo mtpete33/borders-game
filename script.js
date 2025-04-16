@@ -871,7 +871,7 @@ $(document).ready(function() {
         const key = $(this).data("key");
         isProgrammaticChange = true; // Mark change as programmatic before any way this happens
         if (key === "backspace") {
-            // console.log("Delete button clicked");
+            //// console.log("Delete button clicked");
             handleDelete();
         } else {
             $(`#${focusableCells[currentCellIndex]}`).val(key.toUpperCase());
@@ -2187,13 +2187,13 @@ async function displayWinnersList(winnersList) {
 
         // Fill table rows
         attemptedData.forEach((playerData) => {
-            console.log("Processing player data:", playerData);
-
+            console.log("Processing document:", playerData);
             if (!playerData.hasGivenUp) {
                 console.log("Skipping non-give-up entry:", playerData);
                 return;
             }
 
+            // Add this entry to the table since it's a give-up entry
             const row = document.createElement('tr');
 
             // Rank
@@ -2203,7 +2203,7 @@ async function displayWinnersList(winnersList) {
 
             // User
             const userTd = document.createElement('td');
-            userTd.innerText = playerData.username ? playerData.username : 'Unknown User';
+            userTd.innerText = playerData.username;
             row.appendChild(userTd);
 
             // Time
