@@ -2112,6 +2112,11 @@ async function displayWinnersList(winnersList) {
                 const data = snapshotDoc.data();
                 console.log("Processing document:", data);
 
+                // Skip entries that don't match the puzzle ID
+                if (data.puzzleId !== puzzleId) {
+                    continue;
+                }
+
                 // Get username from users collection if not present
                 if (!data.username && data.uid) {
                     try {
@@ -2128,10 +2133,11 @@ async function displayWinnersList(winnersList) {
                     }
                 }
 
-                // Separate documents based on hasGivenUp and ensure puzzleId matches
-                if (data.hasGivenUp && data.puzzleId === puzzleId) {
+                // Push to appropriate array based on hasGivenUp status
+                if (data.hasGivenUp) {
+                    console.log("Found player who gave up:", data.username);
                     attemptedData.push(data);
-                } else if (!data.hasGivenUp && data.puzzleId === puzzleId) {
+                } else {
                     leaderboardData.push(data);
                 }
             }
