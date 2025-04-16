@@ -148,6 +148,7 @@ function displayAttempted(attemptedData) {
 
     // Filter for only given up entries
     const givenUpEntries = attemptedData.filter(entry => entry.hasGivenUp === true);
+    console.log("Given up entries:", givenUpEntries);
 
     // Clear existing rows
     attemptedTable.innerHTML = '';
@@ -175,7 +176,7 @@ function displayAttempted(attemptedData) {
 
     // Fill table rows
     givenUpEntries.forEach((playerData, index) => {
-        console.log("Processing document:", playerData);
+        console.log("Processing given up entry:", playerData);
         const row = document.createElement('tr');
         const rankCell = document.createElement('td');
         rankCell.textContent = index + 1;
