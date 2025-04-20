@@ -1,6 +1,6 @@
 # Borders
 
-**Borders** is a sleek, daily word puzzle game that challenges players to complete four valid English words around the border of a grid. With only a few starting letters revealed, players must deduce the rest using logic, vocabulary, and pattern recognition.
+**Borders** is a daily word puzzle game that challenges players to complete four valid English words around the border of a grid. With a few starting letters revealed, players must deduce the rest using logic, vocabulary, and pattern recognition.
 
 Play it now: 👉 [bordersgame.net](https://bordersgame.net)
 
@@ -17,9 +17,9 @@ Play it now: 👉 [bordersgame.net](https://bordersgame.net)
 
 ## 🔥 Features
 
-- 🧩 Daily rotating puzzles (unique every day)
+- 🧩 Daily rotating puzzles (unique hand-picked puzzle every day)
 - 🟢 Multiple valid solutions accepted
-- 🧠 Word validation via in-game dictionary
+- 🧠 Word validation via in-game JSON word list dictionary
 - 🧮 Personal stats: #games played, win %, best rank, best solve, etc.
 - 🏆 Leaderboard system (global and friends-only views)
 - ➕ Friend system with follow & filter functionality
@@ -39,9 +39,9 @@ Play it now: 👉 [bordersgame.net](https://bordersgame.net)
 
 ## ✍️ Developer Notes
 
-This project was built as a fun, strategic twist on the classic daily word game format inspired by my love of Wordle. Unlike fixed-answer games, Borders allows for creative thinking, as any valid combination of border words can be correct.
+This project was built as a fun, strategic twist on the classic daily word game format and inspired by my love of Wordle. Unlike fixed-answer games, Borders allows for creative thinking, as any valid combination of border words can be correct, and while logged in, you can view other users' answers after you complete the puzzle. You might learn a new word or get frustrated that your friend's word actually worked!
 
-The puzzle system, leaderboard, and user stats are all built for long-term daily use, with minimal admin maintenance required.
+The puzzle system, leaderboard, and user stats are all built for long-term daily use, with minimal admin maintenance required, save for me having to put in new puzzle words every couple of weeks or so.
 
 ---
 
