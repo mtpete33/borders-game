@@ -37,18 +37,11 @@ Play it now: 👉 [bordersgame.net](https://bordersgame.net)
 
 ---
 
-## 📸 Sample Screens
-
-- Stats & leaderboard view  
-![Screenshot](https://github.com/mtpete33/borders-game/assets/your-image-here.png)
-
----
-
 ## ✍️ Developer Notes
 
 This project was built as a fun, strategic twist on the classic daily word game format inspired by my love of Wordle. Unlike fixed-answer games, Borders allows for creative thinking, as any valid combination of border words can be correct.
 
-The puzzle system, leaderboard, and user stats are all built for long-term daily use, with minimal admin maintenance required. It’s also connected to another personal word game project: [7Letters Solitaire](https://github.com/mtpete33/7letters-solitaire).
+The puzzle system, leaderboard, and user stats are all built for long-term daily use, with minimal admin maintenance required.
 
 ---
 
